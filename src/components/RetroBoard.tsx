@@ -9,7 +9,7 @@ const ColumnsWrapper = styled.main`
 `;
 
 export default function RetroBoard() {
-  const columnTitles = ["Yes", "No", "Hello"];
+  const columnTitles = ["Yes"];
   const onBeforeCapture = useCallback(() => {
     /*...*/
   }, []);
@@ -17,6 +17,7 @@ export default function RetroBoard() {
     /*...*/
   }, []);
   const onDragStart = useCallback(() => {
+    console.log("draggin");
     /*...*/
   }, []);
   const onDragUpdate = useCallback(() => {
@@ -35,10 +36,14 @@ export default function RetroBoard() {
       onDragEnd={onDragEnd}
     >
       <ColumnsWrapper>
-        {columnTitles.map((item) => (
-          <Droppable droppableId="droppable-1" type="PERSON">
+        {columnTitles.map((item, index) => (
+          <Droppable droppableId={`droppable-${index}`}>
             {(provided, snapshot) => (
-              <RetroColumn ref={provided.innerRef} columnTitle={item} />
+              <RetroColumn
+                ref={provided.innerRef}
+                droppableProvided={provided}
+                columnTitle={item}
+              />
             )}
           </Droppable>
         ))}

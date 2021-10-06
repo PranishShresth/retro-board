@@ -1,4 +1,5 @@
 import React from "react";
+import { DraggableProvided } from "react-beautiful-dnd";
 import styled from "styled-components";
 
 const StyledCard = styled.div`
@@ -13,15 +14,19 @@ const CardContent = styled.div`
 interface Props {
   content: string;
   children?: React.ReactChild;
+  provided: DraggableProvided;
 }
 
-const RetroCard = React.forwardRef<HTMLDivElement, Props>(
-  ({ content }: Props, ref) => {
-    return (
-      <StyledCard ref={ref}>
-        <CardContent>{content}</CardContent>
-      </StyledCard>
-    );
-  }
-);
+const RetroCard = ({ content, provided }: Props) => {
+  return (
+    <StyledCard
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+    >
+      <CardContent>{content}</CardContent>
+    </StyledCard>
+  );
+};
+
 export default RetroCard;

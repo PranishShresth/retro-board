@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import RetroCard from "./RetroCard";
-import { Draggable } from "react-beautiful-dnd";
+import { Draggable, DroppableProvided } from "react-beautiful-dnd";
 
 const RetroColumnWrapper = styled.div`
   min-width: 250px;
@@ -22,38 +22,31 @@ const RetroCardContainer = styled.div`
 interface Props {
   columnTitle: string;
   children?: React.ReactNode;
+  droppableProvided?: DroppableProvided;
 }
 
-const RetroColumn = React.forwardRef<HTMLDivElement, Props>(
-  ({ columnTitle }, ref) => {
-    const mockData = [
-      "hi",
-      "asdsadasdasdasdasd",
-      "en tougrage dasds",
-      "Sadsdas",
-    ];
-    return (
-      <RetroColumnWrapper ref={ref}>
-        <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
-        <RetroCardContainer>
-          {mockData.map((item) => {
-            return (
-              <Draggable draggableId="draggable-1" index={0}>
-                {(provided, snapshot) => (
-                  <RetroCard
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    content={item}
-                  />
-                )}
-              </Draggable>
-            );
-          })}
-        </RetroCardContainer>
-      </RetroColumnWrapper>
-    );
-  }
-);
+const RetroColumn = ({ columnTitle, droppableProvided }: Props) => {
+  const mockData = ["hi", "asdsadasdasdasdasd", "en tougrage dasds", "Sadsdas"];
+  return (
+    <RetroColumnWrapper ref={droppableProvided?.innerRef}>
+      <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
+      <RetroCardContainer>
+        {mockData.map((item, index) => {
+          return (
+            <Draggable
+              draggableId={`draggable-${index}`}
+              index={index}
+              key={index}
+            >
+              {(provided, snapshot) => (
+                <RetroCard provided={provided} content={item} />
+              )}
+            </Draggable>
+          );
+        })}
+      </RetroCardContainer>
+    </RetroColumnWrapper>
+  );
+};
 
 export default RetroColumn;
