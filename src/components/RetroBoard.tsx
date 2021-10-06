@@ -9,7 +9,24 @@ const ColumnsWrapper = styled.main`
 `;
 
 export default function RetroBoard() {
-  const columnTitles = ["Yes"];
+  const columnTitles = ["Yes", "No"];
+
+  const twoColumns = [
+    {
+      columnTitle: "Yes",
+      columnData: [
+        { content: "Hey what are you doing", id: 12321 },
+        { content: "Hey what are you doing 232", id: 12322321 },
+      ],
+    },
+    {
+      columnTitle: "No",
+      columnData: [
+        { content: "Hey what are you doing 12321312", id: 12232321 },
+        { content: "Hey what are you doing 2321 3212", id: 12323222321 },
+      ],
+    },
+  ];
   const onBeforeCapture = useCallback(() => {
     /*...*/
   }, []);
@@ -36,14 +53,10 @@ export default function RetroBoard() {
       onDragEnd={onDragEnd}
     >
       <ColumnsWrapper>
-        {columnTitles.map((item, index) => (
+        {twoColumns.map((item, index) => (
           <Droppable droppableId={`droppable-${index}`}>
             {(provided, snapshot) => (
-              <RetroColumn
-                ref={provided.innerRef}
-                droppableProvided={provided}
-                columnTitle={item}
-              />
+              <RetroColumn droppableProvided={provided} columnData={item} />
             )}
           </Droppable>
         ))}

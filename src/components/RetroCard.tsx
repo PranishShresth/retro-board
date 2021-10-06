@@ -15,6 +15,7 @@ interface Props {
   content: string;
   children?: React.ReactChild;
   provided: DraggableProvided;
+  // columnItem: { content: string; id: number };
 }
 
 const RetroCard = ({ content, provided }: Props) => {

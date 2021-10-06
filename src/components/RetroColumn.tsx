@@ -19,27 +19,36 @@ const RetroCardContainer = styled.div`
   gap: 10px;
 `;
 
-interface Props {
+interface ColumnData {
+  content: string;
+  id: number;
+}
+interface ColumnDetails {
   columnTitle: string;
+  columnData: Array<ColumnData>;
+}
+
+interface Props {
+  columnData: ColumnDetails;
   children?: React.ReactNode;
   droppableProvided?: DroppableProvided;
 }
 
-const RetroColumn = ({ columnTitle, droppableProvided }: Props) => {
-  const mockData = ["hi", "asdsadasdasdasdasd", "en tougrage dasds", "Sadsdas"];
+const RetroColumn = ({ columnData, droppableProvided }: Props) => {
   return (
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
-      <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
+      <RetroColumnHeader>{columnData.columnTitle}</RetroColumnHeader>
+      {droppableProvided?.placeholder}
       <RetroCardContainer>
-        {mockData.map((item, index) => {
+        {columnData.columnData.map((item, index) => {
           return (
             <Draggable
-              draggableId={`draggable-${index}`}
+              draggableId={`draggable-${item.id}`}
               index={index}
               key={index}
             >
               {(provided, snapshot) => (
-                <RetroCard provided={provided} content={item} />
+                <RetroCard provided={provided} content={item.content} />
               )}
             </Draggable>
           );
