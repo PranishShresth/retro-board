@@ -1,18 +1,34 @@
 import React from "react";
 import styled from "styled-components";
+import RetroCard from "./RetroCard";
 
 const RetroColumnWrapper = styled.div`
-  min-width: 250px;
+  max-width: 250px;
+  padding: 5px;
+  background: #636363;
 `;
 
 const RetroColumnHeader = styled.div`
   font-weight: bold;
   font-size: 1.2rem;
 `;
-export default function RetroColumn() {
+const RetroCardContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+interface Props {
+  columnTitle: string;
+}
+export default function RetroColumn({ columnTitle }: Props) {
   return (
-    <div>
-      <RetroColumnHeader>Action Items?</RetroColumnHeader>
-    </div>
+    <RetroColumnWrapper>
+      <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
+      <RetroCardContainer>
+        <RetroCard />
+        <RetroCard /> <RetroCard /> <RetroCard />
+      </RetroCardContainer>
+    </RetroColumnWrapper>
   );
 }
