@@ -25,12 +25,19 @@ interface Props {
 
 const RetroColumn = React.forwardRef<HTMLDivElement, Props>(
   ({ columnTitle }, ref) => {
+    const mockData = [
+      "hi",
+      "asdsadasdasdasdasd",
+      "en tougrage dasds",
+      "Sadsdas",
+    ];
     return (
       <RetroColumnWrapper ref={ref}>
         <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
         <RetroCardContainer>
-          <RetroCard />
-          <RetroCard /> <RetroCard /> <RetroCard />
+          {mockData.map((item) => {
+            return <RetroCard content={item} />;
+          })}
         </RetroCardContainer>
       </RetroColumnWrapper>
     );
