@@ -9,10 +9,16 @@ const StyledCard = styled.div`
 const CardContent = styled.div`
   font-size: 15px;
 `;
-export default function RetroCard() {
+
+interface Props {
+  content: string;
+}
+
+const RetroCard = ({ content }: Props) => {
   return (
     <StyledCard>
-      <CardContent> hi there</CardContent>
+      <CardContent>{content}</CardContent>
     </StyledCard>
   );
-}
+};
+export default RetroCard;

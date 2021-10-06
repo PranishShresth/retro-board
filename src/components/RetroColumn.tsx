@@ -20,15 +20,21 @@ const RetroCardContainer = styled.div`
 
 interface Props {
   columnTitle: string;
+  children?: React.ReactNode;
 }
-export default function RetroColumn({ columnTitle }: Props) {
-  return (
-    <RetroColumnWrapper>
-      <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
-      <RetroCardContainer>
-        <RetroCard />
-        <RetroCard /> <RetroCard /> <RetroCard />
-      </RetroCardContainer>
-    </RetroColumnWrapper>
-  );
-}
+
+const RetroColumn = React.forwardRef<HTMLDivElement, Props>(
+  ({ columnTitle }, ref) => {
+    return (
+      <RetroColumnWrapper ref={ref}>
+        <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
+        <RetroCardContainer>
+          <RetroCard />
+          <RetroCard /> <RetroCard /> <RetroCard />
+        </RetroCardContainer>
+      </RetroColumnWrapper>
+    );
+  }
+);
+
+export default RetroColumn;
