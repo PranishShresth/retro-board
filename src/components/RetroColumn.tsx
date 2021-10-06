@@ -3,9 +3,9 @@ import styled from "styled-components";
 import RetroCard from "./RetroCard";
 
 const RetroColumnWrapper = styled.div`
-  max-width: 250px;
-  padding: 5px;
-  background: #636363;
+  min-width: 250px;
+  padding: 8px;
+  background: rgb(235, 236, 240);
 `;
 
 const RetroColumnHeader = styled.div`
