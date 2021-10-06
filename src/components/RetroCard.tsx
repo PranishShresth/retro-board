@@ -12,13 +12,16 @@ const CardContent = styled.div`
 
 interface Props {
   content: string;
+  children?: React.ReactChild;
 }
 
-const RetroCard = ({ content }: Props) => {
-  return (
-    <StyledCard>
-      <CardContent>{content}</CardContent>
-    </StyledCard>
-  );
-};
+const RetroCard = React.forwardRef<HTMLDivElement, Props>(
+  ({ content }: Props, ref) => {
+    return (
+      <StyledCard ref={ref}>
+        <CardContent>{content}</CardContent>
+      </StyledCard>
+    );
+  }
+);
 export default RetroCard;

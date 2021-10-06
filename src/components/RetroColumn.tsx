@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import RetroCard from "./RetroCard";
+import { Draggable } from "react-beautiful-dnd";
 
 const RetroColumnWrapper = styled.div`
   min-width: 250px;
@@ -36,7 +37,18 @@ const RetroColumn = React.forwardRef<HTMLDivElement, Props>(
         <RetroColumnHeader>{columnTitle}</RetroColumnHeader>
         <RetroCardContainer>
           {mockData.map((item) => {
-            return <RetroCard content={item} />;
+            return (
+              <Draggable draggableId="draggable-1" index={0}>
+                {(provided, snapshot) => (
+                  <RetroCard
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    content={item}
+                  />
+                )}
+              </Draggable>
+            );
           })}
         </RetroCardContainer>
       </RetroColumnWrapper>
