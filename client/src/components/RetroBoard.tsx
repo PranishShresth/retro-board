@@ -26,6 +26,13 @@ export default function RetroBoard() {
         { content: "Hey what are you doing 2321 3212", id: 12323222321 },
       ],
     },
+    {
+      columnTitle: "Npe!o",
+      columnData: [
+        { content: "Hey what are you doing 12321312", id: 1222332321 },
+        { content: "Hey what are you doing 2321 3212", id: 12322323222321 },
+      ],
+    },
   ];
   const onBeforeCapture = useCallback(() => {
     /*...*/
