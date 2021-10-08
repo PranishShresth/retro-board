@@ -1,3 +1,11 @@
 import mongoose from "mongoose";
 
-mongoose.connect("");
+async function connectToDB(dbString: string) {
+  try {
+    await mongoose.connect(dbString);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export default connectToDB;
