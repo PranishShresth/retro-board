@@ -79,14 +79,18 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
     const updatedList = await list.save();
     res.status(200).send(updatedList);
   } catch (err) {
-    console.log(err);
     res.status(500).send("Internal Server Error");
   }
 };
 
 export const getAllBoard = async (req: Request, res: Response) => {
   try {
-    const boards = await Board.find({}).populate("lists");
-    res.send(boards);
-  } catch (err) {}
+    const boards = await Board.find({}).populate({
+      path: "lists",
+      populate: { path: "items" },
+    });
+    res.status(200).send(boards);
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
 };
