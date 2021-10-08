@@ -74,7 +74,10 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
   try {
     const newItem = new Item({ item_title: item_title, list: list_id });
     const savedItem = await newItem.save();
-    res.status(200).send(savedItem);
+    const list = await List.findById(list_id);
+    list.items.push(savedItem._id);
+    const updatedList = await list.save();
+    res.status(200).send(updatedList);
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");
