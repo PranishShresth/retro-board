@@ -6,7 +6,9 @@ import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
-import { Card, Grid } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Grid } from "semantic-ui-react";
+import BoardCard from "./BoardCard";
 import styled from "styled-components";
 
 const BoardsContainer = styled(Container)`
@@ -42,9 +44,9 @@ const RetroDashBoard = React.memo(() => {
         <Grid columns={3}>
           {boards.map((board) => {
             return (
-              <Grid.Column width={4}>
-                <Card
-                  href="#card-example-link-card"
+              <Grid.Column width={4} key={board._id}>
+                <BoardCard
+                  to={`/board/card-example-link-card`}
                   header={board.title}
                   meta="Friend"
                   description="Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat."

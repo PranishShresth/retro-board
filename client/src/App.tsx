@@ -1,11 +1,15 @@
 import "./App.css";
 import RetroDashboard from "./components/RetroDashboard";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <RetroDashboard />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={RetroDashboard} />
+        <Route exact path="/board/:boardId" />
+      </Switch>
+    </Router>
   );
 }
 
