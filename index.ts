@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(logger("dev"));
 app.use("/api/v1", ApiRoutes);
+app.use(cors());
 
 app.listen(PORT, () => {
   console.log(`Listening to ${PORT}`);
