@@ -67,6 +67,7 @@ export default function RetroBoardSingle() {
                 <RetroColumn
                   droppableProvided={provided}
                   items={list.items}
+                  list_id={list._id}
                   title={list.list_title}
                 />
               )}

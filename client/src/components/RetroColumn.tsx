@@ -15,6 +15,7 @@ const RetroColumnWrapper = styled.div`
 const RetroColumnHeader = styled.div`
   font-weight: bold;
   font-size: 1.2rem;
+  padding: 12px 0;
 `;
 const RetroCardContainer = styled.div`
   display: flex;
@@ -24,12 +25,13 @@ const RetroCardContainer = styled.div`
 
 interface Props {
   items: Item[];
+  list_id: string;
   title: string;
   children?: React.ReactNode;
   droppableProvided?: DroppableProvided;
 }
 
-const RetroColumn = ({ items, title, droppableProvided }: Props) => {
+const RetroColumn = ({ items, list_id, title, droppableProvided }: Props) => {
   return (
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
       <RetroColumnHeader>{title}</RetroColumnHeader>
@@ -44,7 +46,7 @@ const RetroColumn = ({ items, title, droppableProvided }: Props) => {
             </Draggable>
           );
         })}
-        <AddItem />
+        <AddItem list_id={list_id} />
       </RetroCardContainer>
     </RetroColumnWrapper>
   );

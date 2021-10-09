@@ -6,8 +6,10 @@ import styled from "styled-components";
 const StyledTextArea = styled(TextArea)`
   resize: none !important;
 `;
-
-function AddItem() {
+interface Props {
+  list_id: string;
+}
+function AddItem({ list_id }: Props) {
   const { formValues, handleChange } = useForm({ item_title: "" });
   const [open, setOpen] = useState(false);
 
