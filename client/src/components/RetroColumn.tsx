@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import RetroCard from "./RetroCard";
 import { Item } from "../interfaces";
+import AddItem from "./AddItem";
 import { Draggable, DroppableProvided } from "react-beautiful-dnd";
 
 const RetroColumnWrapper = styled.div`
@@ -36,17 +37,14 @@ const RetroColumn = ({ items, title, droppableProvided }: Props) => {
       <RetroCardContainer>
         {items.map((item, index) => {
           return (
-            <Draggable
-              draggableId={`draggable-${item._id}`}
-              index={index}
-              key={index}
-            >
+            <Draggable draggableId={item._id} index={index} key={index}>
               {(provided, snapshot) => (
                 <RetroCard provided={provided} content={item.item_title} />
               )}
             </Draggable>
           );
         })}
+        <AddItem />
       </RetroCardContainer>
     </RetroColumnWrapper>
   );

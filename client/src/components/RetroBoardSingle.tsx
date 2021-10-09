@@ -1,30 +1,34 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import RetroColumn from "./RetroColumn";
 import styled from "styled-components";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Container } from "semantic-ui-react";
 import { boardSelector } from "../utils/selectors";
 import CreateList from "./CreateList";
-
+import Loading from "./Loader";
 const ColumnsWrapper = styled.main`
   display: flex;
   gap: 20px;
+  padding-top: 30px;
   overflow-x: auto;
-  height: 100vh;
+  height: calc(100vh - 80px);
 `;
 
 interface BoardParam {
   boardId: string;
 }
 export default function RetroBoardSingle() {
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const params = useParams<BoardParam>();
   const board = useSelector(boardSelector);
 
   useEffect(() => {
+    setLoading(true);
     dispatch({ type: "FETCH_BOARD_REQUESTED", payload: params.boardId });
+    setLoading(false);
   }, [params.boardId, dispatch]);
 
   const onBeforeCapture = useCallback(() => {
@@ -40,10 +44,13 @@ export default function RetroBoardSingle() {
   const onDragUpdate = useCallback(() => {
     /*...*/
   }, []);
-  const onDragEnd = useCallback(() => {
-    /*...*/
+  const onDragEnd = useCallback((result: DropResult) => {
+    console.log(result);
   }, []);
 
+  if (loading) {
+    return <Loading />;
+  }
   return (
     <Container>
       <DragDropContext
@@ -55,7 +62,7 @@ export default function RetroBoardSingle() {
       >
         <ColumnsWrapper>
           {board?.lists.map((list) => (
-            <Droppable droppableId={`droppable-${list._id}`} key={list._id}>
+            <Droppable droppableId={list._id} key={list._id}>
               {(provided) => (
                 <RetroColumn
                   droppableProvided={provided}

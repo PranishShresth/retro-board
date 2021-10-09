@@ -24,7 +24,6 @@ const RetroDashBoard = React.memo(() => {
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });
-    console.log("re run effect");
   }, []);
 
   const handleCreateBoard = (ev: React.FormEvent) => {

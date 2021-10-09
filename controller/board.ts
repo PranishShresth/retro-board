@@ -1,9 +1,11 @@
 import { Board } from "../models/board";
 import { List } from "../models/list";
 import { Item } from "../models/item";
+import { LexoRank } from "lexorank";
 
 import { Request, Response } from "express";
 import { APIError, HttpStatusCode } from "../utils/errorHandler";
+import { List as IList } from "../utils/interfaces";
 
 interface IRequest1 extends Request {
   body: {
@@ -77,13 +79,63 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
   const { item_title, list_id } = req.body;
 
   try {
-    const newItem = new Item({ item_title: item_title, list: list_id });
+    let existingList: IList = await List.findById(list_id).populate("items");
+
+    existingList.items.sort((a, b) =>
+      LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
+    );
+
+    const nextOrder = LexoRank.parse(
+      existingList.items[existingList.items.length - 1].order
+    ).genNext();
+
+    const newItem = new Item({ item_title: item_title, order: nextOrder });
     const savedItem = await newItem.save();
 
     const list = await List.findById(list_id);
     list.items.push(savedItem._id);
-    const updatedList = await list.save();
+
+    let updatedList = await list.save();
+    updatedList = await updatedList.populate("items");
+
+    updatedList.items.sort((a, b) =>
+      LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
+    );
+
     res.status(200).send(updatedList);
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+interface IReorderRequest extends Request {
+  body: {
+    item_id: string;
+    list_source: string;
+    list_destination: string;
+  };
+}
+export const reorderItem = async (req: IReorderRequest, res: Response) => {
+  const { item_id, list_source, list_destination } = req.body;
+
+  try {
+    // find the item content
+
+    const item = await Item.findById(item_id);
+
+    const sourceList = await List.findById(list_source);
+    // sourceList.
+
+    const destinationList = await List.findById(list_destination);
+
+    sourceList.push(item);
+    // const newItem = new Item({ item_title: item_title });
+    // const savedItem = await newItem.save();
+
+    // // const list = await List.findById(list_id);
+    // // list.items.push(savedItem._id);
+    // // const updatedList = await list.save();
+    // res.status(200).send(updatedList);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
