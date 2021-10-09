@@ -33,6 +33,9 @@ const boardSlice = createSlice({
       const board = state.boards.find((board) => board._id === id);
       board!.title = action.payload.title;
     },
+    clearBoard(state) {
+      state.boards = [];
+    },
   },
 });
 
