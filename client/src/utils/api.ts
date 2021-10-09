@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Board } from "../interfaces";
+import { Board, List } from "../interfaces";
 const httpClient = axios.create({
   baseURL: "http://localhost:5000/api/v1",
 });
@@ -22,9 +22,18 @@ export const fetchActiveBoardAPI = async (boardId: string) => {
   }
 };
 
-export const createBoardAPI = async (payload: Board): Promise<Board> => {
+export const createBoardAPI = async (payload: Partial<Board>) => {
   try {
     const { data } = await httpClient.post("/create-board", payload);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const createListAPI = async (payload: Partial<List>) => {
+  try {
+    const { data } = await httpClient.post("/create-list", payload);
     return data;
   } catch (err) {
     throw err;

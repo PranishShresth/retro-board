@@ -1,10 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
 import { useParams } from "react-router";
-import styled from "styled-components";
 
 interface FormParam {
   boardId: string;
@@ -39,7 +38,7 @@ const CreateList = () => {
               type="text"
               name="title"
               value={formValues.list_title}
-              placeholder="Board Title"
+              placeholder="List Title"
               onChange={handleChange}
             />
           </Form.Field>
