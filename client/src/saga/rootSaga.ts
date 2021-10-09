@@ -4,15 +4,13 @@ import { Board } from "../interfaces";
 import { AxiosResponse } from "axios";
 import boardSlice from "../reducers/rootReducer";
 
-// ...
-
 // Our worker Saga: will perform the async increment task
 function* getBoards() {
   try {
     const result: Promise<AxiosResponse<Board[]>> = yield call(fetchAllBoards);
     yield put(boardSlice.actions.fetchBoards(result));
   } catch (err) {
-    yield put({ type: "INCREMENT" });
+    console.log(err);
   }
 }
 
