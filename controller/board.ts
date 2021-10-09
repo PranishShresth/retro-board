@@ -100,7 +100,7 @@ interface IGetBoardAPI extends Request {
 }
 export const getBoard = async (req: IGetBoardAPI, res: Response) => {
   try {
-    const board = await Board.find({ _id: req.params.boardId }).populate({
+    const board = await Board.findOne({ _id: req.params.boardId }).populate({
       path: "lists",
       populate: { path: "items" },
     });

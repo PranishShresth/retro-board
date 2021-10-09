@@ -39,15 +39,15 @@ const RetroDashBoard = React.memo(() => {
   return (
     <>
       <BoardsContainer>
-        <Grid columns={3}>
+        <Grid>
           {boards.map((board) => {
             return (
-              <Grid.Column width={4} key={board._id}>
+              <Grid.Column mobile={16} tablet={8} computer={4} key={board._id}>
                 <BoardCard to={`/board/${board._id}`} header={board.title} />
               </Grid.Column>
             );
           })}
-          <Grid.Column width={4}>
+          <Grid.Column mobile={16} tablet={8} computer={4}>
             <RetroModal
               modalTitle="Board Creation"
               triggerName="Create a Board"

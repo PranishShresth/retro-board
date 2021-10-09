@@ -41,7 +41,7 @@ function* fetchActiveBoard(
       fetchActiveBoardAPI,
       action.payload
     );
-    yield put(boardSlice.actions.createBoard(result));
+    yield put(boardSlice.actions.fetchActiveBoard(result));
   } catch (err) {
     console.log(err);
   }
