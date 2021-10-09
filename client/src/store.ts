@@ -1,8 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
+import { boardReducer } from "./reducers/rootReducer";
+import createSagaMiddleware from "redux-saga";
+
+const sagaMiddleware = createSagaMiddleware();
+
 const store = configureStore({
-  reducer,
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-  devTools: process.env.NODE_ENV !== "production",
-  preloadedState,
-  enhancers: [reduxBatch],
+  reducer: boardReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(sagaMiddleware),
 });
+
+export default store;
