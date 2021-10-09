@@ -9,23 +9,30 @@ import { useForm } from "./hooks/useForm";
 
 import styled from "styled-components";
 
-const RetroDashBoard = () => {
+const RetroDashBoard = React.memo(() => {
   const dispatch = useDispatch();
   const { formValues, handleChange } = useForm({
     title: "",
     theme: "",
   });
   const boards = useSelector(boardSelector);
+  console.log(formValues);
+
   useEffect(() => {
-    // dispatch({ type: "FETCH_BOARDS_REQUESTED" });
+    dispatch({ type: "FETCH_BOARDS_REQUESTED" });
+    console.log("ran");
   }, [dispatch]);
 
   const handleCreateBoard = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
-    } catch (err) {}
+      dispatch({ type: "CREATE_BOARD_REQUESTED", payload: formValues });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
+  console.log(boards);
   return (
     <div>
       <RetroHeader />
@@ -61,6 +68,6 @@ const RetroDashBoard = () => {
       </Container>
     </div>
   );
-};
+});
 
 export default RetroDashBoard;
