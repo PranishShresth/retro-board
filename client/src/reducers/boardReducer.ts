@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { listeners } from "process";
 import { Board } from "../interfaces";
 
 interface BoardState {
@@ -31,6 +32,13 @@ const boardSlice = createSlice({
     },
     createBoard(state, action) {
       state.boards.push(action.payload);
+    },
+    createItem(state, action) {
+      const list = action.payload;
+      const boardIdx = state.board?.lists.findIndex(
+        (singleList) => singleList._id === list._id
+      );
+      state.board!.lists[boardIdx!] = list;
     },
     deleteBoard(state, action) {
       state.boards = state.boards.filter(

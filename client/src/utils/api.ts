@@ -44,7 +44,7 @@ type createItemPayload = {
   item_title: string;
   list_id: string;
 };
-export const createItem = async (payload: createItemPayload) => {
+export const createItemAPI = async (payload: createItemPayload) => {
   try {
     const { data } = await httpClient.post("/create-item", payload);
     return data;
