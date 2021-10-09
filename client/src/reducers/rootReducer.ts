@@ -1,9 +1,6 @@
-import { createAction, createReducer, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { Board } from "../interfaces";
 
-interface Board {
-  title: string;
-  _id: string;
-}
 interface BoardState {
   boards: Board[];
   loading: boolean;
@@ -20,6 +17,9 @@ const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
+    fetchBoards(state, action) {
+      state.boards.push(action.payload);
+    },
     createBoard(state, action) {
       state.boards.push(action.payload);
     },
@@ -36,4 +36,4 @@ const boardSlice = createSlice({
   },
 });
 
-export default boardSlice.reducer;
+export default boardSlice;

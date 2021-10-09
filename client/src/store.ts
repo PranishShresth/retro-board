@@ -5,7 +5,7 @@ import createSagaMiddleware from "redux-saga";
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-  reducer: boardReducer,
+  reducer: boardReducer.reducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),
 });
