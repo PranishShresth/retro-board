@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { boardSelector } from "../utils/selectors";
-import RetroHeader from "./RetroHeader";
 import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
-import { Link } from "react-router-dom";
+
 import { Grid } from "semantic-ui-react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
@@ -39,18 +38,12 @@ const RetroDashBoard = React.memo(() => {
 
   return (
     <>
-      <RetroHeader />
       <BoardsContainer>
         <Grid columns={3}>
           {boards.map((board) => {
             return (
               <Grid.Column width={4} key={board._id}>
-                <BoardCard
-                  to={`/board/card-example-link-card`}
-                  header={board.title}
-                  meta="Friend"
-                  description="Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat."
-                />
+                <BoardCard to={`/board/${board._id}`} header={board.title} />
               </Grid.Column>
             );
           })}

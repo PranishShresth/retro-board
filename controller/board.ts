@@ -86,11 +86,25 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
 
 export const getAllBoard = async (req: Request, res: Response) => {
   try {
-    const boards = await Board.find({}).populate({
+    const boards = await Board.find({});
+    res.status(200).send(boards);
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+interface IGetBoardAPI extends Request {
+  params: {
+    boardId: string;
+  };
+}
+export const getBoard = async (req: IGetBoardAPI, res: Response) => {
+  try {
+    const board = await Board.find({ _id: req.params.boardId }).populate({
       path: "lists",
       populate: { path: "items" },
     });
-    res.status(200).send(boards);
+    res.status(200).send(board);
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }

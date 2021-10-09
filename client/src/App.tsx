@@ -1,13 +1,14 @@
 import "./App.css";
-import RetroDashboard from "./components/RetroDashboard";
+import RetroHome from "./pages/RetroHome";
+import RetroBoard from "./pages/RetroBoard";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={RetroDashboard} />
-        <Route exact path="/board/:boardId" />
+        <Route exact path="/" component={RetroHome} />
+        <Route exact path="/board/:boardId" component={RetroBoard} />
       </Switch>
     </Router>
   );

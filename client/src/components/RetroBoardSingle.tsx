@@ -8,7 +8,7 @@ const ColumnsWrapper = styled.main`
   gap: 20px;
 `;
 
-export default function RetroBoard() {
+export default function RetroBoardSingle() {
   const twoColumns = [
     {
       columnTitle: "Yes",
