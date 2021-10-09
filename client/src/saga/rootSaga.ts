@@ -1,10 +1,13 @@
 import { put, takeEvery, call, takeLatest } from "redux-saga/effects";
-import { fetchAllBoardsAPI, createBoardAPI } from "../utils/api";
+import {
+  fetchAllBoardsAPI,
+  createBoardAPI,
+  fetchActiveBoardAPI,
+} from "../utils/api";
 import { Board } from "../interfaces";
 import { AxiosResponse } from "axios";
 import boardSlice from "../reducers/rootReducer";
 
-// Our worker Saga: will perform the async increment task
 function* getBoards() {
   try {
     const result: Promise<AxiosResponse<Board[]>> = yield call(
@@ -29,10 +32,24 @@ function* createBoard(
     console.log(err);
   }
 }
-// Our watcher Saga: spawn a new incrementAsync task on each INCREMENT_ASYNC
+
+function* fetchActiveBoard(
+  action: ReturnType<typeof boardSlice.actions.fetchActiveBoard>
+) {
+  try {
+    const result: Promise<AxiosResponse<Board>> = yield call(
+      fetchActiveBoardAPI,
+      action.payload
+    );
+    yield put(boardSlice.actions.createBoard(result));
+  } catch (err) {
+    console.log(err);
+  }
+}
 function* watchRootSaga() {
   yield takeLatest("FETCH_BOARDS_REQUESTED", getBoards);
   yield takeLatest("CREATE_BOARD_REQUESTED", createBoard);
+  yield takeLatest("FETCH_BOARD_REQUESTED", fetchActiveBoard);
 }
 
 export default watchRootSaga;

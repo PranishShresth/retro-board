@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import RetroColumn from "./RetroColumn";
 import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { useDispatch } from "react-redux";
 
 const ColumnsWrapper = styled.main`
   display: flex;

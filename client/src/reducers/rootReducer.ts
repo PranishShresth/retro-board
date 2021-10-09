@@ -3,6 +3,7 @@ import { Board } from "../interfaces";
 
 interface BoardState {
   boards: Board[];
+  board: Board | null;
   loading: boolean;
   error: string;
 }
@@ -11,7 +12,12 @@ interface BoardState {
 // const deleteBoard = createAction<Board>("board/delete");
 // const updateBoardDetails = createAction<Board>("board/update");
 
-const initialState = { boards: [], loading: false, error: "" } as BoardState;
+const initialState = {
+  boards: [],
+  board: null,
+  loading: false,
+  error: "",
+} as BoardState;
 
 const boardSlice = createSlice({
   name: "board",
@@ -19,6 +25,9 @@ const boardSlice = createSlice({
   reducers: {
     fetchBoards(state, action) {
       state.boards = action.payload;
+    },
+    fetchActiveBoard(state, action) {
+      state.board = action.payload;
     },
     createBoard(state, action) {
       state.boards.push(action.payload);

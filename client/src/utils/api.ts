@@ -12,6 +12,16 @@ export const fetchAllBoardsAPI = async () => {
     throw err;
   }
 };
+
+export const fetchActiveBoardAPI = async (boardId: string) => {
+  try {
+    const { data } = await httpClient.get(`/get-board/${boardId}`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const createBoardAPI = async (payload: Board): Promise<Board> => {
   try {
     const { data } = await httpClient.post("/create-board", payload);
