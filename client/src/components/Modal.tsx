@@ -1,4 +1,4 @@
-import { Children, useState } from "react";
+import { useState } from "react";
 import { Button, Modal, Form } from "semantic-ui-react";
 
 interface Props {

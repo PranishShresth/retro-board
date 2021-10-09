@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Container } from "semantic-ui-react";
 import { boardSelector } from "../utils/selectors";
-import RetroModal from "./Modal";
-import { Button, Form } from "semantic-ui-react";
+import CreateList from "./CreateList";
 
 const ColumnsWrapper = styled.main`
   display: flex;
   gap: 20px;
+  overflow-x: auto;
+  height: 100vh;
 `;
 
 interface BoardParam {
@@ -54,8 +55,8 @@ export default function RetroBoardSingle() {
       >
         <ColumnsWrapper>
           {board?.lists.map((list) => (
-            <Droppable droppableId={`droppable-${list._id}`}>
-              {(provided, snapshot) => (
+            <Droppable droppableId={`droppable-${list._id}`} key={list._id}>
+              {(provided) => (
                 <RetroColumn
                   droppableProvided={provided}
                   items={list.items}
@@ -64,6 +65,9 @@ export default function RetroBoardSingle() {
               )}
             </Droppable>
           ))}
+          <div style={{ minWidth: 250 }}>
+            <CreateList />
+          </div>
         </ColumnsWrapper>
       </DragDropContext>
     </Container>

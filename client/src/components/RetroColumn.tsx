@@ -8,6 +8,7 @@ const RetroColumnWrapper = styled.div`
   min-width: 250px;
   padding: 8px;
   background: rgb(235, 236, 240);
+  height: fit-content;
 `;
 
 const RetroColumnHeader = styled.div`

@@ -54,7 +54,12 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
     const savedList = await newList.save();
     const board = await Board.findById(board_id);
     board.lists.push(savedList._id);
-    const updatedBoard = await board.save();
+    let updatedBoard = await board.save();
+    updatedBoard = await updatedBoard.populate({
+      path: "lists",
+      populate: { path: "items" },
+    });
+
     res.status(200).send(updatedBoard);
   } catch (err) {
     console.log(err);

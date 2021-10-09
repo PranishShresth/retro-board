@@ -20,7 +20,7 @@ const CreateList = () => {
     try {
       ev.preventDefault();
       dispatch({
-        type: "CREATE_BOARD_REQUESTED",
+        type: "CREATE_LIST_REQUESTED",
         payload: { ...formValues, board_id: boardId },
       });
     } catch (err) {
@@ -30,13 +30,13 @@ const CreateList = () => {
 
   return (
     <>
-      <RetroModal modalTitle="Board Creation" triggerName="Create a List">
+      <RetroModal modalTitle="List Creation" triggerName="Create a List">
         <Form onSubmit={handleCreateBoard}>
           <Form.Field>
             <label>List Title</label>
             <input
               type="text"
-              name="title"
+              name="list_title"
               value={formValues.list_title}
               placeholder="List Title"
               onChange={handleChange}

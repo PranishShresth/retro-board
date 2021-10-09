@@ -5,7 +5,7 @@ import { AxiosResponse } from "axios";
 import boardSlice from "../reducers/boardReducer";
 
 function* createList(
-  action: ReturnType<typeof boardSlice.actions.createBoard>
+  action: ReturnType<typeof boardSlice.actions.updateBoard>
 ) {
   try {
     const result: Promise<AxiosResponse<List>> = yield call(
