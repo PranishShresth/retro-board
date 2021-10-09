@@ -7,6 +7,11 @@ import { Button, Form } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
 import { Card, Grid } from "semantic-ui-react";
+import styled from "styled-components";
+
+const BoardsContainer = styled(Container)`
+  padding-top: 50px;
+`;
 
 const RetroDashBoard = React.memo(() => {
   const dispatch = useDispatch();
@@ -18,6 +23,7 @@ const RetroDashBoard = React.memo(() => {
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });
+    console.log("re run effect");
   }, []);
 
   const handleCreateBoard = (ev: React.FormEvent) => {
@@ -30,9 +36,9 @@ const RetroDashBoard = React.memo(() => {
   };
 
   return (
-    <div>
+    <>
       <RetroHeader />
-      <Container>
+      <BoardsContainer>
         <Grid columns={3}>
           {boards.map((board) => {
             return (
@@ -80,8 +86,8 @@ const RetroDashBoard = React.memo(() => {
             </RetroModal>
           </Grid.Column>
         </Grid>
-      </Container>
-    </div>
+      </BoardsContainer>
+    </>
   );
 });
 

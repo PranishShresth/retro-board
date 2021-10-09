@@ -31,7 +31,7 @@ function* createBoard(
 }
 // Our watcher Saga: spawn a new incrementAsync task on each INCREMENT_ASYNC
 function* watchRootSaga() {
-  yield takeEvery("FETCH_BOARDS_REQUESTED", getBoards);
+  yield takeLatest("FETCH_BOARDS_REQUESTED", getBoards);
   yield takeLatest("CREATE_BOARD_REQUESTED", createBoard);
 }
 

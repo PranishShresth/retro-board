@@ -18,7 +18,7 @@ const boardSlice = createSlice({
   initialState,
   reducers: {
     fetchBoards(state, action) {
-      state.boards.push(...action.payload);
+      state.boards = action.payload;
     },
     createBoard(state, action) {
       state.boards.push(action.payload);
