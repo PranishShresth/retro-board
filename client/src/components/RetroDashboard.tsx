@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { boardSelector } from "../utils/selectors";
+import { boardsSelector } from "../utils/selectors";
 import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
@@ -20,7 +20,7 @@ const RetroDashBoard = React.memo(() => {
     title: "",
     theme: "",
   });
-  const boards = useSelector(boardSelector);
+  const boards = useSelector(boardsSelector);
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });

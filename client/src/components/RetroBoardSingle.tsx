@@ -1,15 +1,28 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import RetroColumn from "./RetroColumn";
 import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router";
+import { boardSelector } from "../utils/selectors";
 
 const ColumnsWrapper = styled.main`
   display: flex;
   gap: 20px;
 `;
 
+interface BoardParam {
+  boardId: string;
+}
 export default function RetroBoardSingle() {
+  const dispatch = useDispatch();
+  const params = useParams<BoardParam>();
+  const board = useSelector(boardSelector);
+
+  useEffect(() => {
+    dispatch({ type: "FETCH_BOARD_REQUESTED", payload: params.boardId });
+  }, [params.boardId, dispatch]);
+
   const twoColumns = [
     {
       columnTitle: "Yes",
@@ -59,10 +72,14 @@ export default function RetroBoardSingle() {
       onDragEnd={onDragEnd}
     >
       <ColumnsWrapper>
-        {twoColumns.map((item, index) => (
-          <Droppable droppableId={`droppable-${index}`}>
+        {board?.lists.map((list, index) => (
+          <Droppable droppableId={`droppable-${list._id}`}>
             {(provided, snapshot) => (
-              <RetroColumn droppableProvided={provided} columnData={item} />
+              <RetroColumn
+                droppableProvided={provided}
+                items={list.items}
+                title={list.list_title}
+              />
             )}
           </Droppable>
         ))}

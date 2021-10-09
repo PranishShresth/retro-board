@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import RetroCard from "./RetroCard";
+import { Item } from "../interfaces";
 import { Draggable, DroppableProvided } from "react-beautiful-dnd";
 
 const RetroColumnWrapper = styled.div`
@@ -19,36 +20,28 @@ const RetroCardContainer = styled.div`
   gap: 10px;
 `;
 
-interface ColumnData {
-  content: string;
-  id: number;
-}
-interface ColumnDetails {
-  columnTitle: string;
-  columnData: Array<ColumnData>;
-}
-
 interface Props {
-  columnData: ColumnDetails;
+  items: Item[];
+  title: string;
   children?: React.ReactNode;
   droppableProvided?: DroppableProvided;
 }
 
-const RetroColumn = ({ columnData, droppableProvided }: Props) => {
+const RetroColumn = ({ items, title, droppableProvided }: Props) => {
   return (
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
-      <RetroColumnHeader>{columnData.columnTitle}</RetroColumnHeader>
+      <RetroColumnHeader>{title}</RetroColumnHeader>
       {droppableProvided?.placeholder}
       <RetroCardContainer>
-        {columnData.columnData.map((item, index) => {
+        {items.map((item, index) => {
           return (
             <Draggable
-              draggableId={`draggable-${item.id}`}
+              draggableId={`draggable-${item._id}`}
               index={index}
               key={index}
             >
               {(provided, snapshot) => (
-                <RetroCard provided={provided} content={item.content} />
+                <RetroCard provided={provided} content={item.item_title} />
               )}
             </Draggable>
           );
