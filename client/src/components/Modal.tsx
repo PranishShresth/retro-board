@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { Children, useState } from "react";
 import { Button, Modal, Form } from "semantic-ui-react";
 
-function RetroModal() {
+interface Props {
+  children?: React.ReactNode;
+  triggerName: string;
+  modalTitle: string;
+}
+function RetroModal({ children, triggerName, modalTitle }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -9,25 +14,10 @@ function RetroModal() {
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button>Create a Board</Button>}
+      trigger={<Button color="purple">{triggerName}</Button>}
     >
-      <Modal.Header>Board Creation</Modal.Header>
-      <Modal.Content>
-        <Form>
-          <Form.Field>
-            <label>Board Title</label>
-            <input type="text" placeholder="Board Title" />
-          </Form.Field>
-          <Form.Field>
-            <label>Board Theme</label>
-            <input type="color" placeholder="Board Theme" />
-          </Form.Field>
-
-          <Button color="instagram" type="submit">
-            Create Board
-          </Button>
-        </Form>
-      </Modal.Content>
+      <Modal.Header>{modalTitle}</Modal.Header>
+      <Modal.Content>{children}</Modal.Content>
     </Modal>
   );
 }
