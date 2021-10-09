@@ -8,6 +8,7 @@
     "esModuleInterop": true,
     "noImplicitAny": false,
     "skipLibCheck": true,
+    "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true
   },
   "include": ["index.d.ts"]

@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 
-interface DOMEvent<T extends EventTarget> extends Event {
-  readonly target: T;
-}
+export const useForm = <T,>(initialState: T) => {
+  const [formValues, setFormValues] = useState<T>(initialState);
 
-export const useForm = (initialState: any) => {
-  const [formValues, setFormValues] = useState(initialState);
-
-  const handleChange = (event: DOMEvent<HTMLInputElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues((prevValues: any) => ({
       ...prevValues,
       [event.target.name]: [event.target.value],
     }));
   };
 
-  return [formValues, handleChange];
+  return { formValues, handleChange };
 };
