@@ -74,6 +74,7 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
   try {
     const newItem = new Item({ item_title: item_title, list: list_id });
     const savedItem = await newItem.save();
+
     const list = await List.findById(list_id);
     list.items.push(savedItem._id);
     const updatedList = await list.save();
