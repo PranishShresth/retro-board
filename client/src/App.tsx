@@ -3,7 +3,6 @@ import RetroBoard from "./components/RetroBoard";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { boardSelector } from "./utils/selectors";
-import { Board } from "./interfaces";
 
 function App() {
   const dispatch = useDispatch();
