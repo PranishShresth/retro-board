@@ -9,8 +9,6 @@ const ColumnsWrapper = styled.main`
 `;
 
 export default function RetroBoard() {
-  const columnTitles = ["Yes", "No"];
-
   const twoColumns = [
     {
       columnTitle: "Yes",

@@ -4,6 +4,11 @@ const httpClient = axios.create({
   baseURL: "http://localhost:5000/api/v1",
 });
 
-export const fetchAllBoards = () => {
-  return httpClient.get("/get-boards").then((res) => res.data);
+export const fetchAllBoards = async () => {
+  try {
+    const { data } = await httpClient.get("/get-boards");
+    return data;
+  } catch {
+    console.log("Network issue");
+  }
 };
