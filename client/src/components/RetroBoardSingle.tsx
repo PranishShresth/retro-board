@@ -45,7 +45,19 @@ export default function RetroBoardSingle() {
     /*...*/
   }, []);
   const onDragEnd = useCallback((result: DropResult) => {
-    console.log(result);
+    const { source, destination, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    if (source.droppableId === destination.droppableId) {
+      const currentlist = board?.lists.find(
+        (list) => list._id === destination.droppableId
+      );
+      const currentItem = currentlist?.items.findIndex(
+        (x) => x._id === draggableId
+      );
+      board?.lists.find((list) => list);
+    }
   }, []);
 
   if (loading) {

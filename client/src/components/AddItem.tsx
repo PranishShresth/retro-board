@@ -1,5 +1,6 @@
 import { Form, TextArea, Button } from "semantic-ui-react";
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 import { useForm } from "./hooks/useForm";
 import styled from "styled-components";
 
@@ -10,14 +11,21 @@ interface Props {
   list_id: string;
 }
 function AddItem({ list_id }: Props) {
+  const dispatch = useDispatch();
   const { formValues, handleChange } = useForm({ item_title: "" });
   const [open, setOpen] = useState(false);
 
   const handleAddingItem = async (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+      dispatch({
+        type: "CREATE_ITEM_REQUESTED",
+        payload: { list_id, ...formValues },
+      });
       setOpen(false);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
   return (
     <>
@@ -34,9 +42,10 @@ function AddItem({ list_id }: Props) {
         <Form onSubmit={handleAddingItem}>
           <Form.Field>
             <StyledTextArea
+              name="item_title"
+              onChange={handleChange}
               placeholder="Add a Item"
               value={formValues.item_title}
-              handleChange={handleChange}
             />
           </Form.Field>
           <Form.Button color="green">Create</Form.Button>

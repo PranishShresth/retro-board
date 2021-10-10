@@ -35,9 +35,11 @@ const boardSlice = createSlice({
     },
     createItem(state, action) {
       const list = action.payload;
+      console.log(list);
       const boardIdx = state.board?.lists.findIndex(
         (singleList) => singleList._id === list._id
       );
+      console.log(boardIdx);
       state.board!.lists[boardIdx!] = list;
     },
     deleteBoard(state, action) {

@@ -77,17 +77,24 @@ interface IRequest4 extends Request {
 }
 export const addItemToList = async (req: IRequest4, res: Response) => {
   const { item_title, list_id } = req.body;
+  console.log();
 
   try {
     let existingList: IList = await List.findById(list_id).populate("items");
+    console.log(existingList);
 
-    existingList.items.sort((a, b) =>
-      LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
-    );
+    let nextOrder;
+    if (existingList.items.length) {
+      existingList.items.sort((a, b) =>
+        LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
+      );
 
-    const nextOrder = LexoRank.parse(
-      existingList.items[existingList.items.length - 1].order
-    ).genNext();
+      nextOrder = LexoRank.parse(
+        existingList.items[existingList.items.length - 1].order
+      ).genNext();
+    } else {
+      nextOrder = LexoRank.min();
+    }
 
     const newItem = new Item({ item_title: item_title, order: nextOrder });
     const savedItem = await newItem.save();
@@ -102,8 +109,10 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
       LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
     );
 
+    console.log(updatedList);
     res.status(200).send(updatedList);
   } catch (err) {
+    console.log(err);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -121,14 +130,19 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
   try {
     // find the item content
 
-    const item = await Item.findById(item_id);
+    if (list_source === list_destination) {
+      const item = await List.find({ _id: [list_source, list_destination] });
+      console.log(item);
+    }
 
-    const sourceList = await List.findById(list_source);
-    // sourceList.
+    // const item = await Item.find({ _id: [list_source, list_destination] });
 
-    const destinationList = await List.findById(list_destination);
+    // const sourceList = await List.findById(list_source);
+    // // sourceList.
 
-    sourceList.push(item);
+    // const destinationList = await List.findById(list_destination);
+
+    // sourceList.push(item);
     // const newItem = new Item({ item_title: item_title });
     // const savedItem = await newItem.save();
 
