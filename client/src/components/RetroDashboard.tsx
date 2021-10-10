@@ -33,9 +33,9 @@ const RetroDashBoard = React.memo(() => {
     });
     socket.emit("connection");
     socket.on("new-board", function (data) {
-      console.log(data);
+      dispatch(boardActions.createBoard(data));
     });
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });

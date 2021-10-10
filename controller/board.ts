@@ -94,7 +94,7 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
         existingList.items[existingList.items.length - 1].order
       ).genNext();
     } else {
-      nextOrder = LexoRank.min();
+      nextOrder = LexoRank.middle();
     }
 
     const newItem = new Item({ item_title: item_title, order: nextOrder });
@@ -122,6 +122,7 @@ interface IReorderRequest extends Request {
   body: {
     prev_item_order: string;
     curr_item: string;
+    dest_item: string;
     next_item_order: string;
   };
   params: {
@@ -132,53 +133,27 @@ export const reorderItemInSameList = async (
   req: IReorderRequest,
   res: Response
 ) => {
-  const { prev_item_order, curr_item, next_item_order } = req.body;
+  const { prev_item_order, curr_item, next_item_order, dest_item } = req.body;
   const { list_id } = req.params;
   console.log(list_id, curr_item);
 
   try {
-    // let existingList: IList = await List.findById(list_id).populate("items");
+    const isFirstItem = LexoRank.parse(dest_item);
 
-    // let nextOrder;
-    // if (existingList.items.length) {
-    //   existingList.items.sort((a, b) =>
-    //     LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
-    //   );
-
-    //   nextOrder = LexoRank.parse(
-    //     existingList.items[existingList.items.length - 1].order
-    //   ).genNext();
-    // }
-    // if (!prev_item_order) {
-    // }
-
-    // if (!next_item_order) {
-    //   let item = await Item.where({ _id: curr_item }).updateOne({
-    //     order: nextOrder,
-    //   });
-    //   existingList
-    // }
-
-    const rank = LexoRank.parse(prev_item_order).between(
-      LexoRank.parse(next_item_order)
-    );
     const item = await Item.findOneAndUpdate(
-      { _id: "616242537a8eff2d31745d78" },
+      { _id: curr_item },
       {
         $set: {
-          order: "0|090002:",
+          order: isFirstItem.genPrev(),
         },
       }
     );
 
     let list: IList = await List.findById(list_id).populate("items");
     list.items.sort((a, b) =>
-      LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
+      LexoRank.parse(b.order).compareTo(LexoRank.parse(a.order))
     );
     res.status(200).send(list);
-
-    // let updatedList: IList = await List.findByIdAndSortByOrder(list_id);
-    // res.status(200).send(updatedList);
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");
