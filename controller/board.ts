@@ -2,7 +2,7 @@ import { Board } from "../models/board";
 import { List } from "../models/list";
 import { Item } from "../models/item";
 import { LexoRank } from "lexorank";
-
+import { ISocket } from "../index";
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
 
@@ -16,8 +16,11 @@ export const createBoard = async (req: IRequest1, res: Response) => {
   try {
     const newBoard = new Board({ title });
     const savedBoard = await newBoard.save();
+    const io: ISocket = req.app.get("socketio");
+    io.emit("new-board", savedBoard);
     res.status(200).send(savedBoard);
   } catch (err) {
+    console.log(err);
     res.status(500).send("Internal Server Error");
   }
 };

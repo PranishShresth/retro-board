@@ -9,6 +9,8 @@ import { useForm } from "./hooks/useForm";
 import { Grid } from "semantic-ui-react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
+import { io } from "socket.io-client";
+
 import { boardActions } from "../reducers/boardReducer";
 import Loading from "./Loader";
 
@@ -18,12 +20,22 @@ const BoardsContainer = styled(Container)`
 
 const RetroDashBoard = React.memo(() => {
   const dispatch = useDispatch();
+  const boards = useSelector(boardsSelector);
+  const loading = useSelector(loadingSelector);
   const { formValues, handleChange } = useForm({
     title: "",
     theme: "",
   });
-  const boards = useSelector(boardsSelector);
-  const loading = useSelector(loadingSelector);
+
+  useEffect(() => {
+    const socket = io("http://localhost:5000", {
+      reconnectionDelayMax: 10000,
+    });
+    socket.emit("connection");
+    socket.on("new-board", function (data) {
+      console.log(data);
+    });
+  }, []);
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });
