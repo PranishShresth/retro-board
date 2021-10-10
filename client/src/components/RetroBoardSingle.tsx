@@ -53,10 +53,17 @@ export default function RetroBoardSingle() {
       const currentlist = board?.lists.find(
         (list) => list._id === destination.droppableId
       );
-      const currentItem = currentlist?.items.findIndex(
+      const currentItems = currentlist!.items;
+
+      const currentItemIdx = currentItems.findIndex(
         (x) => x._id === draggableId
       );
-      board?.lists.find((list) => list);
+      const prevItem = currentItems[currentItemIdx - 1]?.order;
+      const currItem = currentItems[currentItemIdx]._id;
+      const nextItem = currentItems[currentItemIdx + 1]?.order;
+
+      console.log("here", prevItem, currItem, nextItem);
+      // board?.lists.find((list) => list);
     }
   }, []);
 
