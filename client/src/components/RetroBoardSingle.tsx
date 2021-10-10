@@ -37,87 +37,22 @@ export default function RetroBoardSingle() {
     dispatch({ type: "FETCH_BOARD_REQUESTED", payload: params.boardId });
   }, [params.boardId, dispatch]);
 
-  const onBeforeCapture = useCallback(() => {
-    /*...*/
-  }, []);
-  const onBeforeDragStart = useCallback(() => {
-    /*...*/
-  }, []);
   const onDragStart = useCallback(() => {
     console.log("draggin");
     /*...*/
   }, []);
-  const onDragUpdate = useCallback(() => {
-    /*...*/
+
+  const onDragEnd = useCallback((result: DropResult) => {
+    const { source, destination, draggableId } = result;
+    if (!isPositionChanged(source, destination)) return;
   }, []);
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      const { source, destination, draggableId } = result;
-      if (!isPositionChanged(source, destination)) return;
-
-      // if (source.droppableId === destination.droppableId) {
-      //   const currentlist = board?.lists.find(
-      //     (list) => list._id === destination.droppableId
-      //   );
-      //   // const prev_item_order = currentlist?.items[destination.index - 1].order;
-      //   const dest_item = currentlist?.items[destination.index].order;
-      //   // const next_item_order = currentlist?.items[destination.index + 1].order;
-      //   // const curr_item = currentlist?.items[source.index];
-      //   console.log(dest_item);
-      //   dispatch({
-      //     type: "REORDER_ITEM_REQUESTED",
-      //     payload: {
-      //       dest_item,
-      //       list_id: destination.droppableId,
-      //     },
-      //   });
-      // }
-      // console.log(source, destination);
-      // if (source.droppableId === destination.droppableId) {
-      //   console.log(board);
-      //   const currentlist = board?.lists.find(
-      //     (list) => list._id === destination.droppableId
-      //   );
-
-      //   console.log(currentlist);
-      //   const currentItems = currentlist!.items;
-
-      //   const currentItemIdx = currentItems.findIndex(
-      //     (x) => x._id === draggableId
-      //   );
-
-      //   console.log(currentItemIdx - 1, currentItemIdx + 1);
-      //   const prevItem = currentItems[currentItemIdx - 1]?.order;
-      //   const currItem = currentItems[currentItemIdx]._id;
-      //   const nextItem = currentItems[currentItemIdx + 1]?.order;
-
-      // dispatch({
-      //   type: "REORDER_ITEM_REQUESTED",
-      //   payload: {
-      //     prev_item_order: prevItem,
-      //     curr_item: currItem,
-      //     next_item_order: nextItem,
-      //     list_id: destination.droppableId,
-      //   },
-      // });
-      // console.log("here", prevItem, currItem, nextItem);
-      // board?.lists.find((list) => list);
-    },
-    [dispatch, board?.lists]
-  );
 
   if (loading) {
     return <Loading />;
   }
   return (
     <Container>
-      <DragDropContext
-        onBeforeCapture={onBeforeCapture}
-        onBeforeDragStart={onBeforeDragStart}
-        onDragStart={onDragStart}
-        onDragUpdate={onDragUpdate}
-        onDragEnd={onDragEnd}
-      >
+      <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <ColumnsWrapper>
           {board?.lists.map((list) => (
             <Droppable droppableId={list._id} key={list._id}>
@@ -150,12 +85,12 @@ const isPositionChanged = (
 };
 
 const calculateItemPosition = () => {};
-export const moveItemWithinArray = (arr, item, newIndex) => {
-  const arrClone = [...arr];
-  const oldIndex = arrClone.indexOf(item);
-  arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
-  return arrClone;
-};
+// export const moveItemWithinArray = (arr, item, newIndex) => {
+//   const arrClone = [...arr];
+//   const oldIndex = arrClone.indexOf(item);
+//   arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
+//   return arrClone;
+// };
 const getPrevAndNextItem = (
   board: Board,
   source: DraggableLocation | undefined,
@@ -169,8 +104,10 @@ const getPrevAndNextItem = (
   const sortedItem = [...currentlist!.items].sort((a, b) =>
     LexoRank.parse(b.order).compareTo(LexoRank.parse(a.order))
   );
-  const prev_item = currentlist?.items[destination.index - 1];
-  const next_item = currentlist?.items[destination.index + 1];
+  const prevItem = currentlist?.items[destination.index - 1];
+  const nextItem = currentlist?.items[destination.index + 1];
+
+  return { prevItem, nextItem };
 };
 // const calculateIssueListPosition = (...args: any[]) => {
 //   const { prevIssue, nextIssue } = getAfterDropPrevNextIssue(...args);
