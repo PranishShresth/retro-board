@@ -8,6 +8,8 @@ import { Container } from "semantic-ui-react";
 import { boardSelector, loadingSelector } from "../utils/selectors";
 import CreateList from "./CreateList";
 import Loading from "./Loader";
+import { io } from "socket.io-client";
+
 const ColumnsWrapper = styled.main`
   display: flex;
   gap: 20px;
@@ -25,6 +27,12 @@ export default function RetroBoardSingle() {
   const board = useSelector(boardSelector);
   const loading = useSelector(loadingSelector);
 
+  useEffect(() => {
+    const socket = io("http://localhost:5000", {
+      reconnectionDelayMax: 10000,
+    });
+    socket.emit("connection");
+  }, []);
   useEffect(() => {
     dispatch({ type: "FETCH_BOARD_REQUESTED", payload: params.boardId });
   }, [params.boardId, dispatch]);
