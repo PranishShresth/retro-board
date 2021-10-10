@@ -10,6 +10,7 @@ import { Grid } from "semantic-ui-react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
 import { boardActions } from "../reducers/boardReducer";
+import Loading from "./Loader";
 
 const BoardsContainer = styled(Container)`
   padding-top: 50px;
@@ -31,6 +32,7 @@ const RetroDashBoard = React.memo(() => {
   const handleCreateBoard = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+
       dispatch({ type: "CREATE_BOARD_REQUESTED", payload: formValues });
     } catch (err) {
       console.log(err);
@@ -38,7 +40,7 @@ const RetroDashBoard = React.memo(() => {
   };
 
   if (loading) {
-    return <h1>Loading...</h1>;
+    return <Loading />;
   }
 
   return (

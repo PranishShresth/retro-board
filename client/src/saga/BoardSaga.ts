@@ -16,7 +16,7 @@ function* getBoards() {
       fetchAllBoardsAPI
     );
     yield put(boardActions.fetchBoards(result));
-    yield put(boardActions.setLoading(true));
+    yield put(boardActions.setLoading(false));
   } catch (err) {
     console.log(err);
   }
@@ -40,11 +40,13 @@ function* fetchActiveBoard(
   action: ReturnType<typeof boardActions.fetchActiveBoard>
 ) {
   try {
+    yield put(boardActions.setLoading(true));
     const result: Promise<AxiosResponse<Board>> = yield call(
       fetchActiveBoardAPI,
       action.payload
     );
     yield put(boardActions.fetchActiveBoard(result));
+    yield put(boardActions.setLoading(false));
   } catch (err) {
     console.log(err);
   }

@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import RetroColumn from "./RetroColumn";
 import styled from "styled-components";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { Container } from "semantic-ui-react";
-import { boardSelector } from "../utils/selectors";
+import { boardSelector, loadingSelector } from "../utils/selectors";
 import CreateList from "./CreateList";
 import Loading from "./Loader";
 const ColumnsWrapper = styled.main`
@@ -20,15 +20,13 @@ interface BoardParam {
   boardId: string;
 }
 export default function RetroBoardSingle() {
-  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const params = useParams<BoardParam>();
   const board = useSelector(boardSelector);
+  const loading = useSelector(loadingSelector);
 
   useEffect(() => {
-    setLoading(true);
     dispatch({ type: "FETCH_BOARD_REQUESTED", payload: params.boardId });
-    setLoading(false);
   }, [params.boardId, dispatch]);
 
   const onBeforeCapture = useCallback(() => {
