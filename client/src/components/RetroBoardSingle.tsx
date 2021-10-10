@@ -44,28 +44,46 @@ export default function RetroBoardSingle() {
   const onDragUpdate = useCallback(() => {
     /*...*/
   }, []);
-  const onDragEnd = useCallback((result: DropResult) => {
-    const { source, destination, draggableId } = result;
-    if (!destination) {
-      return;
-    }
-    if (source.droppableId === destination.droppableId) {
-      const currentlist = board?.lists.find(
-        (list) => list._id === destination.droppableId
-      );
-      const currentItems = currentlist!.items;
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      const { source, destination, draggableId } = result;
+      if (!destination) {
+        return;
+      }
+      if (source.droppableId === destination.droppableId) {
+        console.log(board);
+        const currentlist = board?.lists.find(
+          (list) => list._id === destination.droppableId
+        );
 
-      const currentItemIdx = currentItems.findIndex(
-        (x) => x._id === draggableId
-      );
-      const prevItem = currentItems[currentItemIdx - 1]?.order;
-      const currItem = currentItems[currentItemIdx]._id;
-      const nextItem = currentItems[currentItemIdx + 1]?.order;
+        console.log(currentlist);
+        const currentItems = currentlist!.items;
 
-      console.log("here", prevItem, currItem, nextItem);
-      // board?.lists.find((list) => list);
-    }
-  }, []);
+        const currentItemIdx = currentItems.findIndex(
+          (x) => x._id === draggableId
+        );
+
+        console.log(currentItemIdx - 1, currentItemIdx + 1);
+        const prevItem = currentItems[currentItemIdx - 1]?.order;
+        const currItem = currentItems[currentItemIdx]._id;
+        const nextItem = currentItems[currentItemIdx + 1]?.order;
+        // prev_item_order, curr_item, next_item_order
+
+        dispatch({
+          type: "REORDER_ITEM_REQUESTED",
+          payload: {
+            prev_item_order: prevItem,
+            curr_item: currItem,
+            next_item_order: nextItem,
+            list_id: destination.droppableId,
+          },
+        });
+        console.log("here", prevItem, currItem, nextItem);
+        // board?.lists.find((list) => list);
+      }
+    },
+    [board, dispatch]
+  );
 
   if (loading) {
     return <Loading />;

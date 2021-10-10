@@ -1,5 +1,5 @@
 import { put, call, takeLatest } from "redux-saga/effects";
-import { createItemAPI } from "../utils/api";
+import { createItemAPI, reorderItemAPI } from "../utils/api";
 import { List } from "../interfaces";
 import { AxiosResponse } from "axios";
 import boardSlice from "../reducers/boardReducer";
@@ -22,7 +22,7 @@ function* reorderItem(
 ) {
   try {
     const result: Promise<AxiosResponse<List>> = yield call(
-      createItemAPI,
+      reorderItemAPI,
       action.payload
     );
 
@@ -33,6 +33,7 @@ function* reorderItem(
 }
 function* watchItemSaga() {
   yield takeLatest("CREATE_ITEM_REQUESTED", createItem);
+  yield takeLatest("REORDER_ITEM_REQUESTED", reorderItem);
 }
 
 export default watchItemSaga;

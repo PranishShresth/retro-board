@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { boardsSelector } from "../utils/selectors";
+import { boardsSelector, loadingSelector } from "../utils/selectors";
 import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
 import { Container } from "semantic-ui-react";
@@ -9,6 +9,7 @@ import { useForm } from "./hooks/useForm";
 import { Grid } from "semantic-ui-react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
+import { boardActions } from "../reducers/boardReducer";
 
 const BoardsContainer = styled(Container)`
   padding-top: 50px;
@@ -21,6 +22,7 @@ const RetroDashBoard = React.memo(() => {
     theme: "",
   });
   const boards = useSelector(boardsSelector);
+  const loading = useSelector(loadingSelector);
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });
@@ -34,6 +36,10 @@ const RetroDashBoard = React.memo(() => {
       console.log(err);
     }
   };
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
 
   return (
     <>

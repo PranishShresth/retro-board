@@ -6,42 +6,45 @@ import {
 } from "../utils/api";
 import { Board } from "../interfaces";
 import { AxiosResponse } from "axios";
-import boardSlice from "../reducers/boardReducer";
+import { boardActions } from "../reducers/boardReducer";
 
 function* getBoards() {
   try {
+    yield put(boardActions.setLoading(true));
+
     const result: Promise<AxiosResponse<Board[]>> = yield call(
       fetchAllBoardsAPI
     );
-    yield put(boardSlice.actions.fetchBoards(result));
+    yield put(boardActions.fetchBoards(result));
+    yield put(boardActions.setLoading(true));
   } catch (err) {
     console.log(err);
   }
 }
 
-function* createBoard(
-  action: ReturnType<typeof boardSlice.actions.createBoard>
-) {
+function* createBoard(action: ReturnType<typeof boardActions.createBoard>) {
   try {
+    yield put(boardActions.setLoading(true));
     const result: Promise<AxiosResponse<Board>> = yield call(
       createBoardAPI,
       action.payload
     );
-    yield put(boardSlice.actions.createBoard(result));
+    yield put(boardActions.createBoard(result));
+    yield put(boardActions.setLoading(false));
   } catch (err) {
     console.log(err);
   }
 }
 
 function* fetchActiveBoard(
-  action: ReturnType<typeof boardSlice.actions.fetchActiveBoard>
+  action: ReturnType<typeof boardActions.fetchActiveBoard>
 ) {
   try {
     const result: Promise<AxiosResponse<Board>> = yield call(
       fetchActiveBoardAPI,
       action.payload
     );
-    yield put(boardSlice.actions.fetchActiveBoard(result));
+    yield put(boardActions.fetchActiveBoard(result));
   } catch (err) {
     console.log(err);
   }

@@ -57,12 +57,13 @@ type reorderItemPayload = {
   prev_item_order: string;
   curr_item: string;
   next_item_order: string;
+  list_id: string;
 };
 
 export const reorderItemAPI = async (payload: reorderItemPayload) => {
   try {
     const { data } = await httpClient.put(
-      "/list/:list_id/reorder-item",
+      `/list/${payload.list_id}/reorder-item`,
       payload
     );
     return data;

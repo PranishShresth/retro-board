@@ -8,6 +8,10 @@ export const boardsSelector = createSelector(
   (state) => state.boards
 );
 
+export const loadingSelector = createSelector(
+  rootSelector,
+  (state) => state.loading
+);
 export const boardSelector = createSelector(
   rootSelector,
   (state) => state.board

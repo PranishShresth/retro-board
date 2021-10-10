@@ -24,6 +24,9 @@ const boardSlice = createSlice({
   name: "board",
   initialState,
   reducers: {
+    setLoading(state, action) {
+      state.loading = action.payload;
+    },
     fetchBoards(state, action) {
       state.boards = action.payload;
     },
@@ -60,5 +63,5 @@ const boardSlice = createSlice({
     },
   },
 });
-
+export const boardActions = boardSlice.actions;
 export default boardSlice;

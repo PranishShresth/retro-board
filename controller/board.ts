@@ -4,7 +4,6 @@ import { Item } from "../models/item";
 import { LexoRank } from "lexorank";
 
 import { Request, Response } from "express";
-import { APIError, HttpStatusCode } from "../utils/errorHandler";
 import { List as IList } from "../utils/interfaces";
 
 interface IRequest1 extends Request {
@@ -81,10 +80,9 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
 
   try {
     let existingList: IList = await List.findById(list_id).populate("items");
-    console.log(existingList);
 
     let nextOrder;
-    if (existingList.items.length) {
+    if (existingList!.items.length) {
       existingList.items.sort((a, b) =>
         LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
       );
@@ -100,10 +98,10 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
     const savedItem = await newItem.save();
 
     const list = await List.findById(list_id);
-    list.items.push(savedItem._id);
+    list?.items?.push(savedItem);
 
-    let updatedList = await list.save();
-    updatedList = await updatedList.populate("items");
+    let updatedList = await list?.save();
+    updatedList = await updatedList?.populate("items");
 
     updatedList.items.sort((a, b) =>
       LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
@@ -119,38 +117,67 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
 
 interface IReorderRequest extends Request {
   body: {
-    item_id: string;
-    list_source: string;
-    list_destination: string;
+    prev_item_order: string;
+    curr_item: string;
+    next_item_order: string;
+  };
+  params: {
+    list_id: string;
   };
 }
-export const reorderItem = async (req: IReorderRequest, res: Response) => {
-  const { item_id, list_source, list_destination } = req.body;
+export const reorderItemInSameList = async (
+  req: IReorderRequest,
+  res: Response
+) => {
+  const { prev_item_order, curr_item, next_item_order } = req.body;
+  const { list_id } = req.params;
+  console.log(list_id, curr_item);
 
   try {
-    // find the item content
+    // let existingList: IList = await List.findById(list_id).populate("items");
 
-    if (list_source === list_destination) {
-      const item = await List.find({ _id: [list_source, list_destination] });
-      console.log(item);
-    }
+    // let nextOrder;
+    // if (existingList.items.length) {
+    //   existingList.items.sort((a, b) =>
+    //     LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
+    //   );
 
-    // const item = await Item.find({ _id: [list_source, list_destination] });
+    //   nextOrder = LexoRank.parse(
+    //     existingList.items[existingList.items.length - 1].order
+    //   ).genNext();
+    // }
+    // if (!prev_item_order) {
+    // }
 
-    // const sourceList = await List.findById(list_source);
-    // // sourceList.
+    // if (!next_item_order) {
+    //   let item = await Item.where({ _id: curr_item }).updateOne({
+    //     order: nextOrder,
+    //   });
+    //   existingList
+    // }
 
-    // const destinationList = await List.findById(list_destination);
+    const rank = LexoRank.parse(prev_item_order).between(
+      LexoRank.parse(next_item_order)
+    );
+    const item = await Item.findOneAndUpdate(
+      { _id: "616242537a8eff2d31745d78" },
+      {
+        $set: {
+          order: "0|090002:",
+        },
+      }
+    );
 
-    // sourceList.push(item);
-    // const newItem = new Item({ item_title: item_title });
-    // const savedItem = await newItem.save();
+    let list: IList = await List.findById(list_id).populate("items");
+    list.items.sort((a, b) =>
+      LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
+    );
+    res.status(200).send(list);
 
-    // // const list = await List.findById(list_id);
-    // // list.items.push(savedItem._id);
-    // // const updatedList = await list.save();
+    // let updatedList: IList = await List.findByIdAndSortByOrder(list_id);
     // res.status(200).send(updatedList);
   } catch (err) {
+    console.log(err);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -180,3 +207,14 @@ export const getBoard = async (req: IGetBoardAPI, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+// const calculateListPosition = async (id): Promise<number> => {
+//   const list = await List.findOne({ _id: id });
+
+//   const itemPositions = issues.map(({ order }) => order);
+
+//   if (itemPositions.length > 0) {
+//     return Math.min(...itemPositionsPositions) - 1;
+//   }
+//   return 1;
+// };
