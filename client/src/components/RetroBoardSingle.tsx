@@ -14,7 +14,7 @@ import { Container } from "semantic-ui-react";
 import { boardSelector, loadingSelector } from "../utils/selectors";
 import CreateList from "./CreateList";
 import Loading from "./Loader";
-import { Board } from "../interfaces";
+import { Board, Item, List } from "../interfaces";
 
 const ColumnsWrapper = styled.main`
   display: flex;
@@ -42,10 +42,20 @@ export default function RetroBoardSingle() {
     /*...*/
   }, []);
 
-  const onDragEnd = useCallback((result: DropResult) => {
-    const { source, destination, draggableId } = result;
-    if (!isPositionChanged(source, destination)) return;
-  }, []);
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      const { source, destination, draggableId } = result;
+      if (!isPositionChanged(source, destination)) return;
+      const position = calculateItemPosition(
+        board!,
+        source,
+        destination,
+        draggableId
+      );
+      console.log(position);
+    },
+    [board]
+  );
 
   if (loading) {
     return <Loading />;
@@ -84,45 +94,84 @@ const isPositionChanged = (
   return !isSameList || !isSamePosition;
 };
 
-const calculateItemPosition = () => {};
-// export const moveItemWithinArray = (arr, item, newIndex) => {
-//   const arrClone = [...arr];
-//   const oldIndex = arrClone.indexOf(item);
-//   arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
-//   return arrClone;
-// };
+const calculateItemPosition = (
+  board: Board,
+  source: DraggableLocation,
+  destination: DraggableLocation | undefined,
+  droppedItemId: string
+) => {
+  const { prevItem, nextItem } = getPrevAndNextItem(
+    board,
+    source,
+    destination,
+    droppedItemId
+  );
+  let position;
+
+  if (!prevItem && !nextItem) {
+    position = LexoRank.middle();
+  } else if (!prevItem) {
+    position = LexoRank.parse(nextItem!.order).genPrev();
+  } else if (!nextItem) {
+    position = LexoRank.parse(prevItem!.order).genNext();
+  } else {
+    position = LexoRank.parse(nextItem!.order).between(
+      LexoRank.parse(prevItem!.order)
+    );
+  }
+  return position;
+};
+export const moveItemWithinArray = (
+  arr: Item[],
+  item: Item | undefined,
+  newIndex: number
+) => {
+  const arrClone = [...arr];
+  const oldIndex = arrClone.indexOf(item!);
+  arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
+  return arrClone;
+};
 const getPrevAndNextItem = (
   board: Board,
-  source: DraggableLocation | undefined,
-  destination: DraggableLocation,
+  source: DraggableLocation,
+  destination: DraggableLocation | undefined,
   droppedItemId: string
 ) => {
   const currentlist = board?.lists.find(
-    (list) => list._id === destination.droppableId
+    (list) => list._id === destination?.droppableId
+  );
+  const droppedItem = currentlist!.items.find(
+    (item) => item._id === droppedItemId
   );
 
   const sortedItem = [...currentlist!.items].sort((a, b) =>
     LexoRank.parse(b.order).compareTo(LexoRank.parse(a.order))
   );
-  const prevItem = currentlist?.items[destination.index - 1];
-  const nextItem = currentlist?.items[destination.index + 1];
+
+  const mutatedItems = moveItemWithinArray(
+    sortedItem,
+    droppedItem,
+    destination!.index
+  );
+  const prevItem = mutatedItems[destination!.index - 1];
+  const nextItem = mutatedItems[destination!.index + 1];
 
   return { prevItem, nextItem };
 };
 // const calculateIssueListPosition = (...args: any[]) => {
-//   const { prevIssue, nextIssue } = getAfterDropPrevNextIssue(...args);
+//   const { prevItem, nextItem } = getAfterDropPrevnextItem(...args);
 //   let position;
 
-//   if (!prevIssue && !nextIssue) {
+//   if (!prevItem && !nextItem) {
 //     position = 1;
-//   } else if (!prevIssue) {
-//     position = nextIssue.listPosition - 1;
-//   } else if (!nextIssue) {
-//     position = prevIssue.listPosition + 1;
+//   } else if (!prevItem) {
+//     position = nextItem.listPosition - 1;
+//   } else if (!nextItem) {
+//     position = prevItem.listPosition + 1;
 //   } else {
 //     position =
-//       prevIssue.listPosition +
-//       (nextIssue.listPosition - prevIssue.listPosition) / 2;
+//       prevItem.listPosition +
+//       (nextItem.listPosition - prevItem.listPosition) / 2;
 //   }
 //   return position;
 // };

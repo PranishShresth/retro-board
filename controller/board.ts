@@ -120,10 +120,8 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
 
 interface IReorderRequest extends Request {
   body: {
-    prev_item_order: string;
-    curr_item: string;
-    dest_item: string;
-    next_item_order: string;
+    item_id: string;
+    position: string;
   };
   params: {
     list_id: string;
@@ -133,18 +131,15 @@ export const reorderItemInSameList = async (
   req: IReorderRequest,
   res: Response
 ) => {
-  const { prev_item_order, curr_item, next_item_order, dest_item } = req.body;
+  const { item_id, position } = req.body;
   const { list_id } = req.params;
-  console.log(list_id, curr_item);
 
   try {
-    const isFirstItem = LexoRank.parse(dest_item);
-
-    const item = await Item.findOneAndUpdate(
-      { _id: curr_item },
+    await Item.findOneAndUpdate(
+      { _id: item_id },
       {
         $set: {
-          order: isFirstItem.genPrev(),
+          order: position,
         },
       }
     );
