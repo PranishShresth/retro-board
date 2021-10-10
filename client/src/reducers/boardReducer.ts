@@ -33,13 +33,12 @@ const boardSlice = createSlice({
     createBoard(state, action) {
       state.boards.push(action.payload);
     },
-    createItem(state, action) {
+    updateList(state, action) {
       const list = action.payload;
-      console.log(list);
+
       const boardIdx = state.board?.lists.findIndex(
         (singleList) => singleList._id === list._id
       );
-      console.log(boardIdx);
       state.board!.lists[boardIdx!] = list;
     },
     deleteBoard(state, action) {
@@ -52,6 +51,7 @@ const boardSlice = createSlice({
       const board = state.boards.find((board) => board._id === id);
       board!.title = action.payload.title;
     },
+
     updateBoard(state, action) {
       state.board = action.payload;
     },

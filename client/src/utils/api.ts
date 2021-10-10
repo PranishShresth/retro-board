@@ -52,3 +52,21 @@ export const createItemAPI = async (payload: createItemPayload) => {
     throw err;
   }
 };
+
+type reorderItemPayload = {
+  prev_item_order: string;
+  curr_item: string;
+  next_item_order: string;
+};
+
+export const reorderItemAPI = async (payload: reorderItemPayload) => {
+  try {
+    const { data } = await httpClient.put(
+      "/list/:list_id/reorder-item",
+      payload
+    );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
