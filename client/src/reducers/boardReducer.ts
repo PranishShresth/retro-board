@@ -44,6 +44,11 @@ const boardSlice = createSlice({
       );
       state.board!.lists[boardIdx!] = list;
     },
+    updateItems(state, action) {
+      const { list_id, items } = action.payload;
+      const list = state.board?.lists.find((l) => l._id === list_id);
+      list!.items = items;
+    },
     deleteBoard(state, action) {
       state.boards = state.boards.filter(
         (board) => board._id !== action.payload._id

@@ -9,7 +9,7 @@ import {
 } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { LexoRank } from "lexorank";
+import { boardActions } from "../reducers/boardReducer";
 import { Container } from "semantic-ui-react";
 import { boardSelector, loadingSelector } from "../utils/selectors";
 import CreateList from "./CreateList";
@@ -42,25 +42,35 @@ export default function RetroBoardSingle() {
     /*...*/
   }, []);
 
-  const onDragEnd = useCallback((result: DropResult) => {
-    const { source, destination, draggableId } = result;
-    if (!isPositionChanged(source, destination)) return;
-    const position = calculateItemPosition(
-      board!,
-      source,
-      destination,
-      draggableId
-    );
+  const onDragEnd = useCallback(
+    (result: DropResult) => {
+      const { source, destination, draggableId } = result;
+      if (!isPositionChanged(source, destination)) return;
+      const { position, mutatedItems } = calculateItemPosition(
+        board!,
+        source,
+        destination,
+        draggableId
+      );
 
-    // dispatch({
-    //   type: "REORDER_ITEM_REQUESTED",
-    //   payload: {
-    //     position: position.format(),
-    //     list_id: destination?.droppableId,
-    //     item_id: draggableId,
-    //   },
-    // });
-  }, []);
+      dispatch(
+        boardActions.updateItems({
+          list_id: destination?.droppableId,
+          items: mutatedItems,
+        })
+      );
+      console.log(position, mutatedItems);
+      // dispatch({
+      //   type: "REORDER_ITEM_REQUESTED",
+      //   payload: {
+      //     position: position.format(),
+      //     list_id: destination?.droppableId,
+      //     item_id: draggableId,
+      //   },
+      // });
+    },
+    [board, dispatch]
+  );
 
   if (loading) {
     return <Loading />;
@@ -105,7 +115,7 @@ const calculateItemPosition = (
   destination: DraggableLocation | undefined,
   droppedItemId: string
 ) => {
-  const { prevItem, nextItem } = getPrevAndNextItem(
+  const { prevItem, nextItem, mutatedItems } = getPrevAndNextItem(
     board,
     source,
     destination,
@@ -122,7 +132,7 @@ const calculateItemPosition = (
   } else {
     position = prevItem.order + (nextItem.order - prevItem.order) / 2;
   }
-  return position;
+  return { mutatedItems, position };
 };
 
 export const moveItemWithinArray = (
@@ -159,5 +169,5 @@ const getPrevAndNextItem = (
   const prevItem = mutatedItems[destination!.index - 1];
   const nextItem = mutatedItems[destination!.index + 1];
 
-  return { prevItem, nextItem };
+  return { prevItem, nextItem, mutatedItems };
 };

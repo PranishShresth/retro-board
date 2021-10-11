@@ -39,7 +39,7 @@ const RetroColumn = ({ items, list_id, title, droppableProvided }: Props) => {
       <RetroCardContainer>
         {items.map((item, index) => {
           return (
-            <Draggable draggableId={item._id} index={index} key={index}>
+            <Draggable draggableId={item._id} index={index} key={item._id}>
               {(provided, snapshot) => (
                 <RetroCard provided={provided} content={item.item_title} />
               )}
