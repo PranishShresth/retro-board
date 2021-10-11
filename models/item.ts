@@ -4,7 +4,7 @@ import { LexoRank } from "lexorank";
 const itemSchema = new Schema(
   {
     item_title: { type: String, required: true },
-    order: { type: String, default: LexoRank.min() },
+    order: { type: Number },
   },
   { timestamps: true }
 );

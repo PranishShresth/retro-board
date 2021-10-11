@@ -1,7 +1,6 @@
 import { Board } from "../models/board";
 import { List } from "../models/list";
 import { Item } from "../models/item";
-import { LexoRank } from "lexorank";
 import { ISocket } from "../index";
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
@@ -79,25 +78,11 @@ interface IRequest4 extends Request {
 }
 export const addItemToList = async (req: IRequest4, res: Response) => {
   const { item_title, list_id } = req.body;
-  console.log();
 
   try {
-    let existingList: IList = await List.findById(list_id).populate("items");
+    const position = await calculateListPosition(list_id);
 
-    let nextOrder;
-    if (existingList!.items.length) {
-      existingList.items.sort((a, b) =>
-        LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
-      );
-
-      nextOrder = LexoRank.parse(
-        existingList.items[existingList.items.length - 1].order
-      ).genNext();
-    } else {
-      nextOrder = LexoRank.middle();
-    }
-
-    const newItem = new Item({ item_title: item_title, order: nextOrder });
+    const newItem = new Item({ item_title: item_title, order: position });
     const savedItem = await newItem.save();
 
     const list = await List.findById(list_id);
@@ -106,11 +91,6 @@ export const addItemToList = async (req: IRequest4, res: Response) => {
     let updatedList = await list?.save();
     updatedList = await updatedList?.populate("items");
 
-    updatedList.items.sort((a, b) =>
-      LexoRank.parse(a.order).compareTo(LexoRank.parse(b.order))
-    );
-
-    console.log(updatedList);
     res.status(200).send(updatedList);
   } catch (err) {
     console.log(err);
@@ -145,9 +125,7 @@ export const reorderItemInSameList = async (
     );
 
     let list: IList = await List.findById(list_id).populate("items");
-    list.items.sort((a, b) =>
-      LexoRank.parse(b.order).compareTo(LexoRank.parse(a.order))
-    );
+
     res.status(200).send(list);
   } catch (err) {
     console.log(err);
@@ -181,13 +159,13 @@ export const getBoard = async (req: IGetBoardAPI, res: Response) => {
   }
 };
 
-// const calculateListPosition = async (id): Promise<number> => {
-//   const list = await List.findOne({ _id: id });
+const calculateListPosition = async (id: string): Promise<number> => {
+  const list: IList = await List.findOne({ _id: id }).populate("items");
 
-//   const itemPositions = issues.map(({ order }) => order);
+  const itemPositions = list.items.map(({ order }) => order);
 
-//   if (itemPositions.length > 0) {
-//     return Math.min(...itemPositionsPositions) - 1;
-//   }
-//   return 1;
-// };
+  if (itemPositions.length > 0) {
+    return Math.max(...itemPositions) + 1;
+  }
+  return 1;
+};

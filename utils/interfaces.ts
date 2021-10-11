@@ -18,7 +18,7 @@ export interface List {
 }
 
 export interface Item {
-  order: string;
+  order: number;
   _id: string;
   item_title: string;
   createdAt: string;
