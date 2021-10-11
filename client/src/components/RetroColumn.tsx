@@ -20,7 +20,12 @@ const RetroColumnHeader = styled.div`
 const RetroCardContainer = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
   gap: 10px;
+`;
+
+const BottomListButton = styled.div`
+  margin-top: 10px;
 `;
 
 interface Props {
@@ -45,9 +50,12 @@ const RetroColumn = ({ items, list_id, title, droppableProvided }: Props) => {
             </Draggable>
           );
         })}
-        <AddItem list_id={list_id} />
+
         {droppableProvided?.placeholder}
       </RetroCardContainer>
+      <BottomListButton>
+        <AddItem list_id={list_id} />
+      </BottomListButton>
     </RetroColumnWrapper>
   );
 };

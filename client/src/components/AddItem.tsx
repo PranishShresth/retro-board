@@ -31,6 +31,7 @@ function AddItem({ list_id }: Props) {
     <>
       {!open && (
         <Button
+          fluid
           onClick={() => {
             setOpen(!open);
           }}
