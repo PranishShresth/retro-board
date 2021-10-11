@@ -35,7 +35,6 @@ const RetroColumn = ({ items, list_id, title, droppableProvided }: Props) => {
   return (
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
       <RetroColumnHeader>{title}</RetroColumnHeader>
-      {droppableProvided?.placeholder}
       <RetroCardContainer>
         {items.map((item, index) => {
           return (
@@ -47,6 +46,7 @@ const RetroColumn = ({ items, list_id, title, droppableProvided }: Props) => {
           );
         })}
         <AddItem list_id={list_id} />
+        {droppableProvided?.placeholder}
       </RetroCardContainer>
     </RetroColumnWrapper>
   );

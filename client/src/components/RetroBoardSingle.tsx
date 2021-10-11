@@ -52,22 +52,22 @@ export default function RetroBoardSingle() {
         destination,
         draggableId
       );
-
+      console.log(mutatedItems);
       dispatch(
         boardActions.updateItems({
           list_id: destination?.droppableId,
           items: mutatedItems,
         })
       );
-      console.log(position, mutatedItems);
-      // dispatch({
-      //   type: "REORDER_ITEM_REQUESTED",
-      //   payload: {
-      //     position: position.format(),
-      //     list_id: destination?.droppableId,
-      //     item_id: draggableId,
-      //   },
-      // });
+      // console.log(position, mutatedItems);
+      dispatch({
+        type: "REORDER_ITEM_REQUESTED",
+        payload: {
+          position: position,
+          list_id: destination?.droppableId,
+          item_id: draggableId,
+        },
+      });
     },
     [board, dispatch]
   );
@@ -146,6 +146,16 @@ export const moveItemWithinArray = (
   return arrClone;
 };
 
+export const insertItemIntoArray = (
+  arr: Item[],
+  item: Item | undefined,
+  index: number
+) => {
+  const arrClone = [...arr];
+  arrClone.splice(index, 0, item!);
+  return arrClone;
+};
+
 const getPrevAndNextItem = (
   board: Board,
   source: DraggableLocation,
@@ -155,17 +165,15 @@ const getPrevAndNextItem = (
   const currentlist = board?.lists.find(
     (list) => list._id === destination?.droppableId
   );
-  const droppedItem = currentlist!.items.find(
-    (item) => item._id === droppedItemId
-  );
+  const droppedItem = board?.lists
+    .find((list) => list._id === source.droppableId)!
+    .items.find((item) => item._id === droppedItemId);
 
   const sortedItem = [...currentlist!.items].sort((a, b) => a.order - b.order);
-
-  const mutatedItems = moveItemWithinArray(
-    sortedItem,
-    droppedItem,
-    destination!.index
-  );
+  const isSameList = destination?.droppableId === source.droppableId;
+  const mutatedItems = isSameList
+    ? moveItemWithinArray(sortedItem, droppedItem, destination!.index)
+    : insertItemIntoArray(sortedItem, droppedItem, destination!.index);
   const prevItem = mutatedItems[destination!.index - 1];
   const nextItem = mutatedItems[destination!.index + 1];
 

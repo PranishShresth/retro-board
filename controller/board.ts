@@ -58,6 +58,7 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
     const board = await Board.findById(board_id);
     board.lists.push(savedList._id);
     let updatedBoard = await board.save();
+
     updatedBoard = await updatedBoard.populate({
       path: "lists",
       populate: { path: "items" },
@@ -102,12 +103,52 @@ interface IReorderRequest extends Request {
   body: {
     item_id: string;
     position: string;
+    source_list_id: string;
+    destination_list_id: string;
   };
   params: {
     list_id: string;
   };
 }
 export const reorderItemInSameList = async (
+  req: IReorderRequest,
+  res: Response
+) => {
+  const { item_id, position, source_list_id, destination_list_id } = req.body;
+  const { list_id } = req.params;
+
+  try {
+    await Item.findOneAndUpdate(
+      { _id: item_id },
+      {
+        $set: {
+          order: position,
+        },
+      }
+    );
+
+    if (source_list_id !== destination_list_id) {
+      const sourceList = await List.findById(source_list_id);
+      sourceList.items.pull({ _id: item_id });
+      await sourceList.save();
+
+      const destinationList = await List.findById(destination_list_id);
+      destinationList.push(item_id);
+      await destinationList.save();
+    }
+    let list: IList = await List.findById(list_id).populate({
+      path: "items",
+      options: { sort: { order: 1 } },
+    });
+
+    res.status(200).send(list);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const reorderItemBetweenList = async (
   req: IReorderRequest,
   res: Response
 ) => {
@@ -124,7 +165,10 @@ export const reorderItemInSameList = async (
       }
     );
 
-    let list: IList = await List.findById(list_id).populate("items");
+    let list: IList = await List.findById(list_id).populate({
+      path: "items",
+      options: { sort: { order: 1 } },
+    });
 
     res.status(200).send(list);
   } catch (err) {
@@ -151,7 +195,10 @@ export const getBoard = async (req: IGetBoardAPI, res: Response) => {
   try {
     const board = await Board.findOne({ _id: req.params.boardId }).populate({
       path: "lists",
-      populate: { path: "items" },
+      populate: {
+        path: "items",
+        options: { sort: { order: 1 } },
+      },
     });
     res.status(200).send(board);
   } catch (err) {
