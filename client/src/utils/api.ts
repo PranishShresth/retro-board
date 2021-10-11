@@ -54,9 +54,8 @@ export const createItemAPI = async (payload: createItemPayload) => {
 };
 
 type reorderItemPayload = {
-  prev_item_order: string;
-  curr_item: string;
-  next_item_order: string;
+  item_id: string;
+  position: string;
   list_id: string;
 };
 

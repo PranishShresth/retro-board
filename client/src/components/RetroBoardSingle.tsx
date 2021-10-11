@@ -42,20 +42,25 @@ export default function RetroBoardSingle() {
     /*...*/
   }, []);
 
-  const onDragEnd = useCallback(
-    (result: DropResult) => {
-      const { source, destination, draggableId } = result;
-      if (!isPositionChanged(source, destination)) return;
-      const position = calculateItemPosition(
-        board!,
-        source,
-        destination,
-        draggableId
-      );
-      console.log(position);
-    },
-    [board]
-  );
+  const onDragEnd = useCallback((result: DropResult) => {
+    const { source, destination, draggableId } = result;
+    if (!isPositionChanged(source, destination)) return;
+    const position = calculateItemPosition(
+      board!,
+      source,
+      destination,
+      draggableId
+    );
+
+    // dispatch({
+    //   type: "REORDER_ITEM_REQUESTED",
+    //   payload: {
+    //     position: position.format(),
+    //     list_id: destination?.droppableId,
+    //     item_id: draggableId,
+    //   },
+    // });
+  }, []);
 
   if (loading) {
     return <Loading />;
@@ -109,18 +114,17 @@ const calculateItemPosition = (
   let position;
 
   if (!prevItem && !nextItem) {
-    position = LexoRank.middle();
+    position = 1;
   } else if (!prevItem) {
-    position = LexoRank.parse(nextItem!.order).genPrev();
+    position = nextItem.order - 1;
   } else if (!nextItem) {
-    position = LexoRank.parse(prevItem!.order).genNext();
+    position = prevItem.order + 1;
   } else {
-    position = LexoRank.parse(nextItem!.order).between(
-      LexoRank.parse(prevItem!.order)
-    );
+    position = prevItem.order + (nextItem.order - prevItem.order) / 2;
   }
   return position;
 };
+
 export const moveItemWithinArray = (
   arr: Item[],
   item: Item | undefined,
@@ -131,6 +135,7 @@ export const moveItemWithinArray = (
   arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
   return arrClone;
 };
+
 const getPrevAndNextItem = (
   board: Board,
   source: DraggableLocation,
@@ -144,9 +149,7 @@ const getPrevAndNextItem = (
     (item) => item._id === droppedItemId
   );
 
-  const sortedItem = [...currentlist!.items].sort((a, b) =>
-    LexoRank.parse(b.order).compareTo(LexoRank.parse(a.order))
-  );
+  const sortedItem = [...currentlist!.items].sort((a, b) => a.order - b.order);
 
   const mutatedItems = moveItemWithinArray(
     sortedItem,
@@ -158,20 +161,3 @@ const getPrevAndNextItem = (
 
   return { prevItem, nextItem };
 };
-// const calculateIssueListPosition = (...args: any[]) => {
-//   const { prevItem, nextItem } = getAfterDropPrevnextItem(...args);
-//   let position;
-
-//   if (!prevItem && !nextItem) {
-//     position = 1;
-//   } else if (!prevItem) {
-//     position = nextItem.listPosition - 1;
-//   } else if (!nextItem) {
-//     position = prevItem.listPosition + 1;
-//   } else {
-//     position =
-//       prevItem.listPosition +
-//       (nextItem.listPosition - prevItem.listPosition) / 2;
-//   }
-//   return position;
-// };
