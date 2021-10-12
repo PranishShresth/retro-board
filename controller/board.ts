@@ -16,7 +16,11 @@ export const createBoard = async (req: IRequest1, res: Response) => {
     const newBoard = new Board({ title });
     const savedBoard = await newBoard.save();
     const io: ISocket = req.app.get("socketio");
-    io.emit("new-board", savedBoard);
+
+    io.on("connection", (socket) => {
+      console.log("hih");
+      socket.broadcast.emit("new-board", savedBoard);
+    });
     res.status(200).send(savedBoard);
   } catch (err) {
     console.log(err);

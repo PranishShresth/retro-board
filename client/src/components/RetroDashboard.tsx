@@ -28,16 +28,6 @@ const RetroDashBoard = React.memo(() => {
   });
 
   useEffect(() => {
-    const socket = io("http://localhost:5000", {
-      reconnectionDelayMax: 10000,
-    });
-    socket.emit("connection");
-    socket.on("new-board", function (data) {
-      dispatch(boardActions.createBoard(data));
-    });
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });
   }, []);
 

@@ -6,6 +6,8 @@ import ApiRoutes from "./routes";
 import socketIO from "./config/socket";
 import logger from "morgan";
 import cors from "cors";
+import { Socket } from "socket.io";
+import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 const app = express();
 const server = http.createServer(app);
@@ -17,6 +19,10 @@ config();
 const DB_STRING = process.env.MONGO_URI!;
 app.use(cors());
 app.use(express.json());
+// app.use(function (req, res, next) {
+//   res.locals.io = io;
+//   next();
+// });
 app.use(express.urlencoded({ extended: false }));
 app.set("socketio", io);
 
@@ -24,13 +30,9 @@ app.use(logger("dev"));
 
 app.use("/api/v1", ApiRoutes);
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
-});
 server.listen(PORT, () => {
   console.log(`Listening to ${PORT}`);
 });
 
-export type ISocket = typeof io;
-
 connectToDB(DB_STRING);
+export type ISocket = typeof io;

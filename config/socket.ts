@@ -8,6 +8,7 @@ function socketIO(server: HttpServer) {
       methods: ["GET", "POST", "PUT", "DELETE"],
     },
   });
+
   return io;
 }
 
