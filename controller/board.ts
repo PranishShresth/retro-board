@@ -133,9 +133,10 @@ export const reorderItemInSameList = async (
       await sourceList.save();
 
       const destinationList = await List.findById(destination_list_id);
-      destinationList.push(item_id);
+      destinationList.items.push(item_id);
       await destinationList.save();
     }
+
     let list: IList = await List.findById(list_id).populate({
       path: "items",
       options: { sort: { order: 1 } },

@@ -46,23 +46,27 @@ export default function RetroBoardSingle() {
     (result: DropResult) => {
       const { source, destination, draggableId } = result;
       if (!isPositionChanged(source, destination)) return;
-      const { position, mutatedItems } = calculateItemPosition(
+      const { position, afterDropDestinationItems } = calculateItemPosition(
         board!,
         source,
         destination,
         draggableId
       );
-      console.log(mutatedItems);
+
       dispatch(
         boardActions.updateItems({
-          list_id: destination?.droppableId,
-          items: mutatedItems,
+          source_list_id: source.droppableId,
+          destination_list_id: destination?.droppableId,
+          items: afterDropDestinationItems,
+          item_id: draggableId,
         })
       );
-      // console.log(position, mutatedItems);
+
       dispatch({
         type: "REORDER_ITEM_REQUESTED",
         payload: {
+          source_list_id: source.droppableId,
+          destination_list_id: destination?.droppableId,
           position: position,
           list_id: destination?.droppableId,
           item_id: draggableId,
@@ -115,7 +119,7 @@ const calculateItemPosition = (
   destination: DraggableLocation | undefined,
   droppedItemId: string
 ) => {
-  const { prevItem, nextItem, mutatedItems } = getPrevAndNextItem(
+  const { prevItem, nextItem, afterDropDestinationItems } = getPrevAndNextItem(
     board,
     source,
     destination,
@@ -132,7 +136,7 @@ const calculateItemPosition = (
   } else {
     position = prevItem.order + (nextItem.order - prevItem.order) / 2;
   }
-  return { mutatedItems, position };
+  return { afterDropDestinationItems, position };
 };
 
 export const moveItemWithinArray = (
@@ -162,20 +166,28 @@ const getPrevAndNextItem = (
   destination: DraggableLocation | undefined,
   droppedItemId: string
 ) => {
-  const currentlist = board?.lists.find(
+  const isSameList = destination?.droppableId === source.droppableId;
+
+  const destinationList = board?.lists.find(
     (list) => list._id === destination?.droppableId
   );
+
   const droppedItem = board?.lists
     .find((list) => list._id === source.droppableId)!
     .items.find((item) => item._id === droppedItemId);
 
-  const sortedItem = [...currentlist!.items].sort((a, b) => a.order - b.order);
-  const isSameList = destination?.droppableId === source.droppableId;
-  const mutatedItems = isSameList
-    ? moveItemWithinArray(sortedItem, droppedItem, destination!.index)
-    : insertItemIntoArray(sortedItem, droppedItem, destination!.index);
-  const prevItem = mutatedItems[destination!.index - 1];
-  const nextItem = mutatedItems[destination!.index + 1];
+  const destSortedItems = getSortedItems(destinationList?.items);
+  const afterDropDestinationItems = isSameList
+    ? moveItemWithinArray(destSortedItems, droppedItem, destination!.index)
+    : insertItemIntoArray(destSortedItems, droppedItem, destination!.index);
 
-  return { prevItem, nextItem, mutatedItems };
+  const prevItem = afterDropDestinationItems[destination!.index - 1];
+  const nextItem = afterDropDestinationItems[destination!.index + 1];
+
+  return { prevItem, nextItem, afterDropDestinationItems };
 };
+
+function getSortedItems(items: Item[] | undefined) {
+  if (!items) return [];
+  return [...items].sort((a, b) => a.order - b.order);
+}

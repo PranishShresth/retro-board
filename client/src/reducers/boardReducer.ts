@@ -45,9 +45,18 @@ const boardSlice = createSlice({
       state.board!.lists[boardIdx!] = list;
     },
     updateItems(state, action) {
-      const { list_id, items } = action.payload;
-      const list = state.board?.lists.find((l) => l._id === list_id);
-      list!.items = items;
+      const { source_list_id, items, destination_list_id, item_id } =
+        action.payload;
+      const destList = state.board?.lists.find(
+        (l) => l._id === destination_list_id
+      );
+      destList!.items = items;
+      if (source_list_id !== destination_list_id) {
+        const sourcelist = state.board?.lists.find(
+          (l) => l._id === source_list_id
+        );
+        sourcelist!.items = sourcelist!.items.filter((l) => l._id !== item_id);
+      }
     },
     deleteBoard(state, action) {
       state.boards = state.boards.filter(
