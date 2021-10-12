@@ -3,11 +3,13 @@ import {
   createBoard,
   updateBoardDetails,
   addListToBoard,
-  addItemToList,
   getAllBoard,
   getBoard,
-  reorderItemInSameList,
 } from "../controller/board";
+
+import { reorderItem } from "../controller/item";
+
+import { addItemToList } from "../controller/list";
 
 const router = Router();
 
@@ -17,6 +19,6 @@ router.post("/create-list", addListToBoard);
 router.post("/create-item", addItemToList);
 router.get("/get-boards", getAllBoard);
 router.get("/get-board/:boardId", getBoard);
-router.put("/list/:list_id/reorder-item", reorderItemInSameList);
+router.put("/list/:list_id/reorder-item", reorderItem);
 
 export default router;
