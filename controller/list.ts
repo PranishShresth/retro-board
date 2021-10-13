@@ -3,6 +3,7 @@ import { Item } from "../models/item";
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
 import { Socket } from "socket.io";
+import { ISocket } from "../index";
 
 interface IAddItem extends Request {
   body: {
@@ -13,9 +14,12 @@ interface IAddItem extends Request {
 export const addItemToList = async (req: IAddItem, res: Response) => {
   const { item_title, list_id } = req.body;
   const socket: Socket = req.app.get("socket");
+  const io: ISocket = req.app.get("socketio");
+  const query = socket.handshake.query.boardId as string;
 
   try {
     const position = await calculateListPosition(list_id);
+    console.log(query);
 
     const newItem = new Item({ item_title: item_title, order: position });
     const savedItem = await newItem.save();
@@ -26,7 +30,7 @@ export const addItemToList = async (req: IAddItem, res: Response) => {
     let updatedList = await list?.save();
     updatedList = await updatedList?.populate("items");
 
-    socket.broadcast.emit("updated-list", updatedList);
+    io.to(query).emit("updated-list", updatedList);
 
     res.status(200).send(updatedList);
   } catch (err) {

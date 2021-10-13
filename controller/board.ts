@@ -4,6 +4,8 @@ import { Item } from "../models/item";
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
 import { Socket } from "socket.io";
+import { ISocket } from "../index";
+
 interface IRequest1 extends Request {
   body: {
     title: string;
@@ -54,6 +56,9 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
   try {
     const newList = new List({ list_title: list_title });
     const socket: Socket = req.app.get("socket");
+    const io: ISocket = req.app.get("socketio");
+    const query = socket.handshake.query.boardId as string;
+
     const savedList = await newList.save();
     const board = await Board.findById(board_id);
     board.lists.push(savedList._id);
@@ -63,7 +68,7 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
       path: "lists",
       populate: { path: "items" },
     });
-    socket.broadcast.emit("new-list", updatedBoard);
+    io.to(query).emit("new-list", updatedBoard);
 
     res.status(200).send(updatedBoard);
   } catch (err) {
