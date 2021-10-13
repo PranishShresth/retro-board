@@ -2,6 +2,7 @@ import { List } from "../models/list";
 import { Item } from "../models/item";
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
+import { Socket } from "socket.io";
 
 interface IAddItem extends Request {
   body: {
@@ -11,6 +12,7 @@ interface IAddItem extends Request {
 }
 export const addItemToList = async (req: IAddItem, res: Response) => {
   const { item_title, list_id } = req.body;
+  const socket: Socket = req.app.get("socket");
 
   try {
     const position = await calculateListPosition(list_id);
@@ -23,6 +25,8 @@ export const addItemToList = async (req: IAddItem, res: Response) => {
 
     let updatedList = await list?.save();
     updatedList = await updatedList?.populate("items");
+
+    socket.broadcast.emit("updated-list", updatedList);
 
     res.status(200).send(updatedList);
   } catch (err) {

@@ -3,11 +3,14 @@ import RetroHeader from "../components/RetroHeader";
 import { useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router";
+import { useDispatch } from "react-redux";
+import { boardActions } from "../reducers/boardReducer";
 
 interface boardParams {
   boardId: string;
 }
 export const RetroHome = () => {
+  const dispatch = useDispatch();
   const { boardId } = useParams<boardParams>();
   const [socket, setSocket] = useState<Socket | null>(null);
 
@@ -16,7 +19,15 @@ export const RetroHome = () => {
       query: { boardId },
       transports: ["websocket"],
     });
-    newSocket?.emit("damn", "boi");
+
+    newSocket.on("new-list", function (data) {
+      dispatch(boardActions.updateBoard(data));
+    });
+
+    newSocket.on("updated-list", function (data) {
+      console.log(data);
+      dispatch(boardActions.updateList(data));
+    });
 
     setSocket(socket);
     // setSocket(newSocket);
@@ -24,7 +35,7 @@ export const RetroHome = () => {
     return () => {
       newSocket.close();
     };
-  }, [boardId, socket]);
+  }, [boardId, socket, dispatch]);
 
   return (
     <>

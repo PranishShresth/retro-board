@@ -11,7 +11,7 @@ import { DefaultEventsMap } from "socket.io/dist/typed-events";
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, app);
 
 const PORT = process.env.PORT || 5000;
 config();
@@ -19,10 +19,7 @@ config();
 const DB_STRING = process.env.MONGO_URI!;
 app.use(cors());
 app.use(express.json());
-// app.use(function (req, res, next) {
-//   res.locals.io = io;
-//   next();
-// });
+
 app.use(express.urlencoded({ extended: false }));
 app.set("socketio", io);
 

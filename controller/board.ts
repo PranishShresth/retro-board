@@ -1,10 +1,9 @@
 import { Board } from "../models/board";
 import { List } from "../models/list";
 import { Item } from "../models/item";
-import { ISocket } from "../index";
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
-
+import { Socket } from "socket.io";
 interface IRequest1 extends Request {
   body: {
     title: string;
@@ -15,12 +14,8 @@ export const createBoard = async (req: IRequest1, res: Response) => {
   try {
     const newBoard = new Board({ title });
     const savedBoard = await newBoard.save();
-    const io: ISocket = req.app.get("socketio");
-
-    io.on("connection", (socket) => {
-      console.log("hih");
-      socket.broadcast.emit("new-board", savedBoard);
-    });
+    const socket: Socket = req.app.get("socket");
+    socket.broadcast.emit("new-board", savedBoard);
     res.status(200).send(savedBoard);
   } catch (err) {
     console.log(err);
@@ -58,6 +53,7 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
 
   try {
     const newList = new List({ list_title: list_title });
+    const socket: Socket = req.app.get("socket");
     const savedList = await newList.save();
     const board = await Board.findById(board_id);
     board.lists.push(savedList._id);
@@ -67,6 +63,7 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
       path: "lists",
       populate: { path: "items" },
     });
+    socket.broadcast.emit("new-list", updatedBoard);
 
     res.status(200).send(updatedBoard);
   } catch (err) {
