@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { boardsSelector, loadingSelector } from "../utils/selectors";
 import RetroModal from "./Modal";
@@ -9,7 +9,6 @@ import { useForm } from "./hooks/useForm";
 import { Grid } from "semantic-ui-react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
-import { io } from "socket.io-client";
 
 import { boardActions } from "../reducers/boardReducer";
 import Loading from "./Loader";
@@ -20,6 +19,7 @@ const BoardsContainer = styled(Container)`
 
 const RetroDashBoard = React.memo(() => {
   const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
   const boards = useSelector(boardsSelector);
   const loading = useSelector(loadingSelector);
   const { formValues, handleChange } = useForm({
@@ -36,6 +36,7 @@ const RetroDashBoard = React.memo(() => {
       ev.preventDefault();
 
       dispatch({ type: "CREATE_BOARD_REQUESTED", payload: formValues });
+      setModalOpen(false);
     } catch (err) {
       console.log(err);
     }
@@ -58,6 +59,9 @@ const RetroDashBoard = React.memo(() => {
           })}
           <Grid.Column mobile={16} tablet={8} computer={4}>
             <RetroModal
+              open={modalOpen}
+              onClose={() => setModalOpen(false)}
+              onOpen={() => setModalOpen(true)}
               modalTitle="Board Creation"
               triggerName="Create a Board"
             >
@@ -72,7 +76,7 @@ const RetroDashBoard = React.memo(() => {
                     onChange={handleChange}
                   />
                 </Form.Field>
-                <Form.Field>
+                {/* <Form.Field>
                   <label>Board Theme</label>
                   <input
                     type="color"
@@ -81,7 +85,7 @@ const RetroDashBoard = React.memo(() => {
                     placeholder="Board Theme"
                     onChange={handleChange}
                   />
-                </Form.Field>
+                </Form.Field> */}
 
                 <Button color="instagram" type="submit">
                   Create Board

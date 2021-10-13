@@ -5,14 +5,22 @@ interface Props {
   children?: React.ReactNode;
   triggerName: string;
   modalTitle: string;
+  open: boolean;
+  onClose: () => void;
+  onOpen: () => void;
 }
-function RetroModal({ children, triggerName, modalTitle }: Props) {
-  const [open, setOpen] = useState(false);
-
+function RetroModal({
+  children,
+  triggerName,
+  modalTitle,
+  open,
+  onClose,
+  onOpen,
+}: Props) {
   return (
     <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
+      onClose={onClose}
+      onOpen={onOpen}
       open={open}
       trigger={<Button color="purple">{triggerName}</Button>}
     >

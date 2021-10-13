@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
@@ -10,19 +10,22 @@ interface FormParam {
 }
 const CreateList = () => {
   const dispatch = useDispatch();
+  const [modalOpen, setModalOpen] = useState(false);
+
   const { boardId } = useParams<FormParam>();
 
   const { formValues, handleChange } = useForm({
     list_title: "",
   });
 
-  const handleCreateBoard = (ev: React.FormEvent) => {
+  const handleCreateList = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
       dispatch({
         type: "CREATE_LIST_REQUESTED",
         payload: { ...formValues, board_id: boardId },
       });
+      setModalOpen(false);
     } catch (err) {
       console.log(err);
     }
@@ -30,8 +33,14 @@ const CreateList = () => {
 
   return (
     <>
-      <RetroModal modalTitle="List Creation" triggerName="Create a List">
-        <Form onSubmit={handleCreateBoard}>
+      <RetroModal
+        modalTitle="List Creation"
+        triggerName="Create a List"
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onOpen={() => setModalOpen(true)}
+      >
+        <Form onSubmit={handleCreateList}>
           <Form.Field>
             <label>List Title</label>
             <input

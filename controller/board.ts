@@ -16,8 +16,6 @@ export const createBoard = async (req: IRequest1, res: Response) => {
   try {
     const newBoard = new Board({ title });
     const savedBoard = await newBoard.save();
-    const socket: Socket = req.app.get("socket");
-    socket.broadcast.emit("new-board", savedBoard);
     res.status(200).send(savedBoard);
   } catch (err) {
     console.log(err);
