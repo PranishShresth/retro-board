@@ -1,6 +1,7 @@
 import { List } from "../models/list";
 import { Item } from "../models/item";
 import { Socket } from "socket.io";
+import { ISocket } from "../index";
 
 import { Request, Response } from "express";
 import { List as IList } from "../utils/interfaces";
@@ -21,6 +22,8 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
   const { item_id, position, source_list_id, destination_list_id } = req.body;
   const { list_id } = req.params;
   const socket: Socket = req.app.get("socket");
+  const io: ISocket = req.app.get("socketio");
+  const query = socket.handshake.query.boardId as string;
 
   try {
     await Item.findOneAndUpdate(
@@ -46,7 +49,12 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
       path: "items",
       options: { sort: { order: 1 } },
     });
-    socket.broadcast.emit("updated-list", list);
+    io.to(query).emit("updated-items", {
+      list,
+      item_id,
+      source_list_id,
+      destination_list_id,
+    });
 
     res.status(200).send(list);
   } catch (err) {
