@@ -1,4 +1,4 @@
-import { Dimmer, Loader, Segment } from "semantic-ui-react";
+import { Dimmer, Loader } from "semantic-ui-react";
 import styled from "styled-components";
 
 const LoaderWrapper = styled.div`

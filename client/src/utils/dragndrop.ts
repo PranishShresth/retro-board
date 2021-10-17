@@ -1,6 +1,6 @@
 import { DraggableLocation } from "react-beautiful-dnd";
 
-import { Board, Item, List } from "../interfaces";
+import { Board, Item } from "../interfaces";
 
 export const isPositionChanged = (
   source: DraggableLocation,

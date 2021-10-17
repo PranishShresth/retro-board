@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Board, List, Item } from "../interfaces";
+import { Board, List } from "../interfaces";
 const httpClient = axios.create({
   baseURL: "http://localhost:5000/api/v1",
 });

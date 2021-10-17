@@ -10,7 +10,6 @@ import { Grid } from "semantic-ui-react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
 
-import { boardActions } from "../reducers/boardReducer";
 import Loading from "./Loader";
 
 const BoardsContainer = styled(Container)`
@@ -76,16 +75,6 @@ const RetroDashBoard = React.memo(() => {
                     onChange={handleChange}
                   />
                 </Form.Field>
-                {/* <Form.Field>
-                  <label>Board Theme</label>
-                  <input
-                    type="color"
-                    name="theme"
-                    value={formValues.theme}
-                    placeholder="Board Theme"
-                    onChange={handleChange}
-                  />
-                </Form.Field> */}
 
                 <Button color="instagram" type="submit">
                   Create Board
