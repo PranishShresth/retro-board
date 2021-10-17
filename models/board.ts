@@ -6,6 +6,7 @@ const boardSchema = new Schema(
     lists: [
       { type: mongoose.Schema.Types.ObjectId, ref: "List", required: true },
     ],
+    closed: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

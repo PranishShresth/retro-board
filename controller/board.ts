@@ -77,7 +77,7 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
 
 export const getAllBoard = async (req: Request, res: Response) => {
   try {
-    const boards = await Board.find({});
+    const boards = await Board.find({ closed: false });
     res.status(200).send(boards);
   } catch (err) {
     res.status(500).send("Internal Server Error");
@@ -99,6 +99,41 @@ export const getBoard = async (req: IGetBoardAPI, res: Response) => {
       },
     });
     res.status(200).send(board);
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+interface IDeleteBoardAPI extends Request {
+  params: {
+    boardId: string;
+  };
+}
+export const closeBoard = async (req: IDeleteBoardAPI, res: Response) => {
+  try {
+    const board = await Board.findOne({ _id: req.params.boardId });
+    board.closed = true;
+    await board.save();
+    res.status(200).send({ success: true });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+export const deleteFullBoard = async (req: IDeleteBoardAPI, res: Response) => {
+  try {
+    const boardId = req.params.boardId;
+    const board = await Board.findOne({ _id: boardId }).populate("lists");
+    const lists = board.lists;
+    const items = lists.reduce(
+      (allItems, currList) => allItems.concat(currList.items),
+      []
+    );
+    const itemsIds = items.map((itemId) => Item.findByIdAndDelete(itemId));
+    const listIds = lists.map((list) => List.findByIdAndDelete(list._id));
+    await Promise.all([...itemsIds, ...listIds]);
+    await Board.findByIdAndDelete(boardId);
+    res.status(200).send({ success: true });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }

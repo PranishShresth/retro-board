@@ -25,6 +25,7 @@ const BoardCard = (props: Props) => {
 
   useEffect(() => {
     if (choice === "delete") {
+    } else if (choice === "edit") {
     }
   }, [choice]);
 
