@@ -3,6 +3,7 @@ import {
   fetchAllBoardsAPI,
   createBoardAPI,
   fetchActiveBoardAPI,
+  deleteBoardAPI,
 } from "../utils/api";
 import { Board } from "../interfaces";
 import { AxiosResponse } from "axios";
@@ -52,10 +53,24 @@ function* fetchActiveBoard(
   }
 }
 
+function* deleteBoard(
+  action: ReturnType<typeof boardActions.fetchActiveBoard>
+) {
+  try {
+    yield put(boardActions.setLoading(true));
+    yield call(deleteBoardAPI, action.payload);
+    yield put(boardActions.deleteBoard({ _id: action.payload }));
+    yield put(boardActions.setLoading(false));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function* watchBoardSaga() {
   yield takeLatest("FETCH_BOARDS_REQUESTED", getBoards);
   yield takeLatest("CREATE_BOARD_REQUESTED", createBoard);
   yield takeLatest("FETCH_BOARD_REQUESTED", fetchActiveBoard);
+  yield takeLatest("DELETE_BOARD_REQUESTED", deleteBoard);
 }
 
 export default watchBoardSaga;

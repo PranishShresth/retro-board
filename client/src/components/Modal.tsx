@@ -2,11 +2,11 @@ import { Button, Modal } from "semantic-ui-react";
 
 interface Props {
   children?: React.ReactNode;
-  triggerName: string;
+  triggerName?: string;
   modalTitle: string;
   open: boolean;
-  onClose: () => void;
-  onOpen: () => void;
+  onClose?: () => void;
+  onOpen?: () => void;
 }
 function RetroModal({
   children,
@@ -21,7 +21,7 @@ function RetroModal({
       onClose={onClose}
       onOpen={onOpen}
       open={open}
-      trigger={<Button color="purple">{triggerName}</Button>}
+      trigger={triggerName ? <Button color="purple">{triggerName}</Button> : ""}
     >
       <Modal.Header>{modalTitle}</Modal.Header>
       <Modal.Content>{children}</Modal.Content>

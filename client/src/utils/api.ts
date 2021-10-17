@@ -31,6 +31,15 @@ export const createBoardAPI = async (payload: Partial<Board>) => {
   }
 };
 
+export const deleteBoardAPI = async (payload: string) => {
+  try {
+    const { data } = await httpClient.delete(`/delete-board/${payload}`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const createListAPI = async (payload: Partial<List>) => {
   try {
     const { data } = await httpClient.post("/create-list", payload);
