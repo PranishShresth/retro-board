@@ -1,4 +1,4 @@
-import { put, takeEvery, call, takeLatest } from "redux-saga/effects";
+import { put, call, takeLatest } from "redux-saga/effects";
 import { createListAPI } from "../utils/api";
 import { List } from "../interfaces";
 import { AxiosResponse } from "axios";

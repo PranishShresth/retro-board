@@ -28,7 +28,7 @@ const RetroDashBoard = React.memo(() => {
 
   useEffect(() => {
     dispatch({ type: "FETCH_BOARDS_REQUESTED" });
-  }, []);
+  }, [dispatch]);
 
   const handleCreateBoard = (ev: React.FormEvent) => {
     try {
@@ -52,7 +52,11 @@ const RetroDashBoard = React.memo(() => {
           {boards.map((board) => {
             return (
               <Grid.Column mobile={16} tablet={8} computer={4} key={board._id}>
-                <BoardCard to={`/board/${board._id}`} header={board.title} />
+                <BoardCard
+                  to={`/board/${board._id}`}
+                  header={board.title}
+                  boardId={board._id}
+                />
               </Grid.Column>
             );
           })}
