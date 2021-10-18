@@ -1,5 +1,13 @@
 import mongoose, { Schema } from "mongoose";
-import { LexoRank } from "lexorank";
+
+const itemSchemaRevised = new Schema(
+  {
+    item_title: { type: String, required: true },
+    order: { type: Number },
+    list: { type: Schema.Types.ObjectId, ref: "List" },
+  },
+  { timestamps: true }
+);
 
 const itemSchema = new Schema(
   {

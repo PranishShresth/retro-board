@@ -1,4 +1,11 @@
-import { Card, CardProps, Dropdown, Modal, Button } from "semantic-ui-react";
+import {
+  Card,
+  CardProps,
+  Dropdown,
+  Modal,
+  Button,
+  Divider,
+} from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
@@ -12,6 +19,7 @@ interface Props extends CardProps {
 
 const StyledCard = styled(Card)`
   margin: 0 auto !important;
+  height: 80px;
 `;
 
 const Grid = styled.div`
@@ -21,6 +29,7 @@ const Grid = styled.div`
 const options = [
   { key: "delete", text: "Delete", value: "delete" },
   { key: "edit", text: "Edit", value: "edit" },
+  { key: "archive", text: "Archive", value: "archive" },
 ];
 
 const BoardCard = (props: Props) => {
@@ -62,22 +71,21 @@ const BoardCard = (props: Props) => {
         <Modal.Content>
           <p>Are you sure you want to delete your account</p>
         </Modal.Content>
-        <Modal.Actions>
-          <Button negative onClick={() => setdeleteModalOpen(false)}>
-            No
-          </Button>
-          <Button
-            positive
-            onClick={() =>
-              dispatch({
-                type: "DELETE_BOARD_REQUESTED",
-                payload: props.boardId,
-              })
-            }
-          >
-            Yes
-          </Button>
-        </Modal.Actions>
+        <Divider />
+        <Button negative onClick={() => setdeleteModalOpen(false)}>
+          No
+        </Button>
+        <Button
+          positive
+          onClick={() =>
+            dispatch({
+              type: "DELETE_BOARD_REQUESTED",
+              payload: props.boardId,
+            })
+          }
+        >
+          Yes
+        </Button>
       </DeleteModal>
     </>
   );
