@@ -6,7 +6,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { boardActions } from "../reducers/boardReducer";
 import { Container } from "semantic-ui-react";
-import { boardSelector, loadingSelector } from "../utils/selectors";
+import {
+  boardSelector,
+  loadingSelector,
+  listsSelector,
+} from "../utils/selectors";
 import CreateList from "./CreateList";
 import { isPositionChanged, calculateItemPosition } from "../utils/dragndrop";
 import Loading from "./Loader";
@@ -25,6 +29,7 @@ interface BoardParam {
 export default function RetroBoardSingle() {
   const dispatch = useDispatch();
   const params = useParams<BoardParam>();
+  const lists = useSelector(listsSelector);
   const board = useSelector(boardSelector);
   const loading = useSelector(loadingSelector);
 
@@ -71,6 +76,7 @@ export default function RetroBoardSingle() {
     [board, dispatch]
   );
 
+  console.log(lists);
   if (loading) {
     return <Loading />;
   }
@@ -78,7 +84,7 @@ export default function RetroBoardSingle() {
     <Container>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <ColumnsWrapper>
-          {board?.lists.map((list) => (
+          {lists?.map((list) => (
             <Droppable droppableId={list._id} key={list._id}>
               {(provided) => (
                 <RetroColumn

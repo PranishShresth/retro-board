@@ -3,14 +3,14 @@ import { List } from "../interfaces";
 
 interface ListState {
   lists: List[];
-  list: List | null;
+  currentList: List | null;
   loading: boolean;
   error: string;
 }
 
 const initialState = {
   lists: [],
-  list: null,
+  currentList: null,
   loading: false,
   error: "",
 } as ListState;

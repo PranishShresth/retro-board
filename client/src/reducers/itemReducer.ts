@@ -3,14 +3,14 @@ import { Item } from "../interfaces";
 
 interface ItemState {
   items: Item[];
-  item: Item | null;
+  currentItem: Item | null;
   loading: boolean;
   error: string;
 }
 
 const initialState = {
   items: [],
-  item: null,
+  currentItem: null,
   loading: false,
   error: "",
 } as ItemState;

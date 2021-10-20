@@ -3,14 +3,14 @@ import { Board } from "../interfaces";
 
 interface BoardState {
   boards: Board[];
-  board: Board | null;
+  currentBoard: Board | null;
   loading: boolean;
   error: string;
 }
 
 const initialState = {
   boards: [],
-  board: null,
+  currentBoard: null,
   loading: false,
   error: "",
 } as BoardState;
@@ -26,7 +26,7 @@ const boardSlice = createSlice({
       state.boards = action.payload;
     },
     fetchActiveBoard(state, action) {
-      state.board = action.payload;
+      state.currentBoard = action.payload;
     },
     createBoard(state, action) {
       state.boards.push(action.payload);
@@ -34,20 +34,20 @@ const boardSlice = createSlice({
     updateList(state, action) {
       const list = action.payload;
 
-      const boardIdx = state.board?.lists.findIndex(
+      const boardIdx = state.currentBoard?.lists.findIndex(
         (singleList) => singleList._id === list._id
       );
-      state.board!.lists[boardIdx!] = list;
+      state.currentBoard!.lists[boardIdx!] = list;
     },
     updateItems(state, action) {
       const { source_list_id, items, destination_list_id, item_id } =
         action.payload;
-      const destList = state.board?.lists.find(
+      const destList = state.currentBoard?.lists.find(
         (l) => l._id === destination_list_id
       );
       destList!.items = items;
       if (source_list_id !== destination_list_id) {
-        const sourcelist = state.board?.lists.find(
+        const sourcelist = state.currentBoard?.lists.find(
           (l) => l._id === source_list_id
         );
         sourcelist!.items = sourcelist!.items.filter((l) => l._id !== item_id);
@@ -65,7 +65,7 @@ const boardSlice = createSlice({
     },
 
     updateBoard(state, action) {
-      state.board = action.payload;
+      state.currentBoard = action.payload;
     },
     clearBoard(state) {
       state.boards = [];

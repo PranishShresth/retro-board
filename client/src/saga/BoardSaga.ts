@@ -15,7 +15,7 @@ function* getBoards() {
   try {
     yield put(boardActions.setLoading(true));
 
-    const result: AxiosResponse<Board[]> = yield call(fetchAllBoardsAPI);
+    const result: Board[] = yield call(fetchAllBoardsAPI);
     yield put(boardActions.fetchBoards(result));
     yield put(boardActions.setLoading(false));
   } catch (err) {
@@ -26,10 +26,7 @@ function* getBoards() {
 function* createBoard(action: ReturnType<typeof boardActions.createBoard>) {
   try {
     yield put(boardActions.setLoading(true));
-    const result: AxiosResponse<Board> = yield call(
-      createBoardAPI,
-      action.payload
-    );
+    const result: Board = yield call(createBoardAPI, action.payload);
     yield put(boardActions.createBoard(result));
     yield put(boardActions.setLoading(false));
   } catch (err) {
@@ -39,7 +36,7 @@ function* createBoard(action: ReturnType<typeof boardActions.createBoard>) {
 
 type Resp = {
   board: Board;
-  lists: List[];
+  list: List[];
   items: Item[];
 };
 function* fetchActiveBoard(
@@ -47,15 +44,14 @@ function* fetchActiveBoard(
 ) {
   try {
     yield put(boardActions.setLoading(true));
-    const result: AxiosResponse<Resp> = yield call(
-      fetchActiveBoardAPI,
-      action.payload
-    );
+    const result: Resp = yield call(fetchActiveBoardAPI, action.payload);
+
     yield all([
-      put(boardActions.fetchActiveBoard(result.data.board)),
-      put(listActions.loadAllLists(result.data.lists)),
-      put(itemActions.loadAllItems(result.data.items)),
+      put(boardActions.fetchActiveBoard(result.board)),
+      put(listActions.loadAllLists(result.list)),
+      put(itemActions.loadAllItems(result.items)),
     ]);
+
     yield put(boardActions.setLoading(false));
   } catch (err) {
     console.log(err);
