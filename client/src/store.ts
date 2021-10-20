@@ -1,12 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
 import boardReducer from "./reducers/boardReducer";
+import listReducer from "./reducers/listReducer";
+import itemReducer from "./reducers/itemReducer";
 import createSagaMiddleware from "redux-saga";
 import rootSaga from "./saga/RootSaga";
 
 const sagaMiddleware = createSagaMiddleware();
 
 const store = configureStore({
-  reducer: boardReducer.reducer,
+  reducer: {
+    board: boardReducer.reducer,
+    list: listReducer.reducer,
+    item: itemReducer.reducer,
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(sagaMiddleware),
 });

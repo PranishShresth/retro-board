@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Item } from "../interfaces";
 
 interface ItemState {
@@ -18,7 +18,14 @@ const initialState = {
 const itemSlice = createSlice({
   name: "item",
   initialState,
-  reducers: {},
+  reducers: {
+    addItem(state, action: PayloadAction<Item>) {
+      state.items.push(action.payload);
+    },
+    removeFromList(state, action: PayloadAction<Item>) {
+      state.items.filter((item) => item._id !== action.payload._id);
+    },
+  },
 });
 export const itemActions = itemSlice.actions;
 export default itemSlice;
