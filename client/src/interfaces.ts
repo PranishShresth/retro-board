@@ -10,7 +10,7 @@ export interface Board {
 export interface List {
   _id: string;
   list_title: string;
-  board: any[];
+  board: string;
   createdAt: string;
   updatedAt: string;
   __v: number;
@@ -20,6 +20,8 @@ export interface List {
 export interface Item {
   order: number;
   _id: string;
+  board: string;
+  list: string;
   item_title: string;
   createdAt: string;
   updatedAt: string;

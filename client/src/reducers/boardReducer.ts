@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { listeners } from "process";
 import { Board } from "../interfaces";
 
 interface BoardState {
@@ -8,10 +7,6 @@ interface BoardState {
   loading: boolean;
   error: string;
 }
-
-// const createBoard = createAction<Board>("board/create");
-// const deleteBoard = createAction<Board>("board/delete");
-// const updateBoardDetails = createAction<Board>("board/update");
 
 const initialState = {
   boards: [],

@@ -31,10 +31,11 @@ export const reorderItem1 = async (req: IReorderRequest, res: Response) => {
       {
         $set: {
           order: position,
-          list: list_id,
+          list: destination_list_id,
         },
       }
     );
+    res.status(200).json(item);
   } catch (err) {}
 };
 export const reorderItem = async (req: IReorderRequest, res: Response) => {
