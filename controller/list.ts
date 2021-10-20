@@ -20,19 +20,21 @@ export const addItemToList = async (req: IAddItem, res: Response) => {
   try {
     const position = await calculateListPosition(list_id);
     console.log(query);
-
-    const newItem = new Item({ item_title: item_title, order: position });
+    const newItem = new Item({ item_title, order: position, list: list_id });
     const savedItem = await newItem.save();
+    io.to(query).emit("updated-list", { savedItem, list_id });
 
-    const list = await List.findById(list_id);
-    list?.items?.push(savedItem);
+    res.status(200).send({ savedItem, list_id });
+    // const newItem = new Item({ item_title: item_title, order: position });
+    // const savedItem = await newItem.save();
 
-    let updatedList = await list?.save();
-    updatedList = await updatedList?.populate("items");
+    // const list = await List.findById(list_id);
+    // list?.items?.push(savedItem);
 
-    io.to(query).emit("updated-list", updatedList);
+    // let updatedList = await list?.save();
+    // updatedList = await updatedList?.populate("items");
 
-    res.status(200).send(updatedList);
+    // res.status(200).send(updatedList);
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");

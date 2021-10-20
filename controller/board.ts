@@ -52,23 +52,16 @@ export const addListToBoard = async (req: IRequest3, res: Response) => {
   const { list_title, board_id } = req.body;
 
   try {
-    const newList = new List({ list_title: list_title });
+    const newList = new List({ list_title: list_title, board: board_id });
     const socket: Socket = req.app.get("socket");
     const io: ISocket = req.app.get("socketio");
     const query = socket.handshake.query.boardId as string;
 
     const savedList = await newList.save();
-    const board = await Board.findById(board_id);
-    board.lists.push(savedList._id);
-    let updatedBoard = await board.save();
 
-    updatedBoard = await updatedBoard.populate({
-      path: "lists",
-      populate: { path: "items" },
-    });
-    io.to(query).emit("new-list", updatedBoard);
+    io.to(query).emit("new-list", savedList);
 
-    res.status(200).send(updatedBoard);
+    res.status(200).send(savedList);
   } catch (err) {
     console.log(err);
     res.status(500).send("Internal Server Error");
@@ -91,14 +84,11 @@ interface IGetBoardAPI extends Request {
 }
 export const getBoard = async (req: IGetBoardAPI, res: Response) => {
   try {
-    const board = await Board.findOne({ _id: req.params.boardId }).populate({
-      path: "lists",
-      populate: {
-        path: "items",
-        options: { sort: { order: 1 } },
-      },
-    });
-    res.status(200).send(board);
+    const board = await Board.findOne({ _id: req.params.boardId });
+    const list = await List.find({ board: req.params.boardId });
+    const items = await Item.find({ board: req.params.boardId });
+
+    res.status(200).send({ board, list, items });
   } catch (err) {
     res.status(500).send("Internal Server Error");
   }
@@ -123,16 +113,9 @@ export const closeBoard = async (req: IDeleteBoardAPI, res: Response) => {
 export const deleteFullBoard = async (req: IDeleteBoardAPI, res: Response) => {
   try {
     const boardId = req.params.boardId;
-    const board = await Board.findOne({ _id: boardId }).populate("lists");
-    const lists = board.lists;
-    const items = lists.reduce(
-      (allItems, currList) => allItems.concat(currList.items),
-      []
-    );
-    const itemsIds = items.map((itemId) => Item.findByIdAndDelete(itemId));
-    const listIds = lists.map((list) => List.findByIdAndDelete(list._id));
-    await Promise.all([...itemsIds, ...listIds]);
-    await Board.findByIdAndDelete(boardId);
+    await Board.findOneAndDelete({ board: boardId });
+    await List.deleteMany({ board: boardId });
+    await Item.deleteMany({ board: boardId });
     res.status(200).send({ success: true });
   } catch (err) {
     res.status(500).send("Internal Server Error");
