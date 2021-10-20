@@ -19,6 +19,9 @@ const itemSlice = createSlice({
   name: "item",
   initialState,
   reducers: {
+    loadAllItems(state, action: PayloadAction<Item[]>) {
+      state.items.push(...action.payload);
+    },
     addItem(state, action: PayloadAction<Item>) {
       state.items.push(action.payload);
     },

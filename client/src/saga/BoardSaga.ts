@@ -1,21 +1,21 @@
-import { put, call, takeLatest } from "redux-saga/effects";
+import { put, call, takeLatest, all } from "redux-saga/effects";
 import {
   fetchAllBoardsAPI,
   createBoardAPI,
   fetchActiveBoardAPI,
   deleteBoardAPI,
 } from "../utils/api";
-import { Board } from "../interfaces";
+import { Board, Item, List } from "../interfaces";
 import { AxiosResponse } from "axios";
 import { boardActions } from "../reducers/boardReducer";
+import { itemActions } from "../reducers/itemReducer";
+import { listActions } from "../reducers/listReducer";
 
 function* getBoards() {
   try {
     yield put(boardActions.setLoading(true));
 
-    const result: Promise<AxiosResponse<Board[]>> = yield call(
-      fetchAllBoardsAPI
-    );
+    const result: AxiosResponse<Board[]> = yield call(fetchAllBoardsAPI);
     yield put(boardActions.fetchBoards(result));
     yield put(boardActions.setLoading(false));
   } catch (err) {
@@ -26,7 +26,7 @@ function* getBoards() {
 function* createBoard(action: ReturnType<typeof boardActions.createBoard>) {
   try {
     yield put(boardActions.setLoading(true));
-    const result: Promise<AxiosResponse<Board>> = yield call(
+    const result: AxiosResponse<Board> = yield call(
       createBoardAPI,
       action.payload
     );
@@ -37,16 +37,25 @@ function* createBoard(action: ReturnType<typeof boardActions.createBoard>) {
   }
 }
 
+type Resp = {
+  board: Board;
+  lists: List[];
+  items: Item[];
+};
 function* fetchActiveBoard(
   action: ReturnType<typeof boardActions.fetchActiveBoard>
 ) {
   try {
     yield put(boardActions.setLoading(true));
-    const result: Promise<AxiosResponse<Board>> = yield call(
+    const result: AxiosResponse<Resp> = yield call(
       fetchActiveBoardAPI,
       action.payload
     );
-    yield put(boardActions.fetchActiveBoard(result));
+    yield all([
+      put(boardActions.fetchActiveBoard(result.data.board)),
+      put(listActions.loadAllLists(result.data.lists)),
+      put(itemActions.loadAllItems(result.data.items)),
+    ]);
     yield put(boardActions.setLoading(false));
   } catch (err) {
     console.log(err);

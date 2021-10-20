@@ -5,14 +5,14 @@ const rootSelector = (state: RootState) => state;
 
 export const boardsSelector = createSelector(
   rootSelector,
-  (state) => state.boards
+  (state) => state.board.boards
 );
 
 export const loadingSelector = createSelector(
   rootSelector,
-  (state) => state.loading
+  (state) => state.board.loading
 );
 export const boardSelector = createSelector(
   rootSelector,
-  (state) => state.board
+  (state) => state.board.board
 );

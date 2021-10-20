@@ -15,10 +15,13 @@ const initialState = {
   error: "",
 } as ListState;
 
-const itemSlice = createSlice({
+const listSlice = createSlice({
   name: "list",
   initialState,
   reducers: {
+    loadAllLists(state, action: PayloadAction<List[]>) {
+      state.lists.push(...action.payload);
+    },
     addList(state, action: PayloadAction<List>) {
       state.lists.push(action.payload);
     },
@@ -27,5 +30,5 @@ const itemSlice = createSlice({
     },
   },
 });
-export const itemActions = itemSlice.actions;
-export default itemSlice;
+export const listActions = listSlice.actions;
+export default listSlice;
