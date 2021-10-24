@@ -8,7 +8,7 @@ import {
   deleteFullBoard,
 } from "../controller/board";
 
-import { reorderItem } from "../controller/item";
+import { reorderItem1 } from "../controller/item";
 
 import { addItemToList } from "../controller/list";
 
@@ -22,6 +22,6 @@ router.post("/create-list", addListToBoard);
 router.post("/create-item", addItemToList);
 router.get("/get-boards", getAllBoard);
 router.get("/get-board/:boardId", getBoard);
-router.put("/list/:list_id/reorder-item", reorderItem);
+router.put("/list/:list_id/reorder-item", reorderItem1);
 
 export default router;

@@ -4,8 +4,8 @@ const itemSchemaRevised = new Schema(
   {
     item_title: { type: String, required: true },
     order: { type: Number },
-    list: { type: Schema.Types.ObjectId, ref: "List" },
-    board: { type: Schema.Types.ObjectId, ref: "Board" },
+    list: { type: Schema.Types.ObjectId, ref: "List", required: true },
+    board: { type: Schema.Types.ObjectId, ref: "Board", required: true },
   },
   { timestamps: true }
 );

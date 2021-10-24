@@ -35,6 +35,8 @@ export const reorderItem1 = async (req: IReorderRequest, res: Response) => {
         },
       }
     );
+    io.to(query).emit("reordered-item", item);
+
     res.status(200).json(item);
   } catch (err) {}
 };

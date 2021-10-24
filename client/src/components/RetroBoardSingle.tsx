@@ -4,16 +4,17 @@ import styled from "styled-components";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { boardActions } from "../reducers/boardReducer";
 import { Container } from "semantic-ui-react";
 import {
   boardSelector,
   loadingSelector,
   listsSelector,
+  itemsSelector,
 } from "../utils/selectors";
 import CreateList from "./CreateList";
 import { isPositionChanged, calculateItemPosition } from "../utils/dragndrop";
 import Loading from "./Loader";
+import { itemActions } from "../reducers/itemReducer";
 
 const ColumnsWrapper = styled.main`
   display: flex;
@@ -30,6 +31,7 @@ export default function RetroBoardSingle() {
   const dispatch = useDispatch();
   const params = useParams<BoardParam>();
   const lists = useSelector(listsSelector);
+  const items = useSelector(itemsSelector);
   const board = useSelector(boardSelector);
   const loading = useSelector(loadingSelector);
 
@@ -46,21 +48,27 @@ export default function RetroBoardSingle() {
     (result: DropResult) => {
       const { source, destination, draggableId } = result;
       if (!isPositionChanged(source, destination)) return;
-      const { position, afterDropDestinationItems } = calculateItemPosition(
-        board!,
+      const position = calculateItemPosition(
+        items,
         source,
         destination,
         draggableId
       );
 
       dispatch(
-        boardActions.updateItems({
-          source_list_id: source.droppableId,
-          destination_list_id: destination?.droppableId,
-          items: afterDropDestinationItems,
+        itemActions.reorderItem({
           item_id: draggableId,
+          position: position,
         })
       );
+      // dispatch(
+      //   boardActions.updateItems({
+      //     source_list_id: source.droppableId,
+      //     destination_list_id: destination?.droppableId,
+      //     items: afterDropDestinationItems,
+      //     item_id: draggableId,
+      //   })
+      // );
 
       dispatch({
         type: "REORDER_ITEM_REQUESTED",
@@ -73,7 +81,7 @@ export default function RetroBoardSingle() {
         },
       });
     },
-    [board, dispatch]
+    [items, dispatch]
   );
 
   console.log(lists);

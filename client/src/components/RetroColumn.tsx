@@ -3,7 +3,9 @@ import styled from "styled-components";
 import RetroCard from "./RetroCard";
 import { Item } from "../interfaces";
 import AddItem from "./AddItem";
+import { useSelector } from "react-redux";
 import { Draggable, DroppableProvided } from "react-beautiful-dnd";
+import { itemsSelector } from "../utils/selectors";
 
 const RetroColumnWrapper = styled.div`
   min-width: 250px;
@@ -36,12 +38,18 @@ interface Props {
   droppableProvided?: DroppableProvided;
 }
 
-const RetroColumn = ({ items, list_id, title, droppableProvided }: Props) => {
+const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
+  const items = useSelector(itemsSelector);
+  console.log(items);
+  const listItems = items
+    .filter((item) => item.list === list_id)
+    .sort((a, b) => a.order - b.order);
+
   return (
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
       <RetroColumnHeader>{title}</RetroColumnHeader>
       <RetroCardContainer>
-        {items.map((item, index) => {
+        {listItems.map((item, index) => {
           return (
             <Draggable draggableId={item._id} index={index} key={item._id}>
               {(provided, snapshot) => (

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Board, List } from "../interfaces";
+import { Board, Item, List } from "../interfaces";
 const httpClient = axios.create({
   baseURL: "http://localhost:5000/api/v1",
 });
@@ -49,11 +49,11 @@ export const createListAPI = async (payload: Partial<List>) => {
   }
 };
 
-type createItemPayload = {
-  item_title: string;
-  list_id: string;
-};
-export const createItemAPI = async (payload: createItemPayload) => {
+// type createItemPayload = {
+//   item_title: string;
+//   list_id: string;
+// };
+export const createItemAPI = async (payload: Partial<Item>) => {
   try {
     const { data } = await httpClient.post("/create-item", payload);
     return data;

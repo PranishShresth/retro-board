@@ -1,32 +1,22 @@
 import { put, call, takeLatest } from "redux-saga/effects";
 import { createItemAPI, reorderItemAPI } from "../utils/api";
-import { List } from "../interfaces";
-import { AxiosResponse } from "axios";
-import boardSlice from "../reducers/boardReducer";
+import { Item } from "../interfaces";
+import { itemActions } from "../reducers/itemReducer";
 
-function* createItem(action: ReturnType<typeof boardSlice.actions.updateList>) {
+function* createItem(action: ReturnType<typeof itemActions.addItem>) {
   try {
-    const result: Promise<AxiosResponse<List>> = yield call(
-      createItemAPI,
-      action.payload
-    );
-
-    yield put(boardSlice.actions.updateList(result));
+    const result: Item = yield call(createItemAPI, action.payload);
+    yield put(itemActions.addItem(result));
   } catch (err) {
     console.log(err);
   }
 }
 
-function* reorderItem(
-  action: ReturnType<typeof boardSlice.actions.updateList>
-) {
+function* reorderItem(action: ReturnType<typeof itemActions.reorderItem>) {
   try {
-    const result: Promise<AxiosResponse<List>> = yield call(
-      reorderItemAPI,
-      action.payload
-    );
+    const result: Item = yield call(reorderItemAPI, action.payload);
 
-    yield put(boardSlice.actions.updateList(result));
+    yield put(itemActions.reorderItem(result));
   } catch (err) {
     console.log(err);
   }

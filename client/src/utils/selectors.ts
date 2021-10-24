@@ -25,3 +25,12 @@ export const listsSelector = createSelector(
   listSelector,
   (state) => state.lists
 );
+
+// item
+
+export const itemSelector = createSelector(rootSelector, (state) => state.item);
+
+export const itemsSelector = createSelector(
+  itemSelector,
+  (state) => state.items
+);

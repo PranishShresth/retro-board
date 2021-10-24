@@ -1,6 +1,6 @@
 import { DraggableLocation } from "react-beautiful-dnd";
 
-import { Board, Item } from "../interfaces";
+import { Item } from "../interfaces";
 
 export const isPositionChanged = (
   source: DraggableLocation,
@@ -13,13 +13,13 @@ export const isPositionChanged = (
 };
 
 export const calculateItemPosition = (
-  board: Board,
+  items: Item[],
   source: DraggableLocation,
   destination: DraggableLocation | undefined,
   droppedItemId: string
 ) => {
-  const { prevItem, nextItem, afterDropDestinationItems } = getPrevAndNextItem(
-    board,
+  const { prevItem, nextItem } = getPrevAndNextItem(
+    items,
     source,
     destination,
     droppedItemId
@@ -35,7 +35,7 @@ export const calculateItemPosition = (
   } else {
     position = prevItem.order + (nextItem.order - prevItem.order) / 2;
   }
-  return { afterDropDestinationItems, position };
+  return position;
 };
 
 const moveItemWithinArray = (
@@ -60,22 +60,18 @@ const insertItemIntoArray = (
 };
 
 const getPrevAndNextItem = (
-  board: Board,
+  items: Item[],
   source: DraggableLocation,
   destination: DraggableLocation | undefined,
   droppedItemId: string
 ) => {
   const isSameList = destination?.droppableId === source.droppableId;
 
-  const destinationList = board?.lists.find(
-    (list) => list._id === destination?.droppableId
-  );
+  const destItems = items.filter((i) => i.list === destination?.droppableId);
 
-  const droppedItem = board?.lists
-    .find((list) => list._id === source.droppableId)!
-    .items.find((item) => item._id === droppedItemId);
+  const droppedItem = items.find((i) => i._id === droppedItemId);
 
-  const destSortedItems = getSortedItems(destinationList?.items);
+  const destSortedItems = getSortedItems(destItems);
   const afterDropDestinationItems = isSameList
     ? moveItemWithinArray(destSortedItems, droppedItem, destination!.index)
     : insertItemIntoArray(destSortedItems, droppedItem, destination!.index);
@@ -83,7 +79,7 @@ const getPrevAndNextItem = (
   const prevItem = afterDropDestinationItems[destination!.index - 1];
   const nextItem = afterDropDestinationItems[destination!.index + 1];
 
-  return { prevItem, nextItem, afterDropDestinationItems };
+  return { prevItem, nextItem };
 };
 
 function getSortedItems(items: Item[] | undefined) {

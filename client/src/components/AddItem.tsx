@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "./hooks/useForm";
 import styled from "styled-components";
+import { useParams } from "react-router";
+import { itemActions } from "../reducers/itemReducer";
 
 const StyledTextArea = styled(TextArea)`
   resize: none !important;
@@ -11,6 +13,7 @@ interface Props {
   list_id: string;
 }
 function AddItem({ list_id }: Props) {
+  const { boardId } = useParams<{ boardId: string }>();
   const dispatch = useDispatch();
   const { formValues, handleChange } = useForm({ item_title: "" });
   const [open, setOpen] = useState(false);
@@ -18,9 +21,10 @@ function AddItem({ list_id }: Props) {
   const handleAddingItem = async (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+
       dispatch({
         type: "CREATE_ITEM_REQUESTED",
-        payload: { list_id, ...formValues },
+        payload: { list_id, board_id: boardId, ...formValues },
       });
       setOpen(false);
     } catch (err) {
