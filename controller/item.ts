@@ -40,24 +40,27 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
     res.status(200).json(item);
   } catch (err) {}
 };
+
 interface IAddItem extends Request {
   body: {
     item_title: string;
     list_id: string;
     board_id: string;
+    _id: string;
   };
 }
 
 export const addItemToList = async (req: IAddItem, res: Response) => {
-  const { item_title, list_id, board_id } = req.body;
+  const { item_title, list_id, board_id, _id } = req.body;
   const socket: Socket = req.app.get("socket");
   const io: ISocket = req.app.get("socketio");
   const query = socket.handshake.query.boardId as string;
 
   try {
     const position = await calculateListPosition(list_id);
-    console.log(query);
+
     const newItem = new Item({
+      _id,
       item_title,
       order: position,
       list: list_id,

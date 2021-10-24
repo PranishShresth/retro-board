@@ -22,8 +22,15 @@ const itemSlice = createSlice({
     loadAllItems(state, action: PayloadAction<Item[]>) {
       state.items = action.payload;
     },
-    addItem(state, action: PayloadAction<Item>) {
-      state.items.push(action.payload);
+    addItem(state, action) {
+      const itemIdx = state.items.findIndex(
+        (item) => item._id === action.payload._id
+      );
+      if (itemIdx === -1) {
+        state.items.push(action.payload);
+      } else {
+        state.items[itemIdx] = action.payload;
+      }
     },
     removeFromList(state, action: PayloadAction<Item>) {
       state.items.filter((item) => item._id !== action.payload._id);

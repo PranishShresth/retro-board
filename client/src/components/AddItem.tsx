@@ -5,6 +5,7 @@ import { useForm } from "./hooks/useForm";
 import styled from "styled-components";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";
+import { itemActions } from "../reducers/itemReducer";
 
 const StyledTextArea = styled(TextArea)`
   resize: none !important;
@@ -22,13 +23,23 @@ function AddItem({ list_id }: Props) {
   const handleAddingItem = async (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+      const id = new ObjectID().toString();
+
+      dispatch(
+        itemActions.addItem({
+          _id: id,
+          list_id,
+          board_id: boardId,
+          ...formValues,
+        })
+      );
 
       dispatch({
         type: "CREATE_ITEM_REQUESTED",
         payload: {
           list_id,
           board_id: boardId,
-          _id: new ObjectID().toString(),
+          _id: id,
           ...formValues,
         },
       });
