@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
-import { Container } from "semantic-ui-react";
 import {
   boardSelector,
   loadingSelector,
@@ -23,7 +22,10 @@ const ColumnsWrapper = styled.main`
   overflow-x: auto;
   height: calc(100vh - 80px);
 `;
-
+const Container = styled.div`
+  width: 95%;
+  margin: 0 auto;
+`;
 interface BoardParam {
   boardId: string;
 }
@@ -31,8 +33,10 @@ export default function RetroBoardSingle() {
   const dispatch = useDispatch();
   const params = useParams<BoardParam>();
   const lists = useSelector(listsSelector);
+
+  const currentBoardLists = lists.filter((l) => l.board === params.boardId);
   const items = useSelector(itemsSelector);
-  const board = useSelector(boardSelector);
+
   const loading = useSelector(loadingSelector);
 
   useEffect(() => {
@@ -86,7 +90,7 @@ export default function RetroBoardSingle() {
     <Container>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <ColumnsWrapper>
-          {lists?.map((list) => (
+          {currentBoardLists?.map((list) => (
             <Droppable droppableId={list._id} key={list._id}>
               {(provided) => (
                 <RetroColumn

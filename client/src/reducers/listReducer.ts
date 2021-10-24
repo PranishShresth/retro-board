@@ -20,7 +20,7 @@ const listSlice = createSlice({
   initialState,
   reducers: {
     loadAllLists(state, action: PayloadAction<List[]>) {
-      state.lists.push(...action.payload);
+      state.lists = action.payload;
     },
     addList(state, action: PayloadAction<List>) {
       state.lists.push(action.payload);

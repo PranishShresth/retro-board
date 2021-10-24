@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { boardsSelector, loadingSelector } from "../utils/selectors";
 import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
-import { Container } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
 
 import { Grid } from "semantic-ui-react";
@@ -12,8 +11,10 @@ import styled from "styled-components";
 
 import Loading from "./Loader";
 
-const BoardsContainer = styled(Container)`
+const BoardsContainer = styled.div`
   padding-top: 50px;
+  width: 95%;
+  margin: 0 auto;
 `;
 
 const RetroDashBoard = React.memo(() => {

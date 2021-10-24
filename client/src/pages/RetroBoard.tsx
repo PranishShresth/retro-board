@@ -20,26 +20,26 @@ export const RetroHome = () => {
       transports: ["websocket"],
     });
 
-    newSocket.on("new-list", function (data) {
-      dispatch(boardActions.updateBoard(data));
-    });
+    // newSocket.on("new-list", function (data) {
+    //   dispatch(boardActions.updateBoard(data));
+    // });
 
-    newSocket.on("updated-list", function (data) {
-      dispatch(boardActions.updateList(data));
-    });
+    // newSocket.on("updated-list", function (data) {
+    //   dispatch(boardActions.updateList(data));
+    // });
 
-    newSocket.on("updated-items", function (data) {
-      const { list, item_id, source_list_id, destination_list_id } = data;
-      console.log(data);
-      dispatch(
-        boardActions.updateItems({
-          source_list_id,
-          destination_list_id,
-          items: list.items,
-          item_id,
-        })
-      );
-    });
+    // newSocket.on("updated-items", function (data) {
+    //   const { list, item_id, source_list_id, destination_list_id } = data;
+    //   console.log(data);
+    //   dispatch(
+    //     boardActions.updateItems({
+    //       source_list_id,
+    //       destination_list_id,
+    //       items: list.items,
+    //       item_id,
+    //     })
+    //   );
+    // });
 
     setSocket(socket);
     // setSocket(newSocket);
