@@ -8,7 +8,7 @@ import { Draggable, DroppableProvided } from "react-beautiful-dnd";
 import { itemsSelector } from "../utils/selectors";
 
 const RetroColumnWrapper = styled.div`
-  min-width: 250px;
+  min-width: 300px;
   padding: 8px;
   background: rgb(235, 236, 240);
   height: fit-content;
@@ -40,7 +40,7 @@ interface Props {
 
 const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
   const items = useSelector(itemsSelector);
-  console.log(items);
+
   const listItems = items
     .filter((item) => item.list === list_id)
     .sort((a, b) => a.order - b.order);
@@ -53,7 +53,11 @@ const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
           return (
             <Draggable draggableId={item._id} index={index} key={item._id}>
               {(provided, snapshot) => (
-                <RetroCard provided={provided} content={item.item_title} />
+                <RetroCard
+                  provided={provided}
+                  content={item.item_title}
+                  item_id={item._id}
+                />
               )}
             </Draggable>
           );

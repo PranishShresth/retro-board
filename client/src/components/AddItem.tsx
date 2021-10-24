@@ -16,7 +16,9 @@ interface Props {
 function AddItem({ list_id }: Props) {
   const { boardId } = useParams<{ boardId: string }>();
   const dispatch = useDispatch();
-  const { formValues, handleChange } = useForm({ item_title: "" });
+  const { formValues, handleChange, setFormValues } = useForm({
+    item_title: "",
+  });
 
   const [open, setOpen] = useState(false);
 
@@ -28,8 +30,8 @@ function AddItem({ list_id }: Props) {
       dispatch(
         itemActions.addItem({
           _id: id,
-          list_id,
-          board_id: boardId,
+          list: list_id,
+          board: boardId,
           ...formValues,
         })
       );
@@ -37,12 +39,14 @@ function AddItem({ list_id }: Props) {
       dispatch({
         type: "CREATE_ITEM_REQUESTED",
         payload: {
-          list_id,
-          board_id: boardId,
+          list: list_id,
+          board: boardId,
           _id: id,
           ...formValues,
         },
       });
+
+      setFormValues({ item_title: "" });
       setOpen(false);
     } catch (err) {
       console.log(err);

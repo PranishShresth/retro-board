@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, current } from "@reduxjs/toolkit";
 import { Item } from "../interfaces";
 
 interface ItemState {
@@ -22,10 +22,14 @@ const itemSlice = createSlice({
     loadAllItems(state, action: PayloadAction<Item[]>) {
       state.items = action.payload;
     },
+    deleteItem(state, action) {
+      state.items = state.items.filter((i) => i._id !== action.payload.item_id);
+    },
     addItem(state, action) {
       const itemIdx = state.items.findIndex(
         (item) => item._id === action.payload._id
       );
+
       if (itemIdx === -1) {
         state.items.push(action.payload);
       } else {

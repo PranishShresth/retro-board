@@ -79,3 +79,12 @@ export const reorderItemAPI = async (payload: reorderItemPayload) => {
     throw err;
   }
 };
+
+export const deleteItemAPI = async (payload: { item_id: string }) => {
+  try {
+    const { data } = await httpClient.delete(`/delete-item/${payload.item_id}`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

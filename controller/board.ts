@@ -62,7 +62,6 @@ export const getBoard = async (req: IGetBoardAPI, res: Response) => {
     const list = await List.find({ board: req.params.boardId });
     const items = await Item.find({ board: req.params.boardId });
 
-    console.log(items);
     res.status(200).send({ board, list, items });
   } catch (err) {
     res.status(500).send("Internal Server Error");

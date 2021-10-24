@@ -44,27 +44,27 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
 interface IAddItem extends Request {
   body: {
     item_title: string;
-    list_id: string;
-    board_id: string;
+    list: string;
+    board: string;
     _id: string;
   };
 }
 
 export const addItemToList = async (req: IAddItem, res: Response) => {
-  const { item_title, list_id, board_id, _id } = req.body;
+  const { item_title, list, board, _id } = req.body;
   const socket: Socket = req.app.get("socket");
   const io: ISocket = req.app.get("socketio");
   const query = socket.handshake.query.boardId as string;
 
   try {
-    const position = await calculateListPosition(list_id);
+    const position = await calculateListPosition(list);
 
     const newItem = new Item({
       _id,
       item_title,
       order: position,
-      list: list_id,
-      board: board_id,
+      list: list,
+      board: board,
     });
     const item = await newItem.save();
 
@@ -86,4 +86,19 @@ const calculateListPosition = async (listId: string): Promise<number> => {
     return Math.max(...itemPositions) + 1;
   }
   return 1;
+};
+
+interface DeleteItemRequest {
+  params: {
+    item_id: string;
+  };
+}
+export const deleteItem = async (req: DeleteItemRequest, res: Response) => {
+  const { item_id } = req.params;
+  try {
+    await Item.findByIdAndDelete(item_id);
+    res.status(200).send({ success: true });
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
 };
