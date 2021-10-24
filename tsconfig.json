@@ -1,15 +1,25 @@
 {
   "compilerOptions": {
-    "lib": ["es2021"],
+    "target": "es6",
+    "moduleResolution": "node",
     "module": "commonjs",
-    "target": "es2021",
-
-    "strict": true,
+    "declaration": false,
+    "noLib": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "pretty": true,
+    "allowUnreachableCode": true,
     "esModuleInterop": true,
-    "noImplicitAny": false,
-    "skipLibCheck": true,
-    "noImplicitReturns": true,
-    "forceConsistentCasingInFileNames": true
+    "allowUnusedLabels": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": false,
+    "noImplicitUseStrict": false,
+    "outDir": "dist/",
+    "baseUrl": "src/",
+    "listFiles": false
   },
-  "include": ["index.d.ts"]
+
+  "include": ["/**/*", "index.d.ts"],
+  "exclude": ["client"]
 }

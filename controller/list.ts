@@ -1,7 +1,5 @@
 import { List } from "../models/list";
-import { Item } from "../models/item";
 import { Request, Response } from "express";
-import { List as IList, Item as IItem } from "../utils/interfaces";
 import { Socket } from "socket.io";
 import { ISocket } from "../index";
 

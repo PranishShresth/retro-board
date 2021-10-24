@@ -2,9 +2,6 @@ import { Board } from "../models/board";
 import { List } from "../models/list";
 import { Item } from "../models/item";
 import { Request, Response } from "express";
-import { List as IList } from "../utils/interfaces";
-import { Socket } from "socket.io";
-import { ISocket } from "../index";
 
 interface IRequest1 extends Request {
   body: {

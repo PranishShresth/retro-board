@@ -1,10 +1,8 @@
-import { List } from "../models/list";
 import { Item } from "../models/item";
 import { Socket } from "socket.io";
 import { ISocket } from "../index";
 
 import { Request, Response } from "express";
-import { List as IList } from "../utils/interfaces";
 
 interface IReorderRequest extends Request {
   body: {

@@ -1,4 +1,4 @@
-import express, { Response, Request } from "express";
+import express from "express";
 import { config } from "dotenv";
 import connectToDB from "./config/db";
 import http from "http";
@@ -6,8 +6,8 @@ import ApiRoutes from "./routes";
 import socketIO from "./config/socket";
 import logger from "morgan";
 import cors from "cors";
-import { Socket } from "socket.io";
-import { DefaultEventsMap } from "socket.io/dist/typed-events";
+
+import path from "path";
 
 const app = express();
 const server = http.createServer(app);
@@ -26,7 +26,11 @@ app.set("socketio", io);
 app.use(logger("dev"));
 
 app.use("/api/v1", ApiRoutes);
+app.use(express.static(path.join(__dirname, "../", "client", "build")));
 
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../", "client", "build", "index.html"));
+});
 server.listen(PORT, () => {
   console.log(`Listening to ${PORT}`);
 });
