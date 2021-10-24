@@ -5,7 +5,6 @@ import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import {
-  boardSelector,
   loadingSelector,
   listsSelector,
   itemsSelector,
