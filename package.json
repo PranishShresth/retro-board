@@ -16,6 +16,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": "16.6.2"
+  },
   "dependencies": {
     "concurrently": "^6.3.0",
     "cors": "^2.8.5",
