@@ -4,6 +4,7 @@ import RetroModal from "./Modal";
 import { Button, Form } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
 import { useParams } from "react-router";
+import { ObjectID } from "bson";
 
 interface FormParam {
   boardId: string;
@@ -21,9 +22,11 @@ const CreateList = () => {
   const handleCreateList = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+      const id = new ObjectID().toString();
+
       dispatch({
         type: "CREATE_LIST_REQUESTED",
-        payload: { ...formValues, board_id: boardId },
+        payload: { ...formValues, _id: id, board_id: boardId },
       });
       setModalOpen(false);
     } catch (err) {

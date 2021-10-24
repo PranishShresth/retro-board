@@ -35,7 +35,12 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
         },
       }
     );
-    io.to(query).emit("reordered-item", item);
+    io.to(query).emit("reordered-item", {
+      source_list_id,
+      destination_list_id,
+      item,
+      position,
+    });
 
     res.status(200).json(item);
   } catch (err) {}
@@ -68,7 +73,7 @@ export const addItemToList = async (req: IAddItem, res: Response) => {
     });
     const item = await newItem.save();
 
-    io.to(query).emit("updated-list", item);
+    io.to(query).emit("new-item", item);
 
     res.status(200).send(item);
   } catch (err) {

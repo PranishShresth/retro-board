@@ -5,6 +5,8 @@ import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
 import { boardActions } from "../reducers/boardReducer";
+import { itemActions } from "../reducers/itemReducer";
+import { listActions } from "../reducers/listReducer";
 
 interface boardParams {
   boardId: string;
@@ -20,26 +22,25 @@ export const RetroHome = () => {
       transports: ["websocket"],
     });
 
-    // newSocket.on("new-list", function (data) {
-    //   dispatch(boardActions.updateBoard(data));
-    // });
+    newSocket.on("new-list", function (data) {
+      dispatch(listActions.addList(data));
+    });
 
-    // newSocket.on("updated-list", function (data) {
-    //   dispatch(boardActions.updateList(data));
-    // });
+    newSocket.on("new-item", function (data) {
+      dispatch(itemActions.addItem(data));
+    });
 
-    // newSocket.on("updated-items", function (data) {
-    //   const { list, item_id, source_list_id, destination_list_id } = data;
-    //   console.log(data);
-    //   dispatch(
-    //     boardActions.updateItems({
-    //       source_list_id,
-    //       destination_list_id,
-    //       items: list.items,
-    //       item_id,
-    //     })
-    //   );
-    // });
+    newSocket.on("reordered-item", function (data) {
+      const { item, source_list_id, destination_list_id, position } = data;
+      dispatch(
+        itemActions.reorderItem({
+          item_id: item._id,
+          source: source_list_id,
+          destination: destination_list_id,
+          position: position,
+        })
+      );
+    });
 
     setSocket(socket);
     // setSocket(newSocket);
