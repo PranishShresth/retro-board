@@ -20,17 +20,26 @@ const itemSlice = createSlice({
   initialState,
   reducers: {
     loadAllItems(state, action: PayloadAction<Item[]>) {
-      state.items.push(...action.payload);
+      state.items = action.payload;
     },
-    addItem(state, action) {
+    addItem(state, action: PayloadAction<Item>) {
       state.items.push(action.payload);
     },
     removeFromList(state, action: PayloadAction<Item>) {
       state.items.filter((item) => item._id !== action.payload._id);
     },
     reorderItem(state, action) {
-      const a = state.items.findIndex((s) => s._id === action.payload.item_id);
-      state.items[a].order = action.payload.position;
+      const { source, destination, item_id, position } = action.payload;
+      const itemIdx = state.items.findIndex((s) => s._id === item_id);
+      const item = state.items[itemIdx];
+
+      if (source === destination) {
+        item.order = position;
+      } else {
+        const item = state.items[itemIdx];
+        item.order = position;
+        item.list = destination;
+      }
     },
   },
 });

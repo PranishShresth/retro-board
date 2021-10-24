@@ -48,6 +48,7 @@ export default function RetroBoardSingle() {
     (result: DropResult) => {
       const { source, destination, draggableId } = result;
       if (!isPositionChanged(source, destination)) return;
+      if (!destination) return;
       const position = calculateItemPosition(
         items,
         source,
@@ -58,23 +59,17 @@ export default function RetroBoardSingle() {
       dispatch(
         itemActions.reorderItem({
           item_id: draggableId,
+          source: source.droppableId,
+          destination: destination.droppableId,
           position: position,
         })
       );
-      // dispatch(
-      //   boardActions.updateItems({
-      //     source_list_id: source.droppableId,
-      //     destination_list_id: destination?.droppableId,
-      //     items: afterDropDestinationItems,
-      //     item_id: draggableId,
-      //   })
-      // );
 
       dispatch({
         type: "REORDER_ITEM_REQUESTED",
         payload: {
           source_list_id: source.droppableId,
-          destination_list_id: destination?.droppableId,
+          destination_list_id: destination.droppableId,
           position: position,
           list_id: destination?.droppableId,
           item_id: draggableId,
@@ -84,7 +79,6 @@ export default function RetroBoardSingle() {
     [items, dispatch]
   );
 
-  console.log(lists);
   if (loading) {
     return <Loading />;
   }
