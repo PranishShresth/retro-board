@@ -10,8 +10,7 @@
     "start": "node dist/index.js",
     "prod": "tsc && nodemon dist/index.js",
     "build": "tsc --build",
-    "install-client": "cd client && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "install-client": "cd client && npm install"
   },
   "keywords": [],
   "author": "",
