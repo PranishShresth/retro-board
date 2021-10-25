@@ -3276,11 +3276,6 @@ bser@2.1.1:
   dependencies:
     node-int64 "^0.4.0"
 
-bson@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/bson/-/bson-0.1.9.tgz#7528f81ed770e6d630ca8c2ccdf5394a4096db14"
-  integrity sha1-dSj4Htdw5tYwyowszfU5SkCW2xQ=
-
 bson@^4.5.3:
   version "4.5.3"
   resolved "https://registry.yarnpkg.com/bson/-/bson-4.5.3.tgz#de3783b357a407d935510beb1fbb285fef43bb06"
@@ -7333,11 +7328,6 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lexorank@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/lexorank/-/lexorank-1.0.4.tgz#49ad4b93937f444763cc2660c147506326aa41b1"
-  integrity sha512-CMgA8AMJIX/QfoYHKyjg0hv9W1SGL2xRkt0uLyhT9xKKRj73fHi+IhsrB3W36wwk4I0iz8YlKHfdW14QDwerMA==
-
 lines-and-columns@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/lines-and-columns/-/lines-and-columns-1.1.6.tgz#1c00c743b433cd0a4e80758f7b64a57440d9ff00"
@@ -8126,13 +8116,6 @@ object.values@^1.1.0, object.values@^1.1.1:
     define-properties "^1.1.3"
     es-abstract "^1.18.0-next.1"
     has "^1.0.3"
-
-objectid@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/objectid/-/objectid-3.2.1.tgz#a3b7a2b4d65f3a8348ef8497f023069b5cb019de"
-  integrity sha1-o7eitNZfOoNI74SX8CMGm1ywGd4=
-  dependencies:
-    bson "^0.1.9"
 
 obuf@^1.0.0, obuf@^1.1.2:
   version "1.1.2"

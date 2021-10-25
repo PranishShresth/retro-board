@@ -4,7 +4,6 @@ import connectToDB from "./config/db";
 import http from "http";
 import ApiRoutes from "./routes";
 import socketIO from "./config/socket";
-import logger from "morgan";
 import cors from "cors";
 
 const app = express();
@@ -21,7 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set("socketio", io);
 
-app.use(logger("dev"));
+// app.use(logger("dev"));
 
 app.use("/api/v1", ApiRoutes);
 

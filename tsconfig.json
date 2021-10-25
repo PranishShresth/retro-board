@@ -16,10 +16,9 @@
     "noImplicitReturns": false,
     "noImplicitUseStrict": false,
     "outDir": "dist/",
-    "baseUrl": "src/",
     "listFiles": false
   },
 
-  "include": ["/**/*", "index.d.ts"],
-  "exclude": ["client"]
+  "include": ["/**/*"],
+  "exclude": ["client/*"]
 }

@@ -6,7 +6,6 @@ import {
   deleteBoardAPI,
 } from "../utils/api";
 import { Board, Item, List } from "../interfaces";
-import { AxiosResponse } from "axios";
 import { boardActions } from "../reducers/boardReducer";
 import { itemActions } from "../reducers/itemReducer";
 import { listActions } from "../reducers/listReducer";

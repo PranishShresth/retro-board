@@ -105,3 +105,31 @@ export const deleteItem = async (req: DeleteItemRequest, res: Response) => {
     res.status(500).send("Internal Server Error");
   }
 };
+
+interface UpdateItemRequest {
+  params: {
+    item_id: string;
+  };
+  body: {
+    item_title: string;
+  };
+}
+export const updateItem = async (req: UpdateItemRequest, res: Response) => {
+  const { item_title } = req.body;
+  const { item_id } = req.params;
+
+  try {
+    const updatedItem = await Item.findByIdAndUpdate(
+      item_id,
+      {
+        $set: {
+          item_title: item_title,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).send(updatedItem);
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
