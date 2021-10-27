@@ -34,7 +34,7 @@ export const addListToBoard = async (req: AddListRequest, res: Response) => {
   }
 };
 
-interface DeleteListRequest {
+interface DeleteListRequest extends Request {
   params: {
     list_id: string;
   };
@@ -49,7 +49,7 @@ export const deleteList = async (req: DeleteListRequest, res: Response) => {
   }
 };
 
-interface UpdateListRequest {
+interface UpdateListRequest extends Request {
   params: {
     list_id: string;
   };
@@ -60,6 +60,9 @@ interface UpdateListRequest {
 export const updateList = async (req: UpdateListRequest, res: Response) => {
   const { list_title } = req.body;
   const { list_id } = req.params;
+  const socket: Socket = req.app.get("socket");
+  const io: ISocket = req.app.get("socketio");
+  const query = socket.handshake.query.boardId as string;
 
   try {
     const updatedList = await List.findByIdAndUpdate(
@@ -71,6 +74,8 @@ export const updateList = async (req: UpdateListRequest, res: Response) => {
       },
       { new: true }
     );
+    io.to(query).emit("updated-list", updatedList);
+
     res.status(200).send(updatedList);
   } catch (err) {
     res.status(500).send("Internal Server Error");

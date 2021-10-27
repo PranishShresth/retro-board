@@ -91,7 +91,7 @@ const calculateListPosition = async (listId: string): Promise<number> => {
   return 1;
 };
 
-interface DeleteItemRequest {
+interface DeleteItemRequest extends Request {
   params: {
     item_id: string;
   };
@@ -106,7 +106,7 @@ export const deleteItem = async (req: DeleteItemRequest, res: Response) => {
   }
 };
 
-interface UpdateItemRequest {
+interface UpdateItemRequest extends Request {
   params: {
     item_id: string;
   };

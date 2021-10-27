@@ -70,10 +70,7 @@ type reorderItemPayload = {
 
 export const reorderItemAPI = async (payload: reorderItemPayload) => {
   try {
-    const { data } = await httpClient.put(
-      `/list/${payload.list_id}/reorder-item`,
-      payload
-    );
+    const { data } = await httpClient.put(`/reorder-item`, payload);
     return data;
   } catch (err) {
     throw err;
@@ -81,6 +78,15 @@ export const reorderItemAPI = async (payload: reorderItemPayload) => {
 };
 
 export const deleteItemAPI = async (payload: { item_id: string }) => {
+  try {
+    const { data } = await httpClient.delete(`/delete-item/${payload.item_id}`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
+export const deleteListAPI = async (payload: { item_id: string }) => {
   try {
     const { data } = await httpClient.delete(`/delete-item/${payload.item_id}`);
     return data;
