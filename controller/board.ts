@@ -50,14 +50,14 @@ export const getAllBoard = async (req: Request, res: Response) => {
 
 interface IGetBoardAPI extends Request {
   params: {
-    boardId: string;
+    board_id: string;
   };
 }
 export const getBoard = async (req: IGetBoardAPI, res: Response) => {
   try {
-    const board = await Board.findOne({ _id: req.params.boardId });
-    const list = await List.find({ board: req.params.boardId });
-    const items = await Item.find({ board: req.params.boardId });
+    const board = await Board.findOne({ _id: req.params.board_id });
+    const list = await List.find({ board: req.params.board_id });
+    const items = await Item.find({ board: req.params.board_id });
 
     res.status(200).send({ board, list, items });
   } catch (err) {
@@ -67,12 +67,12 @@ export const getBoard = async (req: IGetBoardAPI, res: Response) => {
 
 interface IDeleteBoardAPI extends Request {
   params: {
-    boardId: string;
+    board_id: string;
   };
 }
 export const closeBoard = async (req: IDeleteBoardAPI, res: Response) => {
   try {
-    const board = await Board.findOne({ _id: req.params.boardId });
+    const board = await Board.findOne({ _id: req.params.board_id });
     board.closed = true;
     await board.save();
     res.status(200).send({ success: true });
@@ -83,10 +83,10 @@ export const closeBoard = async (req: IDeleteBoardAPI, res: Response) => {
 
 export const deleteFullBoard = async (req: IDeleteBoardAPI, res: Response) => {
   try {
-    const boardId = req.params.boardId;
-    await Board.findOneAndDelete({ board: boardId });
-    await List.deleteMany({ board: boardId });
-    await Item.deleteMany({ board: boardId });
+    const board_id = req.params.board_id;
+    await Board.findOneAndDelete({ board: board_id });
+    await List.deleteMany({ board: board_id });
+    await Item.deleteMany({ board: board_id });
     res.status(200).send({ success: true });
   } catch (err) {
     res.status(500).send("Internal Server Error");

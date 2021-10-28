@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { boardsSelector, loadingSelector } from "../utils/selectors";
-import RetroModal from "./Modal";
-import { Button, Form } from "semantic-ui-react";
 import { useForm } from "./hooks/useForm";
 
-import { Grid } from "semantic-ui-react";
+import { Grid, Stack } from "@chakra-ui/layout";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { Input, InputGroup, Button, useToast } from "@chakra-ui/react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
-
+import NewModal from "./NewModal";
 import Loading from "./Loader";
 
 const BoardsContainer = styled.div`
@@ -19,7 +19,9 @@ const BoardsContainer = styled.div`
 
 const RetroDashBoard = React.memo(() => {
   const dispatch = useDispatch();
-  const [modalOpen, setModalOpen] = useState(false);
+  const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const boards = useSelector(boardsSelector);
   const loading = useSelector(loadingSelector);
   const { formValues, handleChange } = useForm({
@@ -36,7 +38,14 @@ const RetroDashBoard = React.memo(() => {
       ev.preventDefault();
 
       dispatch({ type: "CREATE_BOARD_REQUESTED", payload: formValues });
-      setModalOpen(false);
+      toast({
+        title: "Board Created",
+        description: "We've created your board for you.",
+        status: "success",
+        duration: 4000,
+        isClosable: true,
+      });
+      onClose();
     } catch (err) {
       console.log(err);
     }
@@ -49,44 +58,48 @@ const RetroDashBoard = React.memo(() => {
   return (
     <>
       <BoardsContainer>
-        <Grid>
+        <Grid
+          templateColumns={{
+            base: "1fr",
+            sm: "repeat(2, 1fr)",
+            lg: "repeat(5, 1fr)",
+          }}
+          gap={6}
+        >
           {boards.map((board) => {
             return (
-              <Grid.Column mobile={16} tablet={8} computer={4} key={board._id}>
-                <BoardCard
-                  to={`/board/${board._id}`}
-                  header={board.title}
-                  boardId={board._id}
-                />
-              </Grid.Column>
+              <BoardCard
+                to={`/board/${board._id}`}
+                header={board.title}
+                boardId={board._id}
+              />
             );
           })}
-          <Grid.Column mobile={16} tablet={8} computer={4}>
-            <RetroModal
-              open={modalOpen}
-              onClose={() => setModalOpen(false)}
-              onOpen={() => setModalOpen(true)}
-              modalTitle="Board Creation"
-              triggerName="Create a Board"
-            >
-              <Form onSubmit={handleCreateBoard}>
-                <Form.Field>
-                  <label>Board Title</label>
-                  <input
+          <NewModal
+            modalTitle="Create Board"
+            isOpen={isOpen}
+            onOpen={onOpen}
+            onClose={onClose}
+            triggerName="Create new Board"
+          >
+            <form onSubmit={handleCreateBoard}>
+              <Stack spacing={3}>
+                <InputGroup>
+                  <Input
                     type="text"
                     name="title"
                     value={formValues.title}
                     placeholder="Board Title"
                     onChange={handleChange}
                   />
-                </Form.Field>
+                </InputGroup>
 
-                <Button color="instagram" type="submit">
-                  Create Board
-                </Button>
-              </Form>
-            </RetroModal>
-          </Grid.Column>
+                <div>
+                  <Button type="submit">Create Board</Button>
+                </div>
+              </Stack>
+            </form>
+          </NewModal>
         </Grid>
       </BoardsContainer>
     </>

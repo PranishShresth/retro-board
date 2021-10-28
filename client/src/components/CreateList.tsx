@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import RetroModal from "./Modal";
-import { Button, Form } from "semantic-ui-react";
+import Modal from "./NewModal";
 import { useForm } from "./hooks/useForm";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { Input, InputGroup } from "@chakra-ui/input";
+import { Stack } from "@chakra-ui/layout";
+import { Button } from "@chakra-ui/button";
 
 interface FormParam {
   boardId: string;
 }
 const CreateList = () => {
   const dispatch = useDispatch();
-  const [modalOpen, setModalOpen] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { boardId } = useParams<FormParam>();
 
@@ -28,7 +31,6 @@ const CreateList = () => {
         type: "CREATE_LIST_REQUESTED",
         payload: { ...formValues, _id: id, board_id: boardId },
       });
-      setModalOpen(false);
     } catch (err) {
       console.log(err);
     }
@@ -36,30 +38,30 @@ const CreateList = () => {
 
   return (
     <>
-      <RetroModal
+      <Modal
         modalTitle="List Creation"
         triggerName="Create a List"
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        onOpen={() => setModalOpen(true)}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
       >
-        <Form onSubmit={handleCreateList}>
-          <Form.Field>
-            <label>List Title</label>
-            <input
-              type="text"
-              name="list_title"
-              value={formValues.list_title}
-              placeholder="List Title"
-              onChange={handleChange}
-            />
-          </Form.Field>
-
-          <Button color="instagram" type="submit">
-            Create List
-          </Button>
-        </Form>
-      </RetroModal>
+        <form onSubmit={handleCreateList}>
+          <Stack spacing={3}>
+            <InputGroup>
+              <Input
+                type="text"
+                name="list_title"
+                value={formValues.list_title}
+                placeholder="List Title"
+                onChange={handleChange}
+              />
+            </InputGroup>
+            <div>
+              <Button type="submit">Create List</Button>
+            </div>
+          </Stack>
+        </form>
+      </Modal>
     </>
   );
 };

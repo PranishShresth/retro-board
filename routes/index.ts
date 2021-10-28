@@ -19,10 +19,10 @@ import { addListToBoard, deleteList, updateList } from "../controller/list";
 const router = Router();
 // board Routes
 router.post("/create-board", createBoard);
-router.put("/update-board/:boardId", updateBoardDetails);
-router.delete("/delete-board/:boardId", deleteFullBoard);
+router.put("/update-board/:board_id", updateBoardDetails);
+router.delete("/delete-board/:board_id", deleteFullBoard);
 router.get("/get-boards", getAllBoard);
-router.get("/get-board/:boardId", getBoard);
+router.get("/get-board/:board_id", getBoard);
 
 // list Routes
 router.post("/create-list", addListToBoard);
