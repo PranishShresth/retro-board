@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
 import DeleteModal from "./Modal";
+import AlertDialog from "./AlertDialog";
 import { useDispatch } from "react-redux";
 
 interface Props extends CardProps {
@@ -67,26 +68,18 @@ const BoardCard = (props: Props) => {
         </Card.Content>
       </StyledCard>
 
-      <DeleteModal open={deleteModalOpen} modalTitle="Delete Your Board">
-        <Modal.Content>
-          <p>Are you sure you want to delete your account</p>
-        </Modal.Content>
-        <Divider />
-        <Button negative onClick={() => setdeleteModalOpen(false)}>
-          No
-        </Button>
-        <Button
-          positive
-          onClick={() =>
-            dispatch({
-              type: "DELETE_BOARD_REQUESTED",
-              payload: props.boardId,
-            })
-          }
-        >
-          Yes
-        </Button>
-      </DeleteModal>
+      <AlertDialog
+        isOpen={deleteModalOpen}
+        onClose={() => setdeleteModalOpen(false)}
+        onClick={() => {
+          dispatch({
+            type: "DELETE_BOARD_REQUESTED",
+            payload: props.boardId,
+          });
+          setdeleteModalOpen(false);
+        }}
+        title="Delete Board"
+      />
     </>
   );
 };
