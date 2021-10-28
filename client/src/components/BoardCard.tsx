@@ -1,18 +1,19 @@
-import {
-  Card,
-  CardProps,
-  Dropdown,
-  Modal,
-  Button,
-  Divider,
-} from "semantic-ui-react";
+import { Card, CardProps } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useState, useEffect } from "react";
-import DeleteModal from "./Modal";
+import { useState } from "react";
 import AlertDialog from "./AlertDialog";
 import { useDispatch } from "react-redux";
+import {
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Button,
+  Icon,
+} from "@chakra-ui/react";
 
+import { FaEllipsisV } from "react-icons/fa";
 interface Props extends CardProps {
   to?: string;
   boardId: string;
@@ -27,23 +28,10 @@ const Grid = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const options = [
-  { key: "delete", text: "Delete", value: "delete" },
-  { key: "edit", text: "Edit", value: "edit" },
-  { key: "archive", text: "Archive", value: "archive" },
-];
 
 const BoardCard = (props: Props) => {
-  const [choice, setChoice] = useState("");
   const dispatch = useDispatch();
   const [deleteModalOpen, setdeleteModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (choice === "delete") {
-      setdeleteModalOpen(true);
-    } else if (choice === "edit") {
-    }
-  }, [choice]);
 
   return (
     <>
@@ -53,17 +41,18 @@ const BoardCard = (props: Props) => {
             <Link to={props.to ?? ""}>
               <Card.Header>{props.header}</Card.Header>
             </Link>
-            <Dropdown
-              upward
-              onChange={(_, data) => {
-                setChoice(data.value as string);
-              }}
-              value={choice}
-              floating
-              options={options}
-              text=" "
-              icon="ellipsis vertical"
-            />
+            <Menu>
+              <MenuButton as={Button}>
+                <Icon as={FaEllipsisV} />
+              </MenuButton>
+              <MenuList>
+                <MenuItem>Edit</MenuItem>
+                <MenuItem>Archive</MenuItem>
+                <MenuItem onClick={() => setdeleteModalOpen(true)}>
+                  Delete
+                </MenuItem>
+              </MenuList>
+            </Menu>
           </Grid>
         </Card.Content>
       </StyledCard>

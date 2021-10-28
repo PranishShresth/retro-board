@@ -94,3 +94,18 @@ export const deleteListAPI = async (payload: { item_id: string }) => {
     throw err;
   }
 };
+
+export const updateListAPI = async (payload: {
+  list_id: string;
+  list_title: string;
+}) => {
+  try {
+    const { data } = await httpClient.put(
+      `/update-list/${payload.list_id}`,
+      payload
+    );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};

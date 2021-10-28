@@ -3,10 +3,13 @@ import styled from "styled-components";
 import RetroCard from "./RetroCard";
 import { Item } from "../interfaces";
 import AddItem from "./AddItem";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Draggable, DroppableProvided } from "react-beautiful-dnd";
 import { itemsSelector } from "../utils/selectors";
-
+import { useState } from "react";
+import { Input } from "@chakra-ui/input";
+import { useForm } from "./hooks/useForm";
+import { listActions } from "../reducers/listReducer";
 const RetroColumnWrapper = styled.div`
   min-width: 300px;
   padding: 8px;
@@ -40,6 +43,22 @@ interface Props {
 
 const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
   const items = useSelector(itemsSelector);
+  const [editMode, setEditMode] = useState(false);
+  const { handleChange, formValues } = useForm({ list_title: title });
+  const dispatch = useDispatch();
+
+  const handleSubmit = (ev: React.KeyboardEvent) => {
+    try {
+      if (ev.key === "Enter") {
+        dispatch({
+          type: "UPDATE_LIST_REQUESTED",
+          payload: { list_id, ...formValues },
+        });
+        dispatch(listActions.updateList({ _id: list_id, ...formValues }));
+        setEditMode(false);
+      }
+    } catch (err) {}
+  };
 
   const listItems = items
     .filter((item) => item.list === list_id)
@@ -47,7 +66,21 @@ const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
 
   return (
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
-      <RetroColumnHeader>{title}</RetroColumnHeader>
+      {editMode ? (
+        <Input
+          variant="filled"
+          placeholder="List Title"
+          name="list_title"
+          onChange={handleChange}
+          onKeyDown={handleSubmit}
+          value={formValues.list_title}
+        />
+      ) : (
+        <RetroColumnHeader onClick={() => setEditMode(true)}>
+          {title}
+        </RetroColumnHeader>
+      )}
+
       <RetroCardContainer>
         {listItems.map((item, index) => {
           return (

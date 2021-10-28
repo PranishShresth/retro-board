@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { act } from "react-dom/test-utils";
 import { List } from "../interfaces";
 
 interface ListState {
@@ -21,6 +22,13 @@ const listSlice = createSlice({
   reducers: {
     loadAllLists(state, action: PayloadAction<List[]>) {
       state.lists = action.payload;
+    },
+    updateList(state, action) {
+      const list = state.lists.find((l) => l._id === action.payload._id);
+      if (!list) {
+        return state;
+      }
+      list.list_title = action.payload.list_title;
     },
     addList(state, action: PayloadAction<List>) {
       const listIdx = state.lists.findIndex(
