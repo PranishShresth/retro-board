@@ -4,6 +4,7 @@ import {
   createBoardAPI,
   fetchActiveBoardAPI,
   deleteBoardAPI,
+  updateBoardAPI,
 } from "../utils/api";
 import { Board, Item, List } from "../interfaces";
 import { boardActions } from "../reducers/boardReducer";
@@ -70,11 +71,23 @@ function* deleteBoard(
   }
 }
 
+function* updateBoard(
+  action: ReturnType<typeof boardActions.updateBoardDetails>
+) {
+  try {
+    const result: Board = yield call(updateBoardAPI, action.payload);
+    yield put(boardActions.updateBoardDetails(result));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function* watchBoardSaga() {
   yield takeLatest("FETCH_BOARDS_REQUESTED", getBoards);
   yield takeLatest("CREATE_BOARD_REQUESTED", createBoard);
   yield takeLatest("FETCH_BOARD_REQUESTED", fetchActiveBoard);
   yield takeLatest("DELETE_BOARD_REQUESTED", deleteBoard);
+  yield takeLatest("UPDATE_BOARD_REQUESTED", updateBoard);
 }
 
 export default watchBoardSaga;

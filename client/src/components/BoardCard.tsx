@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useState } from "react";
+import React, { useState } from "react";
 import AlertDialog from "./AlertDialog";
 import { useDispatch } from "react-redux";
+import Modal from "./Modal";
 import {
   Menu,
   MenuButton,
@@ -12,9 +13,15 @@ import {
   Box,
   Icon,
   Text,
+  Stack,
+  InputGroup,
+  Input,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
+import { useForm } from "./hooks/useForm";
+import { boardActions } from "../reducers/boardReducer";
 interface Props {
   to?: string;
   boardId: string;
@@ -28,8 +35,28 @@ const Grid = styled.div`
 
 const BoardCard = (props: Props) => {
   const dispatch = useDispatch();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+  const { formValues, handleChange } = useForm({
+    board_title: props.header,
+  });
+
   const [deleteModalOpen, setdeleteModalOpen] = useState(false);
 
+  const handleEditBoard = (ev: React.FormEvent) => {
+    try {
+      ev.preventDefault();
+      dispatch({
+        type: "UPDATE_BOARD_REQUESTED",
+        payload: { board_id: props.boardId, ...formValues },
+      });
+      dispatch(
+        boardActions.updateBoardDetails({ _id: props.boardId, ...formValues })
+      );
+      onClose();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <>
       <Box
@@ -51,7 +78,7 @@ const BoardCard = (props: Props) => {
               <Icon as={FaEllipsisV} />
             </MenuButton>
             <MenuList>
-              <MenuItem>Edit</MenuItem>
+              <MenuItem onClick={onOpen}>Edit</MenuItem>
               <MenuItem>Archive</MenuItem>
               <MenuItem onClick={() => setdeleteModalOpen(true)}>
                 Delete
@@ -61,6 +88,30 @@ const BoardCard = (props: Props) => {
         </Grid>
       </Box>
 
+      <Modal
+        modalTitle="Edit Board Details"
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+      >
+        <form onSubmit={handleEditBoard}>
+          <Stack spacing={3}>
+            <InputGroup>
+              <Input
+                type="text"
+                name="board_title"
+                value={formValues.board_title}
+                placeholder="Board Title"
+                onChange={handleChange}
+              />
+            </InputGroup>
+
+            <div>
+              <Button type="submit">Update board</Button>
+            </div>
+          </Stack>
+        </form>
+      </Modal>
       <AlertDialog
         isOpen={deleteModalOpen}
         onClose={() => setdeleteModalOpen(false)}

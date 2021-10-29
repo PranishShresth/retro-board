@@ -1,6 +1,6 @@
 export interface Board {
   _id: string;
-  title: string;
+  board_title: string;
   lists: List[];
   createdAt: string;
   updatedAt: string;

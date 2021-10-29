@@ -1,32 +1,42 @@
-import { Button, Modal } from "semantic-ui-react";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  Button,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 
 interface Props {
   children?: React.ReactNode;
   triggerName?: string;
   modalTitle: string;
-  open: boolean;
-  onClose?: () => void;
-  onOpen?: () => void;
-}
-function RetroModal({
-  children,
-  triggerName,
-  modalTitle,
-  open,
-  onClose,
-  onOpen,
-}: Props) {
-  return (
-    <Modal
-      onClose={onClose}
-      onOpen={onOpen}
-      open={open}
-      trigger={triggerName ? <Button color="purple">{triggerName}</Button> : ""}
-    >
-      <Modal.Header>{modalTitle}</Modal.Header>
-      <Modal.Content>{children}</Modal.Content>
-    </Modal>
-  );
+  isOpen: boolean;
+  onClose: () => void;
+  onOpen: () => void;
 }
 
-export default RetroModal;
+export default function Modal1({
+  onClose,
+  onOpen,
+  modalTitle,
+  isOpen,
+  triggerName,
+  children,
+}: Props) {
+  return (
+    <>
+      {triggerName && <Button onClick={onOpen}>{triggerName}</Button>}
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>{modalTitle}</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>{children}</ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}

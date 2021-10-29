@@ -2,7 +2,6 @@ import { Button, Textarea, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "./hooks/useForm";
-import styled from "styled-components";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";

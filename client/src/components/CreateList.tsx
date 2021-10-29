@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import Modal from "./NewModal";
+import Modal from "./Modal";
 import { useForm } from "./hooks/useForm";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";

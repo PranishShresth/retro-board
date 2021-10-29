@@ -31,6 +31,21 @@ export const createBoardAPI = async (payload: Partial<Board>) => {
   }
 };
 
+export const updateBoardAPI = async (payload: {
+  board_id: string;
+  board_title: string;
+}) => {
+  try {
+    const { data } = await httpClient.put(
+      `/update-board/${payload.board_id}`,
+      payload
+    );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const deleteBoardAPI = async (payload: string) => {
   try {
     const { data } = await httpClient.delete(`/delete-board/${payload}`);

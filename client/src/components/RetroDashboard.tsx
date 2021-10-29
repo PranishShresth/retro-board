@@ -8,7 +8,7 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { Input, InputGroup, Button, useToast, Box } from "@chakra-ui/react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
-import NewModal from "./NewModal";
+import NewModal from "./Modal";
 import Loading from "./Loader";
 
 const BoardsContainer = styled.div`
@@ -25,8 +25,7 @@ const RetroDashBoard = React.memo(() => {
   const boards = useSelector(boardsSelector);
   const loading = useSelector(loadingSelector);
   const { formValues, handleChange } = useForm({
-    title: "",
-    theme: "",
+    board_title: "",
   });
 
   useEffect(() => {
@@ -72,7 +71,7 @@ const RetroDashBoard = React.memo(() => {
             return (
               <BoardCard
                 to={`/board/${board._id}`}
-                header={board.title}
+                header={board.board_title}
                 boardId={board._id}
               />
             );
@@ -90,8 +89,8 @@ const RetroDashBoard = React.memo(() => {
                   <InputGroup>
                     <Input
                       type="text"
-                      name="title"
-                      value={formValues.title}
+                      name="board_title"
+                      value={formValues.board_title}
                       placeholder="Board Title"
                       onChange={handleChange}
                     />
