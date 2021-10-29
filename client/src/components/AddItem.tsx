@@ -1,15 +1,13 @@
-import { Form, TextArea, Button } from "semantic-ui-react";
+import { Button, Textarea, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "./hooks/useForm";
 import styled from "styled-components";
+import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";
 import { itemActions } from "../reducers/itemReducer";
 
-const StyledTextArea = styled(TextArea)`
-  resize: none !important;
-`;
 interface Props {
   list_id: string;
 }
@@ -56,7 +54,10 @@ function AddItem({ list_id }: Props) {
     <>
       {!open && (
         <Button
+          leftIcon={<FaPlus />}
           fluid
+          width="100%"
+          colorScheme="facebook"
           onClick={() => {
             setOpen(!open);
           }}
@@ -65,17 +66,29 @@ function AddItem({ list_id }: Props) {
         </Button>
       )}
       {open && (
-        <Form onSubmit={handleAddingItem}>
-          <Form.Field>
-            <StyledTextArea
+        <form onSubmit={handleAddingItem}>
+          <Stack spacing={2}>
+            <Textarea
               name="item_title"
               onChange={handleChange}
               placeholder="Add a Item"
               value={formValues.item_title}
+              resize="none"
+              focusBorderColor="blue.500"
+              background="white"
             />
-          </Form.Field>
-          <Form.Button color="green">Create</Form.Button>
-        </Form>
+            <div>
+              <Button
+                leftIcon={<FaPlus />}
+                type="submit"
+                colorScheme="teal"
+                variant="solid"
+              >
+                Create
+              </Button>
+            </div>
+          </Stack>
+        </form>
       )}
     </>
   );

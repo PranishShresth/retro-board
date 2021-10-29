@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { boardActions } from "../reducers/boardReducer";
 import { itemActions } from "../reducers/itemReducer";
 import { listActions } from "../reducers/listReducer";
 

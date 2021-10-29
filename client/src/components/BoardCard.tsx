@@ -1,4 +1,3 @@
-import { Card, CardProps } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useState } from "react";
@@ -10,19 +9,17 @@ import {
   MenuList,
   MenuItem,
   Button,
+  Box,
   Icon,
+  Text,
 } from "@chakra-ui/react";
 
 import { FaEllipsisV } from "react-icons/fa";
-interface Props extends CardProps {
+interface Props {
   to?: string;
   boardId: string;
+  header: string;
 }
-
-const StyledCard = styled(Card)`
-  margin: 0 auto !important;
-  height: 80px;
-`;
 
 const Grid = styled.div`
   display: flex;
@@ -35,27 +32,34 @@ const BoardCard = (props: Props) => {
 
   return (
     <>
-      <StyledCard color="purple">
-        <Card.Content>
-          <Grid>
-            <Link to={props.to ?? ""}>
-              <Card.Header>{props.header}</Card.Header>
-            </Link>
-            <Menu>
-              <MenuButton as={Button}>
-                <Icon as={FaEllipsisV} />
-              </MenuButton>
-              <MenuList>
-                <MenuItem>Edit</MenuItem>
-                <MenuItem>Archive</MenuItem>
-                <MenuItem onClick={() => setdeleteModalOpen(true)}>
-                  Delete
-                </MenuItem>
-              </MenuList>
-            </Menu>
-          </Grid>
-        </Card.Content>
-      </StyledCard>
+      <Box
+        borderWidth="1px"
+        borderRadius="lg"
+        overflow="hidden"
+        backgroundColor="gray.100"
+        padding="10px"
+        height="60px"
+      >
+        <Grid>
+          <Link to={props.to ?? ""}>
+            <Text fontSize="lg" color="#4b5489" fontWeight="700">
+              {props.header}
+            </Text>
+          </Link>
+          <Menu>
+            <MenuButton as={Button}>
+              <Icon as={FaEllipsisV} />
+            </MenuButton>
+            <MenuList>
+              <MenuItem>Edit</MenuItem>
+              <MenuItem>Archive</MenuItem>
+              <MenuItem onClick={() => setdeleteModalOpen(true)}>
+                Delete
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Grid>
+      </Box>
 
       <AlertDialog
         isOpen={deleteModalOpen}

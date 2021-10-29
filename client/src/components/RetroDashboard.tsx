@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { boardsSelector, loadingSelector } from "../utils/selectors";
 import { useForm } from "./hooks/useForm";
 
 import { Grid, Stack } from "@chakra-ui/layout";
 import { useDisclosure } from "@chakra-ui/hooks";
-import { Input, InputGroup, Button, useToast } from "@chakra-ui/react";
+import { Input, InputGroup, Button, useToast, Box } from "@chakra-ui/react";
 import BoardCard from "./BoardCard";
 import styled from "styled-components";
 import NewModal from "./NewModal";
@@ -62,8 +62,10 @@ const RetroDashBoard = React.memo(() => {
           templateColumns={{
             base: "1fr",
             sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
             lg: "repeat(5, 1fr)",
           }}
+          justifyContent="center"
           gap={6}
         >
           {boards.map((board) => {
@@ -75,31 +77,33 @@ const RetroDashBoard = React.memo(() => {
               />
             );
           })}
-          <NewModal
-            modalTitle="Create Board"
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
-            triggerName="Create new Board"
-          >
-            <form onSubmit={handleCreateBoard}>
-              <Stack spacing={3}>
-                <InputGroup>
-                  <Input
-                    type="text"
-                    name="title"
-                    value={formValues.title}
-                    placeholder="Board Title"
-                    onChange={handleChange}
-                  />
-                </InputGroup>
+          <Box>
+            <NewModal
+              modalTitle="Create Board"
+              isOpen={isOpen}
+              onOpen={onOpen}
+              onClose={onClose}
+              triggerName="Create new Board"
+            >
+              <form onSubmit={handleCreateBoard}>
+                <Stack spacing={3}>
+                  <InputGroup>
+                    <Input
+                      type="text"
+                      name="title"
+                      value={formValues.title}
+                      placeholder="Board Title"
+                      onChange={handleChange}
+                    />
+                  </InputGroup>
 
-                <div>
-                  <Button type="submit">Create Board</Button>
-                </div>
-              </Stack>
-            </form>
-          </NewModal>
+                  <div>
+                    <Button type="submit">Create Board</Button>
+                  </div>
+                </Stack>
+              </form>
+            </NewModal>
+          </Box>
         </Grid>
       </BoardsContainer>
     </>
