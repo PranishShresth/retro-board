@@ -11,7 +11,7 @@ import { Input } from "@chakra-ui/input";
 import { useForm } from "./hooks/useForm";
 import { listActions } from "../reducers/listReducer";
 const RetroColumnWrapper = styled.div`
-  min-width: 300px;
+  width: 300px;
   padding: 8px;
   background: rgb(235, 236, 240);
   height: fit-content;
@@ -20,7 +20,8 @@ const RetroColumnWrapper = styled.div`
 const RetroColumnHeader = styled.div`
   font-weight: bold;
   font-size: 1.2rem;
-  padding: 12px 0;
+
+  padding: 12px 14px;
 `;
 const RetroCardContainer = styled.div`
   display: flex;
@@ -47,16 +48,25 @@ const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
   const { handleChange, formValues } = useForm({ list_title: title });
   const dispatch = useDispatch();
 
-  const handleSubmit = (ev: React.KeyboardEvent) => {
+  const updateList = () => {
+    if (formValues.list_title.length < 1) {
+      return;
+    }
+    dispatch({
+      type: "UPDATE_LIST_REQUESTED",
+      payload: { list_id, ...formValues },
+    });
+    dispatch(listActions.updateList({ _id: list_id, ...formValues }));
+    setEditMode(false);
+  };
+  const handleSubmit = (ev: React.KeyboardEvent | React.FocusEvent) => {
     try {
-      if (ev.key === "Enter") {
-        dispatch({
-          type: "UPDATE_LIST_REQUESTED",
-          payload: { list_id, ...formValues },
-        });
-        dispatch(listActions.updateList({ _id: list_id, ...formValues }));
-        setEditMode(false);
+      const { key } = ev as React.KeyboardEvent<HTMLInputElement>;
+      if (key === "Enter") {
+        return updateList();
       }
+
+      // updateList();
     } catch (err) {}
   };
 
@@ -68,10 +78,13 @@ const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
     <RetroColumnWrapper ref={droppableProvided?.innerRef}>
       {editMode ? (
         <Input
+          autoFocus
+          fontWeight="bold"
           variant="filled"
           placeholder="List Title"
           name="list_title"
           onChange={handleChange}
+          onBlur={handleSubmit}
           onKeyDown={handleSubmit}
           value={formValues.list_title}
         />

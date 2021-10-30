@@ -18,19 +18,24 @@ const CreateList = () => {
 
   const { boardId } = useParams<FormParam>();
 
-  const { formValues, handleChange } = useForm({
+  const { formValues, handleChange, setFormValues } = useForm({
     list_title: "",
   });
 
   const handleCreateList = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+
+      if (formValues.list_title.length < 1) {
+        return;
+      }
       const id = new ObjectID().toString();
 
       dispatch({
         type: "CREATE_LIST_REQUESTED",
         payload: { ...formValues, _id: id, board_id: boardId },
       });
+      setFormValues({ list_title: "" });
     } catch (err) {
       console.log(err);
     }

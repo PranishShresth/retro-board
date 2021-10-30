@@ -35,7 +35,9 @@ const RetroDashBoard = React.memo(() => {
   const handleCreateBoard = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
-
+      if (formValues.board_title.length < 1) {
+        return;
+      }
       dispatch({ type: "CREATE_BOARD_REQUESTED", payload: formValues });
       toast({
         title: "Board Created",

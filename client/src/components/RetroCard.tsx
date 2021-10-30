@@ -4,18 +4,7 @@ import styled from "styled-components";
 import { CardDescription, Icon } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
 import { itemActions } from "../reducers/itemReducer";
-
-const StyledCard = styled.div`
-  padding: 8px;
-  min-height: 32px;
-  background: white;
-  display: flex;
-`;
-
-const CardContent = styled(CardDescription)`
-  font-size: 15px;
-  flex: 1;
-`;
+import { Box, Text } from "@chakra-ui/layout";
 
 const StyledIcon = styled(Icon)`
   cursor: pointer;
@@ -30,12 +19,20 @@ interface Props {
 const RetroCard = ({ content, item_id, provided }: Props) => {
   const dispatch = useDispatch();
   return (
-    <StyledCard
+    <Box
+      padding="10px 12px"
+      background="white"
+      display="flex"
+      justifyContent="space-between"
       ref={provided.innerRef}
+      transition="background 100ms linear"
+      _hover={{
+        background: "gray.200",
+      }}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
-      <CardContent>{content}</CardContent>
+      <Text overflowWrap="anywhere">{content}</Text>
       <div>
         <StyledIcon name="pencil"></StyledIcon>
         <StyledIcon
@@ -46,7 +43,7 @@ const RetroCard = ({ content, item_id, provided }: Props) => {
           }}
         ></StyledIcon>
       </div>
-    </StyledCard>
+    </Box>
   );
 };
 

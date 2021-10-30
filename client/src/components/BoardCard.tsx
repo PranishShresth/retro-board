@@ -45,6 +45,9 @@ const BoardCard = (props: Props) => {
   const handleEditBoard = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+      if (formValues.board_title.length < 1) {
+        return;
+      }
       dispatch({
         type: "UPDATE_BOARD_REQUESTED",
         payload: { board_id: props.boardId, ...formValues },
