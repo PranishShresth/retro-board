@@ -1,23 +1,27 @@
 import React from "react";
 import { DraggableProvided } from "react-beautiful-dnd";
-import styled from "styled-components";
-import { CardDescription, Icon } from "semantic-ui-react";
 import { useDispatch } from "react-redux";
 import { itemActions } from "../reducers/itemReducer";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Icon, useDisclosure } from "@chakra-ui/react";
+import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import EditItem from "./EditItem";
 
-const StyledIcon = styled(Icon)`
-  cursor: pointer;
-`;
 interface Props {
   content: string;
   item_id: string;
+  list_id: string;
   children?: React.ReactChild;
   provided: DraggableProvided;
 }
 
-const RetroCard = ({ content, item_id, provided }: Props) => {
+const RetroCard = ({ content, item_id, provided, list_id }: Props) => {
   const dispatch = useDispatch();
+  const { isOpen, onClose, onOpen } = useDisclosure();
+
+  if (isOpen) {
+    return <EditItem content={content} isOpen={isOpen} onClose={onClose} />;
+  }
   return (
     <Box
       padding="10px 12px"
@@ -33,16 +37,17 @@ const RetroCard = ({ content, item_id, provided }: Props) => {
       {...provided.dragHandleProps}
     >
       <Text overflowWrap="anywhere">{content}</Text>
-      <div>
-        <StyledIcon name="pencil"></StyledIcon>
-        <StyledIcon
-          name="trash"
+      <Stack direction="row">
+        <Icon as={FaPencilAlt} cursor="pointer" onClick={onOpen} />
+        <Icon
+          cursor="pointer"
+          as={FaTrash}
           onClick={() => {
             dispatch(itemActions.deleteItem({ item_id }));
             dispatch({ type: "DELETE_ITEM_REQUESTED", payload: { item_id } });
           }}
-        ></StyledIcon>
-      </div>
+        />
+      </Stack>
     </Box>
   );
 };

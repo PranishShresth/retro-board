@@ -2,6 +2,7 @@ import { put, call, takeLatest } from "redux-saga/effects";
 import { createListAPI, updateListAPI } from "../utils/api";
 import { List } from "../interfaces";
 import { listActions } from "../reducers/listReducer";
+import { CREATE_LIST_REQUESTED, UPDATE_LIST_REQUESTED } from "../utils/types";
 
 function* createList(action: ReturnType<typeof listActions.addList>) {
   try {
@@ -22,8 +23,8 @@ function* updateList(action: ReturnType<typeof listActions.updateList>) {
 }
 
 function* watchListSaga() {
-  yield takeLatest("CREATE_LIST_REQUESTED", createList);
-  yield takeLatest("UPDATE_LIST_REQUESTED", updateList);
+  yield takeLatest(CREATE_LIST_REQUESTED, createList);
+  yield takeLatest(UPDATE_LIST_REQUESTED, updateList);
 }
 
 export default watchListSaga;

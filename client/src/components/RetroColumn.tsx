@@ -103,6 +103,7 @@ const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
                   provided={provided}
                   content={item.item_title}
                   item_id={item._id}
+                  list_id={list_id}
                 />
               )}
             </Draggable>

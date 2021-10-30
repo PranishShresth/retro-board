@@ -10,6 +10,13 @@ import { Board, Item, List } from "../interfaces";
 import { boardActions } from "../reducers/boardReducer";
 import { itemActions } from "../reducers/itemReducer";
 import { listActions } from "../reducers/listReducer";
+import {
+  FETCH_BOARDS_REQUESTED,
+  FETCH_BOARD_REQUESTED,
+  CREATE_BOARD_REQUESTED,
+  DELETE_BOARD_REQUESTED,
+  UPDATE_BOARD_REQUESTED,
+} from "../utils/types";
 
 function* getBoards() {
   try {
@@ -83,11 +90,11 @@ function* updateBoard(
 }
 
 function* watchBoardSaga() {
-  yield takeLatest("FETCH_BOARDS_REQUESTED", getBoards);
-  yield takeLatest("CREATE_BOARD_REQUESTED", createBoard);
-  yield takeLatest("FETCH_BOARD_REQUESTED", fetchActiveBoard);
-  yield takeLatest("DELETE_BOARD_REQUESTED", deleteBoard);
-  yield takeLatest("UPDATE_BOARD_REQUESTED", updateBoard);
+  yield takeLatest(FETCH_BOARDS_REQUESTED, getBoards);
+  yield takeLatest(CREATE_BOARD_REQUESTED, createBoard);
+  yield takeLatest(FETCH_BOARDS_REQUESTED, fetchActiveBoard);
+  yield takeLatest(DELETE_BOARD_REQUESTED, deleteBoard);
+  yield takeLatest(UPDATE_BOARD_REQUESTED, updateBoard);
 }
 
 export default watchBoardSaga;

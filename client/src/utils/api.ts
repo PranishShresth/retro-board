@@ -101,6 +101,21 @@ export const deleteItemAPI = async (payload: { item_id: string }) => {
   }
 };
 
+export const updateItemAPI = async (payload: {
+  item_id: string;
+  item_title: string;
+}) => {
+  try {
+    const { data } = await httpClient.put(
+      `/update-item/${payload.item_id}`,
+      payload
+    );
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
+
 export const deleteListAPI = async (payload: { item_id: string }) => {
   try {
     const { data } = await httpClient.delete(`/delete-item/${payload.item_id}`);

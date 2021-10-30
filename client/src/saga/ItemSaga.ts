@@ -1,5 +1,16 @@
 import { put, call, takeLatest } from "redux-saga/effects";
-import { createItemAPI, reorderItemAPI, deleteItemAPI } from "../utils/api";
+import {
+  createItemAPI,
+  reorderItemAPI,
+  deleteItemAPI,
+  updateItemAPI,
+} from "../utils/api";
+import {
+  CREATE_ITEM_REQUESTED,
+  DELETE_ITEM_REQUESTED,
+  UPDATE_ITEM_REQUESTED,
+  REORDER_ITEM_REQUESTED,
+} from "../utils/types";
 import { Item } from "../interfaces";
 import { itemActions } from "../reducers/itemReducer";
 
@@ -22,6 +33,16 @@ function* reorderItem(action: ReturnType<typeof itemActions.reorderItem>) {
   }
 }
 
+function* updateItem(action: ReturnType<typeof itemActions.reorderItem>) {
+  try {
+    const result: Item = yield call(updateItemAPI, action.payload);
+
+    yield put(itemActions.updateItem(result));
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 function* deleteItem(action: ReturnType<typeof itemActions.deleteItem>) {
   try {
     const result: { success: boolean } = yield call(
@@ -36,9 +57,10 @@ function* deleteItem(action: ReturnType<typeof itemActions.deleteItem>) {
   }
 }
 function* watchItemSaga() {
-  yield takeLatest("CREATE_ITEM_REQUESTED", createItem);
-  yield takeLatest("REORDER_ITEM_REQUESTED", reorderItem);
-  yield takeLatest("DELETE_ITEM_REQUESTED", deleteItem);
+  yield takeLatest(CREATE_ITEM_REQUESTED, createItem);
+  yield takeLatest(REORDER_ITEM_REQUESTED, reorderItem);
+  yield takeLatest(DELETE_ITEM_REQUESTED, deleteItem);
+  yield takeLatest(UPDATE_ITEM_REQUESTED, updateItem);
 }
 
 export default watchItemSaga;
