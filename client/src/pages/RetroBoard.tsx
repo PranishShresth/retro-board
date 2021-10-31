@@ -29,6 +29,10 @@ export const RetroHome = () => {
       dispatch(itemActions.addItem(data));
     });
 
+    newSocket.on("updated-item", function (data) {
+      dispatch(itemActions.updateItem(data));
+    });
+
     newSocket.on("reordered-item", function (data) {
       const { item, source_list_id, destination_list_id, position } = data;
       dispatch(

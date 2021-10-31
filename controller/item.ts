@@ -117,6 +117,9 @@ interface UpdateItemRequest extends Request {
 export const updateItem = async (req: UpdateItemRequest, res: Response) => {
   const { item_title } = req.body;
   const { item_id } = req.params;
+  const socket: Socket = req.app.get("socket");
+  const io: ISocket = req.app.get("socketio");
+  const query = socket.handshake.query.boardId as string;
 
   try {
     const updatedItem = await Item.findByIdAndUpdate(
@@ -128,6 +131,8 @@ export const updateItem = async (req: UpdateItemRequest, res: Response) => {
       },
       { new: true }
     );
+
+    io.to(query).emit("updated-item", updatedItem);
     res.status(200).send(updatedItem);
   } catch (err) {
     res.status(500).send("Internal Server Error");

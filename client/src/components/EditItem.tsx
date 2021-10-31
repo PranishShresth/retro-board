@@ -2,18 +2,14 @@ import { Button, Textarea, Stack } from "@chakra-ui/react";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "./hooks/useForm";
-import { FaPlus } from "react-icons/fa";
-import { useParams } from "react-router";
-import { ObjectID } from "bson";
-import { itemActions } from "../reducers/itemReducer";
 
 interface Props {
   isOpen: boolean;
   content: string;
+  item_id: string;
   onClose: () => void;
 }
-function EditItem({ isOpen, onClose, content }: Props) {
-  const { boardId } = useParams<{ boardId: string }>();
+function EditItem({ isOpen, onClose, content, item_id }: Props) {
   const dispatch = useDispatch();
   const { formValues, handleChange, setFormValues } = useForm({
     item_title: content,
@@ -22,8 +18,10 @@ function EditItem({ isOpen, onClose, content }: Props) {
   const handleEditingItem = async (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
-      const id = new ObjectID().toString();
-
+      dispatch({
+        type: "UPDATE_ITEM_REQUESTED",
+        payload: { item_id, ...formValues },
+      });
       setFormValues({ item_title: "" });
       onClose();
     } catch (err) {

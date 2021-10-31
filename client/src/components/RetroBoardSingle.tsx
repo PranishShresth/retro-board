@@ -13,6 +13,8 @@ import CreateList from "./CreateList";
 import { isPositionChanged, calculateItemPosition } from "../utils/dragndrop";
 import Loading from "./Loader";
 import { itemActions } from "../reducers/itemReducer";
+import RetroColumnListHeader from "./RetroColumnHeader";
+import { Box } from "@chakra-ui/layout";
 
 const ColumnsWrapper = styled.main`
   display: flex;
@@ -20,6 +22,13 @@ const ColumnsWrapper = styled.main`
   padding-top: 30px;
   overflow-x: auto;
   height: calc(100vh - 80px);
+`;
+
+const RetroColumnWrapper = styled.div`
+  width: 300px;
+  padding: 8px;
+  background: rgb(235, 236, 240);
+  height: fit-content;
 `;
 const Container = styled.div`
   width: 95%;
@@ -89,21 +98,31 @@ export default function RetroBoardSingle() {
     <Container>
       <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
         <ColumnsWrapper>
-          {currentBoardLists?.map((list) => (
-            <Droppable droppableId={list._id} key={list._id}>
-              {(provided) => (
-                <RetroColumn
-                  droppableProvided={provided}
-                  items={list.items}
-                  list_id={list._id}
-                  title={list.list_title}
-                />
-              )}
-            </Droppable>
-          ))}
-          <div style={{ minWidth: 250 }}>
+          {currentBoardLists?.map((list) => {
+            return (
+              <Box>
+                <RetroColumnWrapper>
+                  <RetroColumnListHeader
+                    list_id={list._id}
+                    list_title={list.list_title}
+                  />
+                  <Droppable droppableId={list._id} key={list._id}>
+                    {(provided) => (
+                      <RetroColumn
+                        droppableProvided={provided}
+                        items={list.items}
+                        list_id={list._id}
+                        title={list.list_title}
+                      />
+                    )}
+                  </Droppable>
+                </RetroColumnWrapper>
+              </Box>
+            );
+          })}
+          <Box minWidth="300px">
             <CreateList />
-          </div>
+          </Box>
         </ColumnsWrapper>
       </DragDropContext>
     </Container>

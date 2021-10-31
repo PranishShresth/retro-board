@@ -92,7 +92,7 @@ function* updateBoard(
 function* watchBoardSaga() {
   yield takeLatest(FETCH_BOARDS_REQUESTED, getBoards);
   yield takeLatest(CREATE_BOARD_REQUESTED, createBoard);
-  yield takeLatest(FETCH_BOARDS_REQUESTED, fetchActiveBoard);
+  yield takeLatest(FETCH_BOARD_REQUESTED, fetchActiveBoard);
   yield takeLatest(DELETE_BOARD_REQUESTED, deleteBoard);
   yield takeLatest(UPDATE_BOARD_REQUESTED, updateBoard);
 }

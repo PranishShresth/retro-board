@@ -36,6 +36,7 @@ const CreateList = () => {
         payload: { ...formValues, _id: id, board_id: boardId },
       });
       setFormValues({ list_title: "" });
+      onClose();
     } catch (err) {
       console.log(err);
     }
