@@ -6,7 +6,7 @@ import ApiRoutes from "./routes";
 import socketIO from "./config/socket";
 import cors from "cors";
 import helmet from "helmet";
-
+import logger from "morgan";
 const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, app);
@@ -22,17 +22,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.set("socketio", io);
 
-// app.use(logger("dev"));
+app.use(logger("dev"));
 
 app.use("/api/v1", ApiRoutes);
-
-// if (process.env.NODE_ENV === "PRODUCTION") {
-//   app.use(express.static(path.join(__dirname, "../", "client", "build")));
-
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "../", "client", "build", "index.html"));
-//   });
-// }
 
 server.listen(PORT, () => {
   console.log(`Listening to ${PORT}`);

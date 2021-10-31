@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addListToBoard = void 0;
+exports.updateList = exports.deleteList = exports.addListToBoard = void 0;
 const list_1 = require("../models/list");
-const addListToBoard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.addListToBoard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { list_title, board_id, _id } = req.body;
     try {
         const newList = new list_1.List({
@@ -31,5 +31,33 @@ const addListToBoard = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(500).send("Internal Server Error");
     }
 });
-exports.addListToBoard = addListToBoard;
+exports.deleteList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { list_id } = req.params;
+    try {
+        yield list_1.List.findByIdAndDelete(list_id);
+        res.status(200).send({ success: true });
+    }
+    catch (err) {
+        res.status(500).send("Internal Server Error");
+    }
+});
+exports.updateList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { list_title } = req.body;
+    const { list_id } = req.params;
+    const socket = req.app.get("socket");
+    const io = req.app.get("socketio");
+    const query = socket.handshake.query.boardId;
+    try {
+        const updatedList = yield list_1.List.findByIdAndUpdate(list_id, {
+            $set: {
+                list_title: list_title,
+            },
+        }, { new: true });
+        io.to(query).emit("updated-list", updatedList);
+        res.status(200).send(updatedList);
+    }
+    catch (err) {
+        res.status(500).send("Internal Server Error");
+    }
+});
 //# sourceMappingURL=list.js.map

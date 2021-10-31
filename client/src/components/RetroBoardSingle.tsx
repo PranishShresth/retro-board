@@ -28,7 +28,10 @@ const RetroColumnWrapper = styled.div`
   width: 300px;
   padding: 8px;
   background: rgb(235, 236, 240);
-  height: fit-content;
+  display: flex;
+  flex-direction: column;
+
+  /* height: fit-content; */
 `;
 const Container = styled.div`
   width: 95%;

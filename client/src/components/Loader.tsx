@@ -1,5 +1,6 @@
 import { Dimmer, Loader } from "semantic-ui-react";
 import styled from "styled-components";
+import { Spinner } from "@chakra-ui/react";
 
 const LoaderWrapper = styled.div`
   padding: 100px 0;
@@ -7,9 +8,7 @@ const LoaderWrapper = styled.div`
 
 const Loading = () => (
   <LoaderWrapper>
-    <Dimmer active inverted>
-      <Loader size="medium" inverted content="Loading" />
-    </Dimmer>
+    <Spinner size="lg" />
   </LoaderWrapper>
 );
 

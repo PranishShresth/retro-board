@@ -14,16 +14,22 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.List = void 0;
+exports.Item = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const listSchema = new mongoose_1.Schema({
-    list_title: { type: String, required: true },
-    board: { type: mongoose_1.Schema.Types.ObjectId, required: true },
+const itemSchemaRevised = new mongoose_1.Schema({
+    item_title: { type: String, required: true },
+    order: { type: Number },
+    list: { type: mongoose_1.Schema.Types.ObjectId, ref: "List", required: true },
+    board: { type: mongoose_1.Schema.Types.ObjectId, ref: "Board", required: true },
 }, { timestamps: true });
-exports.List = mongoose_1.default.model("List", listSchema);
-//# sourceMappingURL=list.js.map
+const itemSchema = new mongoose_1.Schema({
+    item_title: { type: String, required: true },
+    order: { type: Number },
+}, { timestamps: true });
+exports.Item = mongoose_1.default.model("Item", itemSchemaRevised);
+//# sourceMappingURL=item.js.map

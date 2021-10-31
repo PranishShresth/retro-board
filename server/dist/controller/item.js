@@ -9,9 +9,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteItem = exports.addItemToList = exports.reorderItem = void 0;
+exports.updateItem = exports.deleteItem = exports.addItemToList = exports.reorderItem = void 0;
 const item_1 = require("../models/item");
-const reorderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.reorderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { item_id, position, source_list_id, destination_list_id } = req.body;
         const { list_id } = req.params;
@@ -34,8 +34,7 @@ const reorderItem = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     }
     catch (err) { }
 });
-exports.reorderItem = reorderItem;
-const addItemToList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.addItemToList = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { item_title, list, board, _id } = req.body;
     const socket = req.app.get("socket");
     const io = req.app.get("socketio");
@@ -58,7 +57,6 @@ const addItemToList = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).send("Internal Server Error");
     }
 });
-exports.addItemToList = addItemToList;
 const calculateListPosition = (listId) => __awaiter(void 0, void 0, void 0, function* () {
     const items = yield item_1.Item.find({ list: listId });
     const itemPositions = items.map(({ order }) => order);
@@ -67,7 +65,7 @@ const calculateListPosition = (listId) => __awaiter(void 0, void 0, void 0, func
     }
     return 1;
 });
-const deleteItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.deleteItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { item_id } = req.params;
     try {
         yield item_1.Item.findByIdAndDelete(item_id);
@@ -77,5 +75,23 @@ const deleteItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         res.status(500).send("Internal Server Error");
     }
 });
-exports.deleteItem = deleteItem;
+exports.updateItem = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { item_title } = req.body;
+    const { item_id } = req.params;
+    const socket = req.app.get("socket");
+    const io = req.app.get("socketio");
+    const query = socket.handshake.query.boardId;
+    try {
+        const updatedItem = yield item_1.Item.findByIdAndUpdate(item_id, {
+            $set: {
+                item_title: item_title,
+            },
+        }, { new: true });
+        io.to(query).emit("updated-item", updatedItem);
+        res.status(200).send(updatedItem);
+    }
+    catch (err) {
+        res.status(500).send("Internal Server Error");
+    }
+});
 //# sourceMappingURL=item.js.map

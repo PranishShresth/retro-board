@@ -77,7 +77,7 @@ const BoardCard = (props: Props) => {
             </Text>
           </Link>
           <Menu>
-            <MenuButton as={Button}>
+            <MenuButton background="none !important">
               <Icon as={FaEllipsisV} />
             </MenuButton>
             <MenuList>

@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -22,7 +22,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Board = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const boardSchema = new mongoose_1.Schema({
-    title: { type: String, required: true },
+    board_title: { type: String, required: true },
     closed: { type: Boolean, default: false },
 }, { timestamps: true });
 exports.Board = mongoose_1.default.model("Board", boardSchema);

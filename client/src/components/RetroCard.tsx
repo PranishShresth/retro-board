@@ -3,8 +3,18 @@ import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { itemActions } from "../reducers/itemReducer";
 import { Box, Stack, Text } from "@chakra-ui/layout";
-import { Icon, IconButton, useDisclosure } from "@chakra-ui/react";
-import { FaPencilAlt, FaTrash } from "react-icons/fa";
+import {
+  Icon,
+  IconButton,
+  useDisclosure,
+  Menu,
+  MenuButton,
+  Button,
+  MenuGroup,
+  MenuList,
+  MenuItem,
+} from "@chakra-ui/react";
+import { FaPencilAlt, FaTrash, FaEllipsisV } from "react-icons/fa";
 import EditItem from "./EditItem";
 
 interface Props {
@@ -39,27 +49,30 @@ const RetroCard = ({ content, item_id, provided, snapshot }: Props) => {
       justifyContent="space-between"
       ref={provided.innerRef}
       transition="background 100ms linear"
-      // _hover={{
-      //   background: "gray.200",
-      // }}
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
       <Text overflowWrap="anywhere">{content}</Text>
       <Stack direction="row">
-        <IconButton
-          icon={<FaPencilAlt />}
-          onClick={onOpen}
-          aria-label="Edit item"
-        />
-        <IconButton
-          aria-label="delete-item"
-          icon={<FaTrash />}
-          onClick={() => {
-            dispatch(itemActions.deleteItem({ item_id }));
-            dispatch({ type: "DELETE_ITEM_REQUESTED", payload: { item_id } });
-          }}
-        />
+        <Menu>
+          <MenuButton as={Button} background="none !important">
+            <Icon as={FaEllipsisV} />
+          </MenuButton>
+          <MenuList>
+            <MenuItem onClick={onOpen}>Edit</MenuItem>
+            <MenuItem
+              onClick={() => {
+                dispatch(itemActions.deleteItem({ item_id }));
+                dispatch({
+                  type: "DELETE_ITEM_REQUESTED",
+                  payload: { item_id },
+                });
+              }}
+            >
+              Delete
+            </MenuItem>
+          </MenuList>
+        </Menu>
       </Stack>
     </Box>
   );
