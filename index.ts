@@ -6,7 +6,6 @@ import ApiRoutes from "./routes";
 import socketIO from "./config/socket";
 import cors from "cors";
 import helmet from "helmet";
-import logger from "morgan";
 import path from "path";
 
 const app = express();
@@ -31,12 +30,9 @@ app.set("socketio", io);
 
 app.use("/api/v1", ApiRoutes);
 
-if (process.env.NODE_ENV === "development") {
-  app.use(logger("dev"));
-}
-
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
+
   app.get("*", (req, res, next) => {
     res.sendFile(path.join(__dirname, "client/build", "index.html"));
   });
