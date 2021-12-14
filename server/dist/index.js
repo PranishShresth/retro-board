@@ -11,27 +11,33 @@ const routes_1 = __importDefault(require("./routes"));
 const socket_1 = __importDefault(require("./config/socket"));
 const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
-const app = express_1.default();
+const morgan_1 = __importDefault(require("morgan"));
+const path_1 = __importDefault(require("path"));
+const app = (0, express_1.default)();
 const server = http_1.default.createServer(app);
-const io = socket_1.default(server, app);
+const io = (0, socket_1.default)(server, app);
 const PORT = process.env.PORT || 5000;
-dotenv_1.config();
+(0, dotenv_1.config)();
 const DB_STRING = process.env.MONGO_URI;
-app.use(helmet_1.default());
-app.use(cors_1.default());
+app.use((0, helmet_1.default)({
+    contentSecurityPolicy: false,
+}));
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.set("socketio", io);
-// app.use(logger("dev"));
 app.use("/api/v1", routes_1.default);
-// if (process.env.NODE_ENV === "PRODUCTION") {
-//   app.use(express.static(path.join(__dirname, "../", "client", "build")));
-//   app.get("*", (req, res) => {
-//     res.sendFile(path.join(__dirname, "../", "client", "build", "index.html"));
-//   });
-// }
+if (process.env.NODE_ENV === "development") {
+    app.use((0, morgan_1.default)("dev"));
+}
+if (process.env.NODE_ENV === "production") {
+    app.use(express_1.default.static(path_1.default.join(__dirname, "../../client/build")));
+    app.get("*", (req, res, next) => {
+        res.sendFile(path_1.default.join(__dirname, "../../client/build", "index.html"));
+    });
+}
 server.listen(PORT, () => {
     console.log(`Listening to ${PORT}`);
 });
-db_1.default(DB_STRING);
+(0, db_1.default)(DB_STRING);
 //# sourceMappingURL=index.js.map

@@ -14,7 +14,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -24,7 +24,7 @@ const board_1 = require("../controller/board");
 const item_1 = require("../controller/item");
 const list_1 = require("../controller/list");
 const validator = __importStar(require("../utils/validator"));
-const router = express_1.Router();
+const router = (0, express_1.Router)();
 // board Routes
 router.post("/create-board", validator.validateCreateBoard, board_1.createBoard);
 router.put("/update-board/:board_id", board_1.updateBoardDetails);

@@ -69,7 +69,7 @@ const RetroDashBoard = React.memo(() => {
           justifyContent="center"
           gap={6}
         >
-          {boards.map((board) => {
+          {boards?.map((board) => {
             return (
               <BoardCard
                 to={`/board/${board._id}`}

@@ -46,7 +46,6 @@ export const RetroHome = () => {
     });
 
     setSocket(socket);
-    // setSocket(newSocket);
 
     return () => {
       newSocket.close();

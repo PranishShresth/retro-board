@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 import RetroCard from "./RetroCard";
 import { Item } from "../interfaces";
@@ -27,17 +27,19 @@ interface Props {
   droppableProvided?: DroppableProvided;
 }
 
-const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
+const RetroColumn = memo(({ list_id, droppableProvided }: Props) => {
   const items = useSelector(itemsSelector);
 
-  const listItems = items
-    .filter((item) => item.list === list_id)
-    .sort((a, b) => a.order - b.order);
+  const memoizedListItems = useMemo(() => {
+    return items
+      .filter((item) => item.list === list_id)
+      .sort((a, b) => a.order - b.order);
+  }, [items, list_id]);
 
   return (
     <>
       <RetroCardContainer ref={droppableProvided?.innerRef}>
-        {listItems.map((item, index) => {
+        {memoizedListItems.map((item, index) => {
           return (
             <Draggable draggableId={item._id} index={index} key={item._id}>
               {(provided, snapshot) => (
@@ -60,6 +62,6 @@ const RetroColumn = ({ list_id, title, droppableProvided }: Props) => {
       </BottomListButton>
     </>
   );
-};
+});
 
 export default RetroColumn;

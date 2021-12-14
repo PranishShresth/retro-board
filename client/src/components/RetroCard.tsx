@@ -1,20 +1,18 @@
-import React from "react";
+import React, { memo, useCallback } from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { itemActions } from "../reducers/itemReducer";
 import { Box, Stack, Text } from "@chakra-ui/layout";
 import {
   Icon,
-  IconButton,
   useDisclosure,
   Menu,
   MenuButton,
   Button,
-  MenuGroup,
   MenuList,
   MenuItem,
 } from "@chakra-ui/react";
-import { FaPencilAlt, FaTrash, FaEllipsisV } from "react-icons/fa";
+import { FaEllipsisV } from "react-icons/fa";
 import EditItem from "./EditItem";
 
 interface Props {
@@ -26,9 +24,17 @@ interface Props {
   snapshot: DraggableStateSnapshot;
 }
 
-const RetroCard = ({ content, item_id, provided, snapshot }: Props) => {
+const RetroCard = memo(({ content, item_id, provided, snapshot }: Props) => {
   const dispatch = useDispatch();
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const deleteItem = useCallback(() => {
+    dispatch(itemActions.deleteItem({ item_id }));
+    dispatch({
+      type: "DELETE_ITEM_REQUESTED",
+      payload: { item_id },
+    });
+  }, [item_id, dispatch]);
 
   if (isOpen) {
     return (
@@ -42,12 +48,12 @@ const RetroCard = ({ content, item_id, provided, snapshot }: Props) => {
   }
   return (
     <Box
-      padding="10px 12px"
+      padding="5px 12px"
       background={snapshot.isDragging ? "rgba(226, 231, 245, 255)" : "white"}
       display="flex"
-      minHeight="60px"
       justifyContent="space-between"
       ref={provided.innerRef}
+      alignItems="center"
       transition="background 100ms linear"
       {...provided.draggableProps}
       {...provided.dragHandleProps}
@@ -60,22 +66,12 @@ const RetroCard = ({ content, item_id, provided, snapshot }: Props) => {
           </MenuButton>
           <MenuList>
             <MenuItem onClick={onOpen}>Edit</MenuItem>
-            <MenuItem
-              onClick={() => {
-                dispatch(itemActions.deleteItem({ item_id }));
-                dispatch({
-                  type: "DELETE_ITEM_REQUESTED",
-                  payload: { item_id },
-                });
-              }}
-            >
-              Delete
-            </MenuItem>
+            <MenuItem onClick={deleteItem}>Delete</MenuItem>
           </MenuList>
         </Menu>
       </Stack>
     </Box>
   );
-};
+});
 
 export default RetroCard;
