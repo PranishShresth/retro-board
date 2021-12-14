@@ -20,5 +20,5 @@
   },
 
   "include": ["/**/*"],
-  "exclude": ["client/*"]
+  "exclude": ["client/*", "dist/client/*"]
 }
