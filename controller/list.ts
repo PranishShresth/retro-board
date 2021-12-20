@@ -1,7 +1,5 @@
 import { List } from "../models/list";
 import { Request, Response } from "express";
-import { Socket } from "socket.io";
-import { ISocket } from "../index";
 
 interface AddListRequest extends Request {
   body: {
@@ -19,17 +17,11 @@ export const addListToBoard = async (req: AddListRequest, res: Response) => {
       list_title: list_title,
       board: board_id,
     });
-    const socket: Socket = req.app.get("socket");
-    const io: ISocket = req.app.get("socketio");
-    const query = socket.handshake.query.boardId as string;
 
     const savedList = await newList.save();
 
-    io.to(query).emit("new-list", savedList);
-
     res.status(200).send(savedList);
   } catch (err) {
-    console.log(err);
     res.status(500).send("Internal Server Error");
   }
 };
@@ -60,9 +52,6 @@ interface UpdateListRequest extends Request {
 export const updateList = async (req: UpdateListRequest, res: Response) => {
   const { list_title } = req.body;
   const { list_id } = req.params;
-  const socket: Socket = req.app.get("socket");
-  const io: ISocket = req.app.get("socketio");
-  const query = socket.handshake.query.boardId as string;
 
   try {
     const updatedList = await List.findByIdAndUpdate(
@@ -74,7 +63,6 @@ export const updateList = async (req: UpdateListRequest, res: Response) => {
       },
       { new: true }
     );
-    io.to(query).emit("updated-list", updatedList);
 
     res.status(200).send(updatedList);
   } catch (err) {

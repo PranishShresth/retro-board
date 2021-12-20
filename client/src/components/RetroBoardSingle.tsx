@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useContext } from "react";
 import RetroColumn from "./RetroColumn";
 import styled from "styled-components";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
@@ -15,6 +15,7 @@ import Loading from "./Loader";
 import { itemActions } from "../reducers/itemReducer";
 import RetroColumnListHeader from "./RetroColumnHeader";
 import { Box } from "@chakra-ui/layout";
+import { SocketContext } from "../context/SocketContext";
 
 const ColumnsWrapper = styled.main`
   display: flex;
@@ -44,6 +45,7 @@ export default function RetroBoardSingle() {
   const dispatch = useDispatch();
   const params = useParams<BoardParam>();
   const lists = useSelector(listsSelector);
+  const { socket } = useContext(SocketContext);
 
   const currentBoardLists = lists.filter((l) => l.board === params.boardId);
   const items = useSelector(itemsSelector);
@@ -70,7 +72,13 @@ export default function RetroBoardSingle() {
         destination,
         draggableId
       );
-
+      const payload = {
+        source_list_id: source.droppableId,
+        destination_list_id: destination.droppableId,
+        position: position,
+        list_id: destination?.droppableId,
+        item_id: draggableId,
+      };
       dispatch(
         itemActions.reorderItem({
           item_id: draggableId,
@@ -80,15 +88,11 @@ export default function RetroBoardSingle() {
         })
       );
 
+      socket?.emit("REORDER_ITEM", payload);
+
       dispatch({
         type: "REORDER_ITEM_REQUESTED",
-        payload: {
-          source_list_id: source.droppableId,
-          destination_list_id: destination.droppableId,
-          position: position,
-          list_id: destination?.droppableId,
-          item_id: draggableId,
-        },
+        payload,
       });
     },
     [items, dispatch]
@@ -103,7 +107,7 @@ export default function RetroBoardSingle() {
         <ColumnsWrapper>
           {currentBoardLists?.map((list) => {
             return (
-              <Box>
+              <Box key={list._id}>
                 <RetroColumnWrapper>
                   <RetroColumnListHeader
                     list_id={list._id}

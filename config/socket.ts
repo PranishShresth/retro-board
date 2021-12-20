@@ -2,6 +2,12 @@ import { Server, Socket } from "socket.io";
 import { Server as HttpServer } from "http";
 import { Express } from "express";
 import { config } from "dotenv";
+import {
+  CREATE_ITEM,
+  UPDATE_ITEM,
+  REORDER_ITEM,
+  CREATE_LIST,
+} from "../utils/constants";
 config();
 
 function socketIO(server: HttpServer, app: Express) {
@@ -16,10 +22,22 @@ function socketIO(server: HttpServer, app: Express) {
     const query = socket.handshake.query.boardId as string;
     if (query) {
       socket.join(query);
-    }
-    app.set("socket", socket);
 
-    socket.emit("user", socket.id);
+      socket.on(CREATE_ITEM, (data) => {
+        io.to(query).emit(CREATE_ITEM, data);
+      });
+
+      socket.on(REORDER_ITEM, (data) => {
+        socket.to(query).emit(REORDER_ITEM, data);
+      });
+
+      socket.on(UPDATE_ITEM, (data) => {
+        socket.to(query).emit(UPDATE_ITEM, data);
+      });
+      socket.on(CREATE_LIST, (data) => {
+        socket.to(query).emit(CREATE_LIST, data);
+      });
+    }
   });
   return io;
 }

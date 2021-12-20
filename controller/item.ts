@@ -1,6 +1,4 @@
 import { Item } from "../models/item";
-import { Socket } from "socket.io";
-import { ISocket } from "../index";
 
 import { Request, Response } from "express";
 
@@ -19,10 +17,6 @@ interface IReorderRequest extends Request {
 export const reorderItem = async (req: IReorderRequest, res: Response) => {
   try {
     const { item_id, position, source_list_id, destination_list_id } = req.body;
-    const { list_id } = req.params;
-    const socket: Socket = req.app.get("socket");
-    const io: ISocket = req.app.get("socketio");
-    const query = socket.handshake.query.boardId as string;
 
     const item = await Item.findOneAndUpdate(
       { _id: item_id },
@@ -33,12 +27,6 @@ export const reorderItem = async (req: IReorderRequest, res: Response) => {
         },
       }
     );
-    io.to(query).emit("reordered-item", {
-      source_list_id,
-      destination_list_id,
-      item,
-      position,
-    });
 
     res.status(200).json(item);
   } catch (err) {}
@@ -55,10 +43,6 @@ interface IAddItem extends Request {
 
 export const addItemToList = async (req: IAddItem, res: Response) => {
   const { item_title, list, board, _id } = req.body;
-  const socket: Socket = req.app.get("socket");
-  const io: ISocket = req.app.get("socketio");
-  const query = socket.handshake.query.boardId as string;
-
   try {
     const position = await calculateListPosition(list);
 
@@ -70,9 +54,6 @@ export const addItemToList = async (req: IAddItem, res: Response) => {
       board: board,
     });
     const item = await newItem.save();
-
-    io.to(query).emit("new-item", item);
-
     res.status(200).send(item);
   } catch (err) {
     console.log(err);
@@ -117,9 +98,6 @@ interface UpdateItemRequest extends Request {
 export const updateItem = async (req: UpdateItemRequest, res: Response) => {
   const { item_title } = req.body;
   const { item_id } = req.params;
-  const socket: Socket = req.app.get("socket");
-  const io: ISocket = req.app.get("socketio");
-  const query = socket.handshake.query.boardId as string;
 
   try {
     const updatedItem = await Item.findByIdAndUpdate(
@@ -132,7 +110,6 @@ export const updateItem = async (req: UpdateItemRequest, res: Response) => {
       { new: true }
     );
 
-    io.to(query).emit("updated-item", updatedItem);
     res.status(200).send(updatedItem);
   } catch (err) {
     res.status(500).send("Internal Server Error");
