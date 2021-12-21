@@ -25,7 +25,10 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
         type: "UPDATE_ITEM_REQUESTED",
         payload: { item_id, ...formValues },
       });
-      socket?.emit(SE.UPDATE_ITEM, { item_id, ...formValues });
+      socket?.emit(SE.UPDATE_ITEM, {
+        _id: item_id,
+        ...formValues,
+      });
       setFormValues({ item_title: "" });
       onClose();
     } catch (err) {

@@ -40,7 +40,8 @@ const itemSlice = createSlice({
       const itemIdx = state.items.findIndex(
         (item) => item._id === action.payload._id
       );
-      state.items[itemIdx] = action.payload;
+
+      state.items[itemIdx] = { ...state.items[itemIdx], ...action.payload };
     },
     removeFromList(state, action: PayloadAction<Item>) {
       state.items.filter((item) => item._id !== action.payload._id);

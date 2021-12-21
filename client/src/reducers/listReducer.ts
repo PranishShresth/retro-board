@@ -29,11 +29,13 @@ const listSlice = createSlice({
       }
       list.list_title = action.payload.list_title;
     },
-    addList(state, action: PayloadAction<List>) {
+    addList(state, action) {
       const listIdx = state.lists.findIndex(
         (list) => list._id === action.payload._id
       );
+      console.log(listIdx);
       if (listIdx === -1) {
+        console.log("here");
         state.lists.push(action.payload);
       } else {
         state.lists[listIdx] = action.payload;

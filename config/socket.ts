@@ -45,9 +45,11 @@ function socketIO(server: HttpServer, app: Express) {
       socket.on(UPDATE_LIST, (data) => {
         socket.to(query).emit(UPDATE_LIST, data);
       });
+
       socket.on(UPDATE_ITEM, (data) => {
         socket.to(query).emit(UPDATE_ITEM, data);
       });
+
       socket.on(CREATE_LIST, (data) => {
         socket.to(query).emit(CREATE_LIST, data);
       });

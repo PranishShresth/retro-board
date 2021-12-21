@@ -48,7 +48,6 @@ const RetroColumn = memo(({ list_id, droppableProvided }: Props) => {
                   snapshot={snapshot}
                   content={item.item_title}
                   item_id={item._id}
-                  list_id={list_id}
                 />
               )}
             </Draggable>

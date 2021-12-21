@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
 import Modal from "./Modal";
 import { useForm } from "./hooks/useForm";
@@ -8,12 +8,16 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { Input, InputGroup } from "@chakra-ui/input";
 import { Stack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
+import { SocketContext } from "../context/SocketContext";
+import * as SE from "../context/socketTypes";
+import { listActions } from "../reducers/listReducer";
 
 interface FormParam {
   boardId: string;
 }
 const CreateList = () => {
   const dispatch = useDispatch();
+  const { socket } = useContext(SocketContext);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { boardId } = useParams<FormParam>();
@@ -31,10 +35,27 @@ const CreateList = () => {
       }
       const id = new ObjectID().toString();
 
+      const payload = { ...formValues, _id: id, board_id: boardId };
+
       dispatch({
         type: "CREATE_LIST_REQUESTED",
-        payload: { ...formValues, _id: id, board_id: boardId },
+        payload,
       });
+
+      socket?.emit(SE.CREATE_LIST, {
+        _id: id,
+        board: boardId,
+        ...formValues,
+      });
+
+      dispatch(
+        listActions.addList({
+          _id: id,
+          board: boardId,
+          ...formValues,
+        })
+      );
+
       setFormValues({ list_title: "" });
       onClose();
     } catch (err) {

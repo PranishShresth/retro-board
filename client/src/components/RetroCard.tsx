@@ -19,7 +19,6 @@ import * as SE from "../context/socketTypes";
 interface Props {
   content: string;
   item_id: string;
-  list_id: string;
   children?: React.ReactChild;
   provided: DraggableProvided;
   snapshot: DraggableStateSnapshot;

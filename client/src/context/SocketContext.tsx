@@ -39,6 +39,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     newSocket.on(SE.UPDATE_ITEM, (data) => {
+      console.log("I am here");
       dispatch(itemActions.updateItem(data));
     });
 
