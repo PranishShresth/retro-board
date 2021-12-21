@@ -65,9 +65,7 @@ function* fetchActiveBoard(
   }
 }
 
-function* deleteBoard(
-  action: ReturnType<typeof boardActions.fetchActiveBoard>
-) {
+function* deleteBoard(action: ReturnType<typeof boardActions.deleteBoard>) {
   try {
     yield put(boardActions.setLoading(true));
     yield call(deleteBoardAPI, action.payload);

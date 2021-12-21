@@ -7,6 +7,9 @@ import {
   UPDATE_ITEM,
   REORDER_ITEM,
   CREATE_LIST,
+  DELETE_ITEM,
+  DELETE_LIST,
+  UPDATE_LIST,
 } from "../utils/constants";
 config();
 
@@ -31,6 +34,17 @@ function socketIO(server: HttpServer, app: Express) {
         socket.to(query).emit(REORDER_ITEM, data);
       });
 
+      socket.on(DELETE_ITEM, (data) => {
+        socket.to(query).emit(DELETE_ITEM, data);
+      });
+
+      socket.on(DELETE_LIST, (data) => {
+        socket.to(query).emit(DELETE_LIST, data);
+      });
+
+      socket.on(UPDATE_LIST, (data) => {
+        socket.to(query).emit(UPDATE_LIST, data);
+      });
       socket.on(UPDATE_ITEM, (data) => {
         socket.to(query).emit(UPDATE_ITEM, data);
       });

@@ -42,6 +42,14 @@ const BoardCard = (props: Props) => {
 
   const [deleteModalOpen, setdeleteModalOpen] = useState(false);
 
+  const handleDeleteBoard = () => {
+    dispatch({
+      type: "DELETE_BOARD_REQUESTED",
+      payload: props.boardId,
+    });
+    setdeleteModalOpen(false);
+  };
+
   const handleEditBoard = (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
@@ -118,13 +126,7 @@ const BoardCard = (props: Props) => {
       <AlertDialog
         isOpen={deleteModalOpen}
         onClose={() => setdeleteModalOpen(false)}
-        onClick={() => {
-          dispatch({
-            type: "DELETE_BOARD_REQUESTED",
-            payload: props.boardId,
-          });
-          setdeleteModalOpen(false);
-        }}
+        onClick={handleDeleteBoard}
         title="Delete Board"
       />
     </>

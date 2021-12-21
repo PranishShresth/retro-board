@@ -4,7 +4,8 @@ import { Socket, io } from "socket.io-client";
 import { useDispatch } from "react-redux";
 import { listActions } from "../reducers/listReducer";
 import { itemActions } from "../reducers/itemReducer";
-
+import { getSocketConfig } from "../utils/config";
+import * as SE from "./socketTypes";
 interface CSocket {
   socket: Socket | null;
 }
@@ -16,25 +17,32 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const newSocket = io("http://localhost:5000", {
+    const newSocket = io(getSocketConfig(), {
       query: { boardId },
       transports: ["websocket"],
     });
 
-    newSocket.on("new-list", (data) => {
+    newSocket.on(SE.CREATE_LIST, (data) => {
       dispatch(listActions.addList(data));
     });
 
-    newSocket.on("CREATE_ITEM", (data) => {
-      console.log(data);
+    newSocket.on(SE.DELETE_LIST, (data) => {
+      dispatch(listActions.removeFromList(data));
+    });
+
+    newSocket.on(SE.DELETE_ITEM, (data) => {
+      dispatch(itemActions.deleteItem(data));
+    });
+
+    newSocket.on(SE.CREATE_ITEM, (data) => {
       dispatch(itemActions.addItem(data));
     });
 
-    newSocket.on("updated-item", (data) => {
+    newSocket.on(SE.UPDATE_ITEM, (data) => {
       dispatch(itemActions.updateItem(data));
     });
 
-    newSocket.on("REORDER_ITEM", (data) => {
+    newSocket.on(SE.REORDER_ITEM, (data) => {
       const { item_id, source_list_id, destination_list_id, position } = data;
       dispatch(
         itemActions.reorderItem({

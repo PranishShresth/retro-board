@@ -95,7 +95,7 @@ export default function RetroBoardSingle() {
         payload,
       });
     },
-    [items, dispatch]
+    [items, dispatch, socket]
   );
 
   if (loading) {

@@ -1,7 +1,9 @@
 import { Button, Textarea, Stack } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
+import { SocketContext } from "../context/SocketContext";
 import { useForm } from "./hooks/useForm";
+import * as SE from "../context/socketTypes";
 
 interface Props {
   isOpen: boolean;
@@ -14,6 +16,7 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
   const { formValues, handleChange, setFormValues } = useForm({
     item_title: content,
   });
+  const { socket } = useContext(SocketContext);
 
   const handleEditingItem = async (ev: React.FormEvent) => {
     try {
@@ -22,6 +25,7 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
         type: "UPDATE_ITEM_REQUESTED",
         payload: { item_id, ...formValues },
       });
+      socket?.emit(SE.UPDATE_ITEM, { item_id, ...formValues });
       setFormValues({ item_title: "" });
       onClose();
     } catch (err) {

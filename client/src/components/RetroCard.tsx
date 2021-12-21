@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from "react";
+import React, { memo, useCallback, useContext } from "react";
 import { DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { useDispatch } from "react-redux";
 import { itemActions } from "../reducers/itemReducer";
@@ -14,7 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { FaEllipsisV } from "react-icons/fa";
 import EditItem from "./EditItem";
-
+import { SocketContext } from "../context/SocketContext";
+import * as SE from "../context/socketTypes";
 interface Props {
   content: string;
   item_id: string;
@@ -26,6 +27,7 @@ interface Props {
 
 const RetroCard = memo(({ content, item_id, provided, snapshot }: Props) => {
   const dispatch = useDispatch();
+  const { socket } = useContext(SocketContext);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const deleteItem = useCallback(() => {
@@ -34,7 +36,8 @@ const RetroCard = memo(({ content, item_id, provided, snapshot }: Props) => {
       type: "DELETE_ITEM_REQUESTED",
       payload: { item_id },
     });
-  }, [item_id, dispatch]);
+    socket?.emit(SE.DELETE_ITEM, { item_id });
+  }, [dispatch, item_id, socket]);
 
   if (isOpen) {
     return (
