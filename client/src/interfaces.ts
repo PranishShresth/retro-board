@@ -2,6 +2,7 @@ export interface Board {
   _id: string;
   board_title: string;
   lists: List[];
+  limit: number;
   createdAt: string;
   updatedAt: string;
   __v: number;

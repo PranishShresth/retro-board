@@ -7,10 +7,17 @@ import { useParams } from "react-router";
 import { ObjectID } from "bson";
 import { itemActions } from "../reducers/itemReducer";
 import { SocketContext } from "../context/SocketContext";
+import styled from "styled-components";
 
 interface Props {
   list_id: string;
 }
+
+const StyledButton = styled(Button)`
+  background: #f7f7f7;
+  border: 1px solid #e6e7e9;
+  color: #b7b8ba;
+`;
 function AddItem({ list_id }: Props) {
   const { boardId } = useParams<{ boardId: string }>();
   const { socket } = useContext(SocketContext);
@@ -33,14 +40,7 @@ function AddItem({ list_id }: Props) {
       };
       socket?.emit("CREATE_ITEM", payload);
 
-      dispatch(
-        itemActions.addItem({
-          _id: id,
-          list: list_id,
-          board: boardId,
-          ...formValues,
-        })
-      );
+      dispatch(itemActions.addItem(payload));
 
       dispatch({
         type: "CREATE_ITEM_REQUESTED",
@@ -56,17 +56,17 @@ function AddItem({ list_id }: Props) {
   return (
     <>
       {!open && (
-        <Button
+        <StyledButton
           leftIcon={<FaPlus />}
           fluid
+          variant="solid"
           width="100%"
-          colorScheme="facebook"
           onClick={() => {
             setOpen(!open);
           }}
         >
           Add a Item
-        </Button>
+        </StyledButton>
       )}
       {open && (
         <form onSubmit={handleAddingItem}>
@@ -81,12 +81,7 @@ function AddItem({ list_id }: Props) {
               background="white"
             />
             <div>
-              <Button
-                leftIcon={<FaPlus />}
-                type="submit"
-                colorScheme="teal"
-                variant="solid"
-              >
+              <Button leftIcon={<FaPlus />} type="submit" variant="solid">
                 Create
               </Button>
             </div>

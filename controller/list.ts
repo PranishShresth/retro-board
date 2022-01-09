@@ -4,18 +4,18 @@ import { Request, Response } from "express";
 interface AddListRequest extends Request {
   body: {
     list_title: string;
-    board_id: string;
+    board: string;
     _id: string;
   };
 }
 export const addListToBoard = async (req: AddListRequest, res: Response) => {
-  const { list_title, board_id, _id } = req.body;
+  const { list_title, board, _id } = req.body;
 
   try {
     const newList = new List({
       _id: _id,
       list_title: list_title,
-      board: board_id,
+      board: board,
     });
 
     const savedList = await newList.save();

@@ -26,6 +26,7 @@ const RetroDashBoard = React.memo(() => {
   const loading = useSelector(loadingSelector);
   const { formValues, handleChange } = useForm({
     board_title: "",
+    limit: "",
   });
 
   useEffect(() => {
@@ -94,6 +95,16 @@ const RetroDashBoard = React.memo(() => {
                       name="board_title"
                       value={formValues.board_title}
                       placeholder="Board Title"
+                      onChange={handleChange}
+                    />
+                  </InputGroup>
+                  <InputGroup>
+                    <Input
+                      type="number"
+                      name="limit"
+                      value={formValues.limit}
+                      min={2}
+                      placeholder="Number of cards"
                       onChange={handleChange}
                     />
                   </InputGroup>

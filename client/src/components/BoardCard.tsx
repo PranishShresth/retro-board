@@ -58,7 +58,7 @@ const BoardCard = (props: Props) => {
       }
       dispatch({
         type: "UPDATE_BOARD_REQUESTED",
-        payload: { board_id: props.boardId, ...formValues },
+        payload: { _id: props.boardId, ...formValues },
       });
       dispatch(
         boardActions.updateBoardDetails({ _id: props.boardId, ...formValues })

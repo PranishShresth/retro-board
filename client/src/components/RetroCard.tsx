@@ -16,6 +16,7 @@ import { FaEllipsisV } from "react-icons/fa";
 import EditItem from "./EditItem";
 import { SocketContext } from "../context/SocketContext";
 import * as SE from "../context/socketTypes";
+import styled from "styled-components";
 interface Props {
   content: string;
   item_id: string;
@@ -24,18 +25,28 @@ interface Props {
   snapshot: DraggableStateSnapshot;
 }
 
+const StyledBox = styled(Box)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: rgb(60 64 67 / 30%) 0px 1px 2px 0px,
+    rgb(60 64 67 / 15%) 0px 1px 3px 1px;
+  transition: background 100ms linear;
+  border-radius: 5px;
+`;
 const RetroCard = memo(({ content, item_id, provided, snapshot }: Props) => {
   const dispatch = useDispatch();
   const { socket } = useContext(SocketContext);
   const { isOpen, onClose, onOpen } = useDisclosure();
 
   const deleteItem = useCallback(() => {
-    dispatch(itemActions.deleteItem({ item_id }));
+    const payload = { item_id };
+    dispatch(itemActions.deleteItem(payload));
     dispatch({
       type: "DELETE_ITEM_REQUESTED",
-      payload: { item_id },
+      payload,
     });
-    socket?.emit(SE.DELETE_ITEM, { item_id });
+    socket?.emit(SE.DELETE_ITEM, payload);
   }, [dispatch, item_id, socket]);
 
   if (isOpen) {
@@ -49,14 +60,10 @@ const RetroCard = memo(({ content, item_id, provided, snapshot }: Props) => {
     );
   }
   return (
-    <Box
+    <StyledBox
       padding="5px 12px"
       background={snapshot.isDragging ? "rgba(226, 231, 245, 255)" : "white"}
-      display="flex"
-      justifyContent="space-between"
       ref={provided.innerRef}
-      alignItems="center"
-      transition="background 100ms linear"
       {...provided.draggableProps}
       {...provided.dragHandleProps}
     >
@@ -72,7 +79,7 @@ const RetroCard = memo(({ content, item_id, provided, snapshot }: Props) => {
           </MenuList>
         </Menu>
       </Stack>
-    </Box>
+    </StyledBox>
   );
 });
 

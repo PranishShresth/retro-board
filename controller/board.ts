@@ -6,12 +6,13 @@ import { Request, Response } from "express";
 interface CreateBoardReq extends Request {
   body: {
     board_title: string;
+    limit: string;
   };
 }
 export const createBoard = async (req: CreateBoardReq, res: Response) => {
-  const { board_title } = req.body;
+  const { board_title, limit } = req.body;
   try {
-    const newBoard = new Board({ board_title });
+    const newBoard = new Board({ board_title, limit });
     const savedBoard = await newBoard.save();
     res.status(200).send(savedBoard);
   } catch (err) {

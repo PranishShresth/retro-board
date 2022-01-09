@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useContext } from "react";
 import RetroColumn from "./RetroColumn";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { DragDropContext, Droppable, DropResult } from "react-beautiful-dnd";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
@@ -8,6 +8,8 @@ import {
   loadingSelector,
   listsSelector,
   itemsSelector,
+  getListCountsPerBoard,
+  getBoardLimit,
 } from "../utils/selectors";
 import CreateList from "./CreateList";
 import { isPositionChanged, calculateItemPosition } from "../utils/dragndrop";
@@ -27,12 +29,20 @@ const ColumnsWrapper = styled.main`
 
 const RetroColumnWrapper = styled.div`
   width: 300px;
+  max-width: 100%;
   padding: 8px;
-  background: rgb(235, 236, 240);
   display: flex;
   flex-direction: column;
 
   /* height: fit-content; */
+`;
+
+const FlexBox = styled(Box)<{ limit: number | undefined }>`
+  ${({ limit }) =>
+    limit &&
+    css`
+      flex: ${100 / limit};
+    `}
 `;
 const Container = styled.div`
   width: 95%;
@@ -49,7 +59,10 @@ export default function RetroBoardSingle() {
 
   const currentBoardLists = lists.filter((l) => l.board === params.boardId);
   const items = useSelector(itemsSelector);
-
+  const listCount = useSelector(getListCountsPerBoard);
+  const boardLimit = useSelector(getBoardLimit(params.boardId));
+  console.log(listCount, boardLimit);
+  const showListCreation = boardLimit && boardLimit > listCount;
   const loading = useSelector(loadingSelector);
 
   useEffect(() => {
@@ -73,20 +86,12 @@ export default function RetroBoardSingle() {
         draggableId
       );
       const payload = {
-        source_list_id: source.droppableId,
-        destination_list_id: destination.droppableId,
+        source: source.droppableId,
+        destination: destination.droppableId,
         position: position,
-        list_id: destination?.droppableId,
         item_id: draggableId,
       };
-      dispatch(
-        itemActions.reorderItem({
-          item_id: draggableId,
-          source: source.droppableId,
-          destination: destination.droppableId,
-          position: position,
-        })
-      );
+      dispatch(itemActions.reorderItem(payload));
 
       socket?.emit("REORDER_ITEM", payload);
 
@@ -107,7 +112,7 @@ export default function RetroBoardSingle() {
         <ColumnsWrapper>
           {currentBoardLists?.map((list) => {
             return (
-              <Box key={list._id}>
+              <FlexBox key={list._id} limit={boardLimit}>
                 <RetroColumnWrapper>
                   <RetroColumnListHeader
                     list_id={list._id}
@@ -124,12 +129,14 @@ export default function RetroBoardSingle() {
                     )}
                   </Droppable>
                 </RetroColumnWrapper>
-              </Box>
+              </FlexBox>
             );
           })}
-          <Box minWidth="300px">
-            <CreateList />
-          </Box>
+          {showListCreation && (
+            <Box minWidth="300px">
+              <CreateList />
+            </Box>
+          )}
         </ColumnsWrapper>
       </DragDropContext>
     </Container>

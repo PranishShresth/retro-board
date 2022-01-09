@@ -1,4 +1,3 @@
-import { Dimmer, Loader } from "semantic-ui-react";
 import styled from "styled-components";
 import { Spinner } from "@chakra-ui/react";
 

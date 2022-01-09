@@ -21,14 +21,13 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
   const handleEditingItem = async (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+
+      const payload = { _id: item_id, ...formValues };
       dispatch({
         type: "UPDATE_ITEM_REQUESTED",
-        payload: { item_id, ...formValues },
+        payload,
       });
-      socket?.emit(SE.UPDATE_ITEM, {
-        _id: item_id,
-        ...formValues,
-      });
+      socket?.emit(SE.UPDATE_ITEM, payload);
       setFormValues({ item_title: "" });
       onClose();
     } catch (err) {

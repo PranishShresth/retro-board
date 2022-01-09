@@ -32,12 +32,12 @@ export const createBoardAPI = async (payload: Partial<Board>) => {
 };
 
 export const updateBoardAPI = async (payload: {
-  board_id: string;
+  _id: string;
   board_title: string;
 }) => {
   try {
     const { data } = await httpClient.put(
-      `/update-board/${payload.board_id}`,
+      `/update-board/${payload._id}`,
       payload
     );
     return data;
@@ -102,12 +102,12 @@ export const deleteItemAPI = async (payload: { item_id: string }) => {
 };
 
 export const updateItemAPI = async (payload: {
-  item_id: string;
+  _id: string;
   item_title: string;
 }) => {
   try {
     const { data } = await httpClient.put(
-      `/update-item/${payload.item_id}`,
+      `/update-item/${payload._id}`,
       payload
     );
     return data;
@@ -116,9 +116,9 @@ export const updateItemAPI = async (payload: {
   }
 };
 
-export const deleteListAPI = async (payload: { item_id: string }) => {
+export const deleteListAPI = async (payload: { list_id: string }) => {
   try {
-    const { data } = await httpClient.delete(`/delete-item/${payload.item_id}`);
+    const { data } = await httpClient.delete(`/delete-list/${payload.list_id}`);
     return data;
   } catch (err) {
     throw err;

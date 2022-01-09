@@ -21,7 +21,6 @@ import {
 function* getBoards() {
   try {
     yield put(boardActions.setLoading(true));
-
     const result: Board[] = yield call(fetchAllBoardsAPI);
     yield put(boardActions.fetchBoards(result));
     yield put(boardActions.setLoading(false));

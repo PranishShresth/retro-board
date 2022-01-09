@@ -6,8 +6,7 @@ interface IReorderRequest extends Request {
   body: {
     item_id: string;
     position: string;
-    source_list_id: string;
-    destination_list_id: string;
+    destination: string;
   };
   params: {
     list_id: string;
@@ -16,20 +15,22 @@ interface IReorderRequest extends Request {
 
 export const reorderItem = async (req: IReorderRequest, res: Response) => {
   try {
-    const { item_id, position, source_list_id, destination_list_id } = req.body;
+    const { item_id, position, destination } = req.body;
 
     const item = await Item.findOneAndUpdate(
       { _id: item_id },
       {
         $set: {
           order: position,
-          list: destination_list_id,
+          list: destination,
         },
       }
     );
 
     res.status(200).json(item);
-  } catch (err) {}
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
 };
 
 interface IAddItem extends Request {
@@ -89,7 +90,7 @@ export const deleteItem = async (req: DeleteItemRequest, res: Response) => {
 
 interface UpdateItemRequest extends Request {
   params: {
-    item_id: string;
+    _id: string;
   };
   body: {
     item_title: string;
@@ -97,11 +98,11 @@ interface UpdateItemRequest extends Request {
 }
 export const updateItem = async (req: UpdateItemRequest, res: Response) => {
   const { item_title } = req.body;
-  const { item_id } = req.params;
+  const { _id } = req.params;
 
   try {
     const updatedItem = await Item.findByIdAndUpdate(
-      item_id,
+      _id,
       {
         $set: {
           item_title: item_title,

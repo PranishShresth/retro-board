@@ -35,26 +35,16 @@ const CreateList = () => {
       }
       const id = new ObjectID().toString();
 
-      const payload = { ...formValues, _id: id, board_id: boardId };
+      const payload = { ...formValues, _id: id, board: boardId };
 
       dispatch({
         type: "CREATE_LIST_REQUESTED",
         payload,
       });
 
-      socket?.emit(SE.CREATE_LIST, {
-        _id: id,
-        board: boardId,
-        ...formValues,
-      });
+      socket?.emit(SE.CREATE_LIST, payload);
 
-      dispatch(
-        listActions.addList({
-          _id: id,
-          board: boardId,
-          ...formValues,
-        })
-      );
+      dispatch(listActions.addList(payload));
 
       setFormValues({ list_title: "" });
       onClose();

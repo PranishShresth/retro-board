@@ -17,6 +17,13 @@ export const boardSelector = createSelector(
   (state) => state.board.currentBoard
 );
 
+export const getBoardLimit = (boardId: string) => {
+  return createSelector(
+    boardsSelector,
+    (boards) => boards.find((board) => board._id === boardId)?.limit
+  );
+};
+
 // list
 
 export const listSelector = createSelector(rootSelector, (state) => state.list);
@@ -24,6 +31,11 @@ export const listSelector = createSelector(rootSelector, (state) => state.list);
 export const listsSelector = createSelector(
   listSelector,
   (state) => state.lists
+);
+
+export const getListCountsPerBoard = createSelector(
+  listSelector,
+  (state) => state.lists.length
 );
 
 // item
