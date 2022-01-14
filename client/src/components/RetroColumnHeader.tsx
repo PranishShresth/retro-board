@@ -9,10 +9,12 @@ import { FaTrash } from "react-icons/fa";
 
 const RetroColumnHeader = styled.div`
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   display: flex;
+  color: #58585a;
   justify-content: space-between;
-  padding: 12px 14px;
+  align-items: center;
+  padding: 12px 0px;
 `;
 
 interface Props {
@@ -39,6 +41,7 @@ export default function RetroColumnListHeader({ list_title, list_id }: Props) {
 
   const deleteList = () => {
     dispatch({ type: "DELETE_LIST_REQUESTED", payload: { list_id } });
+    dispatch(listActions.removeList({ _id: list_id }));
   };
   const handleSubmit = (ev: React.KeyboardEvent | React.FocusEvent) => {
     try {
@@ -68,8 +71,9 @@ export default function RetroColumnListHeader({ list_title, list_id }: Props) {
           <div onClick={() => setEditMode(true)}>{list_title}</div>
           <Icon
             as={FaTrash}
+            size="mini"
             onClick={deleteList}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", fontSize: 14 }}
           />
         </RetroColumnHeader>
       )}

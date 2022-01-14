@@ -90,22 +90,21 @@ export const deleteItem = async (req: DeleteItemRequest, res: Response) => {
 
 interface UpdateItemRequest extends Request {
   params: {
-    _id: string;
+    item_id: string;
   };
   body: {
-    item_title: string;
+    item_title?: string;
   };
 }
 export const updateItem = async (req: UpdateItemRequest, res: Response) => {
-  const { item_title } = req.body;
-  const { _id } = req.params;
+  const { item_id } = req.params;
 
   try {
     const updatedItem = await Item.findByIdAndUpdate(
-      _id,
+      item_id,
       {
         $set: {
-          item_title: item_title,
+          ...req.body,
         },
       },
       { new: true }

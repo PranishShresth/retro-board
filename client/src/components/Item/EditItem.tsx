@@ -1,9 +1,10 @@
 import { Button, Textarea, Stack } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
-import { SocketContext } from "../context/SocketContext";
-import { useForm } from "./hooks/useForm";
-import * as SE from "../context/socketTypes";
+import { SocketContext } from "../../context/SocketContext";
+import { useForm } from "../hooks/useForm";
+import * as SE from "../../context/socketTypes";
+import { itemActions } from "../../reducers/itemReducer";
 
 interface Props {
   isOpen: boolean;
@@ -23,6 +24,8 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
       ev.preventDefault();
 
       const payload = { _id: item_id, ...formValues };
+
+      dispatch(itemActions.updateItem(payload));
       dispatch({
         type: "UPDATE_ITEM_REQUESTED",
         payload,

@@ -27,11 +27,7 @@ export default function Modal1({
 }: Props) {
   return (
     <>
-      {triggerName && (
-        <Button isFullWidth onClick={onOpen}>
-          {triggerName}
-        </Button>
-      )}
+      {triggerName && <Button onClick={onOpen}>{triggerName}</Button>}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

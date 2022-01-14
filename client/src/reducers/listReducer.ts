@@ -33,16 +33,16 @@ const listSlice = createSlice({
       const listIdx = state.lists.findIndex(
         (list) => list._id === action.payload._id
       );
-      console.log(listIdx);
       if (listIdx === -1) {
-        console.log("here");
         state.lists.push(action.payload);
       } else {
         state.lists[listIdx] = action.payload;
       }
     },
-    removeFromList(state, action: PayloadAction<List>) {
-      state.lists.filter((lists) => lists._id !== action.payload._id);
+    removeList(state, action) {
+      state.lists = state.lists.filter(
+        (list) => list._id !== action.payload._id
+      );
     },
   },
 });

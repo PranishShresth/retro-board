@@ -17,12 +17,10 @@ export const boardSelector = createSelector(
   (state) => state.board.currentBoard
 );
 
-export const getBoardLimit = (boardId: string) => {
-  return createSelector(
-    boardsSelector,
-    (boards) => boards.find((board) => board._id === boardId)?.limit
-  );
-};
+export const getBoardLimit = createSelector(
+  boardSelector,
+  (board) => board?.limit
+);
 
 // list
 

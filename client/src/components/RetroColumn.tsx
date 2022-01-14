@@ -2,7 +2,7 @@ import React, { memo, useMemo } from "react";
 import styled from "styled-components";
 import RetroCard from "./RetroCard";
 import { Item } from "../interfaces";
-import AddItem from "./AddItem";
+import AddItem from "./Item/AddItem";
 import { useSelector } from "react-redux";
 import { Draggable, DroppableProvided } from "react-beautiful-dnd";
 import { itemsSelector } from "../utils/selectors";

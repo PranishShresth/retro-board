@@ -6,6 +6,7 @@ const itemSchemaRevised = new Schema(
     order: { type: Number },
     list: { type: Schema.Types.ObjectId, ref: "List", required: true },
     board: { type: Schema.Types.ObjectId, ref: "Board", required: true },
+    upvotes: { type: Number, default: 0 },
   },
   { timestamps: true }
 );

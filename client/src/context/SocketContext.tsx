@@ -27,7 +27,7 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     newSocket.on(SE.DELETE_LIST, (data) => {
-      dispatch(listActions.removeFromList(data));
+      dispatch(listActions.removeList(data));
     });
 
     newSocket.on(SE.DELETE_ITEM, (data) => {
@@ -39,7 +39,6 @@ export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
     });
 
     newSocket.on(SE.UPDATE_ITEM, (data) => {
-      console.log("I am here");
       dispatch(itemActions.updateItem(data));
     });
 

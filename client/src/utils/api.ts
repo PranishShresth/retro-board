@@ -104,6 +104,8 @@ export const deleteItemAPI = async (payload: { item_id: string }) => {
 export const updateItemAPI = async (payload: {
   _id: string;
   item_title: string;
+  upvote?: number;
+  isUpvote?: boolean;
 }) => {
   try {
     const { data } = await httpClient.put(

@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
-import Modal from "./Modal";
-import { useForm } from "./hooks/useForm";
+import Modal from "../Modal";
+import { useForm } from "../hooks/useForm";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Input, InputGroup } from "@chakra-ui/input";
 import { Stack } from "@chakra-ui/layout";
 import { Button } from "@chakra-ui/button";
-import { SocketContext } from "../context/SocketContext";
-import * as SE from "../context/socketTypes";
-import { listActions } from "../reducers/listReducer";
+import { SocketContext } from "../../context/SocketContext";
+import * as SE from "../../context/socketTypes";
+import { listActions } from "../../reducers/listReducer";
 
 interface FormParam {
   boardId: string;
@@ -57,7 +57,7 @@ const CreateList = () => {
     <>
       <Modal
         modalTitle="List Creation"
-        triggerName="Create a List"
+        triggerName="Add"
         isOpen={isOpen}
         onClose={onClose}
         onOpen={onOpen}

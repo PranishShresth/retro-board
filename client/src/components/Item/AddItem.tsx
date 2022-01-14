@@ -1,12 +1,12 @@
 import { Button, Textarea, Stack } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
-import { useForm } from "./hooks/useForm";
+import { useForm } from "../hooks/useForm";
 import { FaPlus } from "react-icons/fa";
 import { useParams } from "react-router";
 import { ObjectID } from "bson";
-import { itemActions } from "../reducers/itemReducer";
-import { SocketContext } from "../context/SocketContext";
+import { itemActions } from "../../reducers/itemReducer";
+import { SocketContext } from "../../context/SocketContext";
 import styled from "styled-components";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 }
 
 const StyledButton = styled(Button)`
-  background: #f7f7f7;
+  background: #f7f7f7 !important;
   border: 1px solid #e6e7e9;
   color: #b7b8ba;
 `;
@@ -65,7 +65,7 @@ function AddItem({ list_id }: Props) {
             setOpen(!open);
           }}
         >
-          Add a Item
+          Item
         </StyledButton>
       )}
       {open && (

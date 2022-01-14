@@ -23,5 +23,6 @@ export interface Item {
   item_title: string;
   createdAt: string;
   updatedAt: string;
+  upvotes: number;
   __v: number;
 }
