@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Icon, Stack, Text } from "@chakra-ui/react";
-import { GiStaryu } from "react-icons/gi";
+import { GiNinjaHead } from "react-icons/gi";
 import {
   getBoardLimit,
   boardSelector,
@@ -37,7 +37,7 @@ const RetroBoardHeader = () => {
     >
       <Stack direction="row">
         <IconDiv>
-          <Icon as={GiStaryu} w={6} h={6} />
+          <Icon as={GiNinjaHead} w={6} h={6} />
         </IconDiv>
         <Text fontWeight={"500"} fontSize={"1.9rem"}>
           {currentBoard?.board_title}

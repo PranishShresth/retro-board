@@ -85,7 +85,7 @@ const RetroDashBoard = React.memo(() => {
               isOpen={isOpen}
               onOpen={onOpen}
               onClose={onClose}
-              triggerName="Create new Board"
+              triggerName="Create"
             >
               <form onSubmit={handleCreateBoard}>
                 <Stack spacing={3}>

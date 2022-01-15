@@ -27,7 +27,11 @@ export default function Modal1({
 }: Props) {
   return (
     <>
-      {triggerName && <Button onClick={onOpen}>{triggerName}</Button>}
+      {triggerName && (
+        <Button onClick={onOpen} background="#4886ff" color="white">
+          {triggerName}
+        </Button>
+      )}
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />

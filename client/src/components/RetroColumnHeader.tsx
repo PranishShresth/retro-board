@@ -6,6 +6,7 @@ import { Input } from "@chakra-ui/input";
 import { listActions } from "../reducers/listReducer";
 import { Icon } from "semantic-ui-react";
 import { FaTrash } from "react-icons/fa";
+import { Box } from "@chakra-ui/react";
 
 const RetroColumnHeader = styled.div`
   font-weight: bold;
@@ -56,17 +57,19 @@ export default function RetroColumnListHeader({ list_title, list_id }: Props) {
   return (
     <>
       {editMode ? (
-        <Input
-          autoFocus
-          fontWeight="bold"
-          variant="filled"
-          placeholder="List Title"
-          name="list_title"
-          onChange={handleChange}
-          onBlur={handleSubmit}
-          onKeyDown={handleSubmit}
-          value={formValues.list_title}
-        />
+        <Box padding="24px 0">
+          <Input
+            autoFocus
+            fontWeight="bold"
+            variant="filled"
+            placeholder="List Title"
+            name="list_title"
+            onChange={handleChange}
+            onBlur={handleSubmit}
+            onKeyDown={handleSubmit}
+            value={formValues.list_title}
+          />
+        </Box>
       ) : (
         <RetroColumnHeader>
           <div onClick={() => setEditMode(true)}>{list_title}</div>
