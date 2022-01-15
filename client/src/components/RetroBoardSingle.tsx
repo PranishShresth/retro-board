@@ -33,7 +33,6 @@ const ColumnsWrapper = styled.main`
   top: 0;
   -webkit-user-select: none;
   user-select: none;
-  white-space: nowrap;
 `;
 
 const RetroColumnWrapper = styled.div<{ listCount: number }>`
