@@ -6,8 +6,10 @@ import { SocketProvider } from "../context/SocketContext";
 export const RetroHome = () => {
   return (
     <SocketProvider>
-      <RetroHeader />
-      <RetroBoardSingle />
+      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+        <RetroHeader />
+        <RetroBoardSingle />
+      </div>
     </SocketProvider>
   );
 };

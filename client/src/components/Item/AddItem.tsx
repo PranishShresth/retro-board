@@ -31,6 +31,9 @@ function AddItem({ list_id }: Props) {
   const handleAddingItem = async (ev: React.FormEvent) => {
     try {
       ev.preventDefault();
+      if (formValues.item_title === "") {
+        return;
+      }
       const id = new ObjectID().toString();
       const payload = {
         list: list_id,

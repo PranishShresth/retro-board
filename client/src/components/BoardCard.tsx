@@ -74,7 +74,7 @@ const BoardCard = (props: Props) => {
         borderWidth="1px"
         borderRadius="lg"
         overflow="hidden"
-        backgroundColor="gray.100"
+        backgroundColor="white"
         padding="10px"
         height="60px"
       >

@@ -24,6 +24,7 @@ export interface Item {
   board: string;
   list: string;
   item_title: string;
+  upvotes: number;
   createdAt: string;
   updatedAt: string;
   __v: number;

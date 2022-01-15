@@ -14,7 +14,8 @@ const RetroColumnHeader = styled.div`
   color: #58585a;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0px;
+  padding: 24px 0px;
+  margin: 0 4px;
 `;
 
 interface Props {

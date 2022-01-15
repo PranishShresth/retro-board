@@ -11,8 +11,10 @@ const RetroCardContainer = styled.div`
   display: flex;
   flex-direction: column;
   position: relative;
-  gap: 10px;
-  min-height: 1px;
+  gap: 1px;
+  max-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const BottomListButton = styled.div`
@@ -46,8 +48,7 @@ const RetroColumn = memo(({ list_id, droppableProvided }: Props) => {
                 <RetroCard
                   provided={provided}
                   snapshot={snapshot}
-                  content={item.item_title}
-                  item_id={item._id}
+                  item={item}
                 />
               )}
             </Draggable>

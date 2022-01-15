@@ -94,9 +94,51 @@ interface UpdateItemRequest extends Request {
   };
   body: {
     item_title?: string;
+    isUpvote?: string;
   };
 }
 export const updateItem = async (req: UpdateItemRequest, res: Response) => {
+  const { item_id } = req.params;
+  const { isUpvote, item_title } = req.body;
+  let query;
+  if (isUpvote == null) {
+    query = {
+      $set: {
+        item_title: item_title,
+      },
+    };
+  } else {
+    query = {
+      $inc: { upvotes: isUpvote ? 1 : -1 },
+    };
+  }
+  try {
+    const updatedItem = await Item.findByIdAndUpdate(
+      item_id,
+      {
+        ...query,
+      },
+      { new: true }
+    );
+
+    res.status(200).send(updatedItem);
+  } catch (err) {
+    res.status(500).send("Internal Server Error");
+  }
+};
+
+interface upvoteOrDownvoteItemRequest extends Request {
+  params: {
+    item_id: string;
+  };
+  body: {
+    upvote: string;
+  };
+}
+export const upvoteOrDownvoteItem = async (
+  req: upvoteOrDownvoteItemRequest,
+  res: Response
+) => {
   const { item_id } = req.params;
 
   try {
