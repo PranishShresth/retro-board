@@ -12,6 +12,7 @@ const RetroCardContainer = styled.div`
   flex-direction: column;
   position: relative;
   gap: 1px;
+  min-height: 2px;
   max-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
