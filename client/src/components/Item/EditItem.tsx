@@ -1,10 +1,11 @@
-import { Button, Textarea, Stack } from "@chakra-ui/react";
+import { Button, Textarea, Stack, IconButton } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { useDispatch } from "react-redux";
 import { SocketContext } from "../../context/SocketContext";
 import { useForm } from "../hooks/useForm";
 import * as SE from "../../context/socketTypes";
 import { itemActions } from "../../reducers/itemReducer";
+import { GiCrossMark } from "react-icons/gi";
 
 interface Props {
   isOpen: boolean;
@@ -51,16 +52,18 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
               focusBorderColor="blue.500"
               background="white"
             />
-            <div>
-              <Button
-                // leftIcon={<FaPlus />}
-                type="submit"
-                colorScheme="teal"
-                variant="solid"
-              >
+            <Stack direction="row" spacing={2}>
+              <Button type="submit" variant="solid">
                 Save
               </Button>
-            </div>
+
+              <IconButton
+                aria-label="cross"
+                icon={<GiCrossMark />}
+                size="md"
+                onClick={onClose}
+              />
+            </Stack>
           </Stack>
         </form>
       )}

@@ -1,4 +1,4 @@
-import { Button, Textarea, Stack } from "@chakra-ui/react";
+import { Button, Textarea, Stack, IconButton } from "@chakra-ui/react";
 import React, { useState, useContext } from "react";
 import { useDispatch } from "react-redux";
 import { useForm } from "../hooks/useForm";
@@ -8,6 +8,7 @@ import { ObjectID } from "bson";
 import { itemActions } from "../../reducers/itemReducer";
 import { SocketContext } from "../../context/SocketContext";
 import styled from "styled-components";
+import { GiCrossMark } from "react-icons/gi";
 
 interface Props {
   list_id: string;
@@ -27,6 +28,8 @@ function AddItem({ list_id }: Props) {
   });
 
   const [open, setOpen] = useState(false);
+
+  const close = () => setOpen(false);
 
   const handleAddingItem = async (ev: React.FormEvent) => {
     try {
@@ -83,11 +86,17 @@ function AddItem({ list_id }: Props) {
               focusBorderColor="blue.500"
               background="white"
             />
-            <div>
+            <Stack direction="row" spacing={2}>
               <Button leftIcon={<FaPlus />} type="submit" variant="solid">
                 Create
               </Button>
-            </div>
+              <IconButton
+                aria-label="cross"
+                icon={<GiCrossMark />}
+                size="md"
+                onClick={close}
+              />
+            </Stack>
           </Stack>
         </form>
       )}
