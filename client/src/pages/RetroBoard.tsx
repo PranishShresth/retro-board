@@ -2,14 +2,23 @@ import RetroBoardSingle from "../components/RetroBoardSingle";
 import RetroHeader from "../components/RetroHeader";
 
 import { SocketProvider } from "../context/SocketContext";
+import styled from "styled-components";
+
+const AppWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+`;
 
 export const RetroHome = () => {
   return (
     <SocketProvider>
-      <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+      <AppWrapper>
         <RetroHeader />
         <RetroBoardSingle />
-      </div>
+      </AppWrapper>
     </SocketProvider>
   );
 };

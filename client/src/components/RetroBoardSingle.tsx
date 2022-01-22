@@ -125,10 +125,10 @@ export default function RetroBoardSingle() {
   if (!currentBoard) {
     return <NoPageFound />;
   }
+
   return (
     <>
       <RetroBoardHeader />
-
       <RetroBoardCanvas>
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <ColumnsWrapper>
