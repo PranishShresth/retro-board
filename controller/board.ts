@@ -2,6 +2,7 @@ import { Board } from "../models/board";
 import { List } from "../models/list";
 import { Item } from "../models/item";
 import { Request, Response } from "express";
+import { isValidObjectId } from "mongoose";
 
 interface CreateBoardReq extends Request {
   body: {
@@ -59,12 +60,19 @@ interface GetBoardReq extends Request {
 }
 export const getBoard = async (req: GetBoardReq, res: Response) => {
   try {
-    const board = await Board.findOne({ _id: req.params.board_id });
-    const list = await List.find({ board: req.params.board_id });
-    const items = await Item.find({ board: req.params.board_id });
-
-    res.status(200).send({ board, list, items });
+    const { board_id } = req.params;
+    const isValidBoard = isValidObjectId(board_id);
+    if (!isValidBoard) {
+      return res.status(200).send({ board: null, list: [], items: [] });
+    }
+    const [board, list, items] = await Promise.all([
+      Board.findOne({ _id: board_id }),
+      List.find({ board: board_id }),
+      Item.find({ board: board_id }),
+    ]);
+    return res.status(200).send({ board, list, items });
   } catch (err) {
+    console.log(err);
     res.status(500).send("Internal Server Error");
   }
 };

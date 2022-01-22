@@ -9,6 +9,7 @@ import {
   listsSelector,
   itemsSelector,
   getListCountsPerBoard,
+  boardSelector,
 } from "../utils/selectors";
 import { isPositionChanged, calculateItemPosition } from "../utils/dragndrop";
 import Loading from "./Loader";
@@ -17,6 +18,7 @@ import RetroColumnListHeader from "./RetroColumnHeader";
 import { Box } from "@chakra-ui/layout";
 import { SocketContext } from "../context/SocketContext";
 import RetroBoardHeader from "./RetroBoardHeader";
+import NoPageFound from "./404page/NoPageFound";
 
 const ColumnsWrapper = styled.main`
   display: flex;
@@ -44,6 +46,7 @@ const RetroColumnWrapper = styled.div<{ listCount: number }>`
   height:100%;
   min-width: 300px;
   max-width: 100%;
+
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -72,6 +75,7 @@ export default function RetroBoardSingle() {
 
   const currentBoardLists = lists.filter((l) => l.board === params.boardId);
   const items = useSelector(itemsSelector);
+  const currentBoard = useSelector(boardSelector);
   const listCount = useSelector(getListCountsPerBoard);
 
   const loading = useSelector(loadingSelector);
@@ -117,9 +121,14 @@ export default function RetroBoardSingle() {
   if (loading) {
     return <Loading />;
   }
+
+  if (!currentBoard) {
+    return <NoPageFound />;
+  }
   return (
     <>
       <RetroBoardHeader />
+
       <RetroBoardCanvas>
         <DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
           <ColumnsWrapper>

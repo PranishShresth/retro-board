@@ -41,7 +41,7 @@ function* createBoard(action: ReturnType<typeof boardActions.createBoard>) {
 }
 
 type Resp = {
-  board: Board;
+  board: Board | null;
   list: List[];
   items: Item[];
 };
