@@ -5,7 +5,7 @@ import { SocketContext } from "../../context/SocketContext";
 import { useForm } from "../hooks/useForm";
 import * as SE from "../../context/socketTypes";
 import { itemActions } from "../../reducers/itemReducer";
-import { GiCrossMark } from "react-icons/gi";
+import { IoMdClose } from "react-icons/io";
 
 interface Props {
   isOpen: boolean;
@@ -41,7 +41,7 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
   return (
     <>
       {isOpen && (
-        <form onSubmit={handleEditingItem}>
+        <form onSubmit={handleEditingItem} style={{ padding: "20px 0" }}>
           <Stack spacing={2}>
             <Textarea
               name="item_title"
@@ -59,7 +59,7 @@ function EditItem({ isOpen, onClose, content, item_id }: Props) {
 
               <IconButton
                 aria-label="cross"
-                icon={<GiCrossMark />}
+                icon={<IoMdClose />}
                 size="md"
                 onClick={onClose}
               />

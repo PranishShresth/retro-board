@@ -16,6 +16,14 @@ const RetroCardContainer = styled.div`
   max-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgb(0 0 0 / 10%);
+  }
 `;
 
 const BottomListButton = styled.div`
