@@ -6,7 +6,8 @@ import { Input } from "@chakra-ui/input";
 import { listActions } from "../reducers/listReducer";
 import { Icon } from "semantic-ui-react";
 import { FaTrash } from "react-icons/fa";
-import { Box } from "@chakra-ui/react";
+import { Box, useDisclosure } from "@chakra-ui/react";
+import DeleteAlert from "./AlertDialog";
 
 const RetroColumnHeader = styled.div`
   font-weight: bold;
@@ -25,6 +26,11 @@ interface Props {
 }
 export default function RetroColumnListHeader({ list_title, list_id }: Props) {
   const dispatch = useDispatch();
+  const {
+    isOpen: isDeleteDialogOpen,
+    onClose: closeDeleteDialog,
+    onOpen: openDeleteDialog,
+  } = useDisclosure();
 
   const [editMode, setEditMode] = useState(false);
   const { handleChange, formValues } = useForm({ list_title: list_title });
@@ -76,11 +82,18 @@ export default function RetroColumnListHeader({ list_title, list_id }: Props) {
           <Icon
             as={FaTrash}
             size="mini"
-            onClick={deleteList}
+            onClick={openDeleteDialog}
             style={{ cursor: "pointer", fontSize: 14 }}
           />
         </RetroColumnHeader>
       )}
+
+      <DeleteAlert
+        isOpen={isDeleteDialogOpen}
+        onClose={closeDeleteDialog}
+        onClick={deleteList}
+        title="Delete Column"
+      />
     </>
   );
 }
